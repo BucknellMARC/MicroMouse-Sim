@@ -7,9 +7,13 @@ BUILD_PATH := build
 CC := gcc
 CXX := gcc
 
+# libraries
+OPENGL_LIB := -lGL -lGLU -lglut
+
 # cflags
 CFLAGS := -Wall
 CXXFLAGS := $(CFLAGS)
+LDFLAGS := $(OPENGL_LIB)
 
 # files to compile
 #C_SOURCES	:= $(wildcard $(SRC_PATH)/*.c)
@@ -23,7 +27,7 @@ all: $(BINARY)
 	
 $(BINARY): $(OBJ_FILES)
 	@echo "Linking $(BINARY)"
-	$(CXX) -o $(BINARY) $(OBJ_FILES)
+	$(CXX) $(LDFLAGS) -o $(BINARY) $(OBJ_FILES)
 	
 $(OBJ_PATH)/%.o: $(CXX_SOURCES) #$(SRC_PATH)/%.cpp
 	@echo "Building: $@"
