@@ -29,7 +29,7 @@ $(BINARY): $(OBJ_FILES)
 	@echo "Linking $(BINARY)"
 	$(CXX) $(LDFLAGS) -o $(BINARY) $(OBJ_FILES)
 	
-$(OBJ_PATH)/%.o: $(CXX_SOURCES) #$(SRC_PATH)/%.cpp
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	@echo "Building: $@"
 	$(CXX) $(CXXFLAGS) -c $^ -o $@
 	
