@@ -13,7 +13,7 @@ OPENGL_LIB := -lGL -lGLU -lglut
 # cflags
 CFLAGS := -Wall
 CXXFLAGS := $(CFLAGS)
-LDFLAGS := $(OPENGL_LIB)
+LDFLAGS := -lstdc++ $(OPENGL_LIB)
 
 # files to compile
 #C_SOURCES	:= $(wildcard $(SRC_PATH)/*.c)
