@@ -1,7 +1,11 @@
-#include <cstdio>
+#include <stdio.h>
 #include <GL/glut.h>
 
+#include "Rectangle.h"
+
 void renderScene();
+
+Rectangle* firstRect;
 
 int main(int argc, char** argv) {
 	printf("Initializing glut...\n");
@@ -19,6 +23,9 @@ int main(int argc, char** argv) {
 	// create the window
 	glutCreateWindow("My First GLUT");
 
+	// create the rectangle
+	firstRect = new Rectangle(0, 0, 10, 10);
+
 	// send the rendering loop to GLUT
 	glutDisplayFunc(renderScene);
 
@@ -31,12 +38,7 @@ void renderScene() {
 	// clear the buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// draw the triangle
-	glBegin(GL_TRIANGLES);
-			glVertex3f(-0.5,-0.5,0.0);
-			glVertex3f(0.5,0.0,0.0);
-			glVertex3f(0.0,0.5,0.0);
-	glEnd();
+	firstRect->draw();
 
 	glutSwapBuffers();
 }
