@@ -1,4 +1,9 @@
 .cproject
 .project
 
-build
+build/
+deps/
+.deps/
+
+*.o
+*.d
