@@ -6,6 +6,18 @@
 #include "define.h"
 #include "Rectangle.h"
 
+// default constructor
+Rectangle::Rectangle() {
+	// set position to nothing
+	this->x = 0;
+	this->y = 0;
+
+	// set width to nothing
+	this->width = 0;
+	this->height = 0;
+}
+
+// main constructor
 Rectangle::Rectangle(int x, int y, int width, int height) {
 	// set the position
 	this->x = x;

@@ -7,6 +7,7 @@ private:
 	int width, height;
 
 public:
+	Rectangle();
 	Rectangle(int x, int y, int width, int height);
 
 	// drawing function
