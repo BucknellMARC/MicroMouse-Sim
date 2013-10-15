@@ -30,12 +30,12 @@ Rectangle::Rectangle(int x, int y, int width, int height) {
 
 void Rectangle::draw() {
 	// convert X and Y coords to GL screen space
-	float glCoordsX = (float)x / (float)SCREEN_WIDTH - 1.0f;
-	float glCoordsY = (float)y / (float)SCREEN_HEIGHT - 1.0f;
+	float glCoordsX = 2.0 * (float)x / (float)SCREEN_WIDTH - 1.0f;
+	float glCoordsY = 2.0 * (float)y / (float)SCREEN_HEIGHT - 1.0f;
 
 	// convert width and height to GL screen space
-	float glCoordsWidth = (float)width / (float)SCREEN_WIDTH;
-	float glCoordsHeight = (float)height / (float)SCREEN_HEIGHT;
+	float glCoordsWidth = 2.0 * (float)width / (float)SCREEN_WIDTH;
+	float glCoordsHeight = 2.0 * (float)height / (float)SCREEN_HEIGHT;
 
 	glBegin(GL_TRIANGLES);
 		// first triangle
