@@ -1,3 +1,6 @@
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
 class Rectangle {
 private:
 	int x, y;
@@ -15,3 +18,5 @@ public:
 	int getWidth();
 	int getHeight();
 };
+
+#endif

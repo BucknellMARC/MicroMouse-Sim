@@ -1,3 +1,6 @@
+#ifndef RECTANGLE_CPP
+#define RECTANGLE_CPP
+
 #include <GL/gl.h>
 
 #include "define.h"
@@ -50,3 +53,5 @@ int Rectangle::getWidth() {
 int Rectangle::getHeight() {
 	return height;
 }
+
+#endif

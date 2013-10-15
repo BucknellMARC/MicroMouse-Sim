@@ -1,3 +1,6 @@
+#ifndef POINT_CPP
+#define POINT_CPP
+
 #include "Point.h"
 
 Point::Point(int x, int y) {
@@ -12,3 +15,5 @@ int Point::getX() {
 int Point::getY() {
 	return y;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef POINT_H
+#define POINT_H
+
 class Point {
 private:
 	int x, y;
@@ -8,3 +11,5 @@ public:
 	int getX();
 	int getY();
 };
+
+#endif
