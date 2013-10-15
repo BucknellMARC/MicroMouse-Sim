@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
-#include "Rectangle.h"
+#include "define.h"
+#include "Maze.h"
 
 void renderScene();
 
-Rectangle* firstRect;
+Maze* firstMaze;
+Rectangle* firstRectangle;
 
 int main(int argc, char** argv) {
 	printf("Initializing glut...\n");
@@ -18,13 +20,13 @@ int main(int argc, char** argv) {
 
 	// put the window position
 	glutInitWindowPosition(0,0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// create the window
 	glutCreateWindow("My First GLUT");
 
-	// create the rectangle
-	firstRect = new Rectangle(0, 0, 10, 10);
+	firstMaze = new Maze();
+	//firstRectangle = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// send the rendering loop to GLUT
 	glutDisplayFunc(renderScene);
@@ -38,7 +40,8 @@ void renderScene() {
 	// clear the buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	firstRect->draw();
+	firstMaze->draw();
+	//firstRectangle->draw();
 
 	glutSwapBuffers();
 }
