@@ -1,7 +1,8 @@
 #ifndef MAZE_CPP
 #define MAZE_CPP
 
-#include "stdio.h"
+#include <GL/gl.h>
+#include <stdio.h>
 
 #include "Maze.h"
 
@@ -50,14 +51,22 @@ Maze::Maze() {
 // main methods
 //
 
+// draws the maze
 void Maze::draw() {
+	// set the draw color to white
+	glColor3f(1.0f, 1.0f, 1.0f);
+
 	// draw every wall in the wall list
 	for (unsigned int n = 0; n < walls.size(); n++) {
 		walls[n].draw();
 	}
 }
 
+// recreates the walls based on the boolean arrays
 void Maze::rebuildWalls() {
+	// empty the vector
+	walls.clear();
+
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int column = 0; column < (MAZE_WIDTH+1); column++) {
