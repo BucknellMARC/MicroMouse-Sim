@@ -2,11 +2,11 @@
 #include <GL/glut.h>
 
 #include "define.h"
-#include "Maze.h"
+#include "VirtualMaze.h"
 
 void renderScene();
 
-Maze* firstMaze;
+VirtualMaze* firstMaze;
 Rectangle* firstRectangle;
 
 int main(int argc, char** argv) {
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 	// create the window
 	glutCreateWindow("My First GLUT");
 
-	firstMaze = new Maze();
+	firstMaze = new VirtualMaze();
 	//firstRectangle = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// send the rendering loop to GLUT
