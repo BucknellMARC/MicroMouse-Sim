@@ -4,7 +4,7 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-#include "Maze.h"
+#include "VirtualMaze.h"
 
 #include "define.h"
 #include "Rectangle.h"
@@ -13,7 +13,7 @@
 // constructors
 //
 
-Maze::Maze() {
+VirtualMaze::VirtualMaze() {
 	// for now, will generate a standard pattern
 	//
 
@@ -52,7 +52,7 @@ Maze::Maze() {
 //
 
 // draws the maze
-void Maze::draw() {
+void VirtualMaze::draw() {
 	// set the draw color to white
 	glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -63,7 +63,7 @@ void Maze::draw() {
 }
 
 // recreates the walls based on the boolean arrays
-void Maze::rebuildWalls() {
+void VirtualMaze::rebuildWalls() {
 	// empty the vector
 	walls.clear();
 
@@ -100,7 +100,7 @@ void Maze::rebuildWalls() {
 // static methods
 //
 
-int Maze::getBlockWidthPX() {
+int VirtualMaze::getBlockWidthPX() {
 	return blockWidthPX;
 }
 

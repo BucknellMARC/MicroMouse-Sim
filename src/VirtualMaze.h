@@ -7,7 +7,7 @@ using namespace std;
 #include "define.h"
 #include "Rectangle.h"
 
-class Maze {
+class VirtualMaze {
 private:
 	//
 	// class members
@@ -30,7 +30,7 @@ public:
 	// constructors
 	//
 
-	Maze();
+	VirtualMaze();
 
 	//
 	// main methods
