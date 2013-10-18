@@ -26,58 +26,8 @@ using namespace std;
 
 VirtualMaze::VirtualMaze()
 	: MazeMap() {
-	// for now, will generate a standard pattern
-	//
-
-	// assign value to the walls
-	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizontalWalls[row][col] = WALL;
-		}
-	}
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
-			verticalWalls[row][col] = WALL;
-		}
-	}
-
-	// init the random number generator the
-	// seed is just going to be the current time
-	int seed = time(NULL);
-	srand(seed);
-
-	// free up some of the walls at random
-	for (int row = 1; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			if ((rand() % 10) > 5) {
-				horizontalWalls[row][col] = FREE;
-			}
-		}
-	}
-	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
-		for (int col = 1; col < MAZE_WIDTH; col++) {
-			if ((rand() % 10) > 5) {
-				verticalWalls[row][col] = FREE;
-			}
-		}
-	}
-
-	// start in the center and push location back
-	int x = MAZE_WIDTH / 2;
-	int y = MAZE_HEIGHT / 2;
-	while (x != 0) {
-		verticalWalls[y][x] = FREE;
-
-		x--;
-	}
-	while (y != 0) {
-		horizontalWalls[y][x] = FREE;
-
-		y--;
-	}
-
-	// now draw the walls
-	rebuildWalls();
+	// perform prim generation
+	primGeneration();
 }
 
 //
@@ -127,6 +77,120 @@ void VirtualMaze::rebuildWalls() {
 			}
 		}
 	}
+}
+
+//
+// private methods
+//
+
+// prim's algorithm
+void VirtualMaze::primGeneration() {
+	// init the random number generator the
+	// seed is just going to be the current time
+	int seed = time(NULL);
+	srand(seed);
+
+	printf("Starting prim generation...\n");
+
+	// wall out the entire maze
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
+			verticalWalls[row][col] = WALL;
+		}
+	}
+	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			horizontalWalls[row][col] = WALL;
+		}
+	}
+
+	// init variable that keeps track of whether or not square is part of the maze
+	bool partOfMaze[MAZE_HEIGHT][MAZE_WIDTH];
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			partOfMaze[row][col] = false;
+		}
+	}
+
+	// holds list of walls active in the algorithm
+	vector<Point> activeWallList;
+
+	// add the first cell location to the active wall list
+	Point zeroPoint;
+	zeroPoint.x = 0;
+	zeroPoint.y = 0;
+	activeWallList.push_back(zeroPoint);
+
+	// loop until the active wall list is zero
+	while (activeWallList.size() > 0) {
+		printf("Wall looping...\n");
+
+		// get a random location from the wall list
+		int currentPos = rand() % activeWallList.size();
+		Point current = activeWallList[currentPos];
+
+		printf("---Current Point---\n");
+		printf("Pos: %i\n", currentPos);
+		printf("X: %i\tY:%i\n", current.x, current.y);
+
+		// lists the direction that the active spot can go in...
+		vector<Direction> canGo;
+
+		// figure out what is part of the maze and what is not
+		if ((current.y + 1) < MAZE_HEIGHT && !partOfMaze[current.y + 1][current.x]) {
+			canGo.push_back(NORTH);
+		}
+		if ((current.x + 1) < MAZE_WIDTH && !partOfMaze[current.y][current.x + 1]) {
+			canGo.push_back(EAST);
+		}
+		if (current.y > 0 && !partOfMaze[current.y - 1][current.x]) {
+			canGo.push_back(SOUTH);
+		}
+		if (current.x > 0 && !partOfMaze[current.y][current.x - 1]) {
+			canGo.push_back(WEST);
+		}
+
+		// the DOF is just number of directions you can go
+		int degreesOfFreedom = canGo.size();
+
+		// if the degrees of freedom zero, then remove it from the list
+		if (degreesOfFreedom == 0) {
+			activeWallList.erase(activeWallList.begin() + currentPos);
+		}
+		else {
+			// go in a random direction
+			Direction direction = canGo[rand() % canGo.size()];
+
+			// break down the wall between the two locations
+			setWall(FREE, current.x, current.y, direction);
+
+			// get the new destination
+			Point destination = current;
+			switch (direction) {
+			case NORTH:
+				destination.y++;
+				break;
+			case EAST:
+				destination.x++;
+				break;
+			case SOUTH:
+				destination.y--;
+				break;
+			case WEST:
+				destination.x--;
+				break;
+			}
+
+			// make the destination part of the maze
+			partOfMaze[destination.y][destination.x] = true;
+
+			// add it to the wall lsit
+			activeWallList.push_back(destination);
+		}
+	}
+
+	// rebuild the graphical walls
+	rebuildWalls();
 }
 
 //

@@ -44,8 +44,17 @@ public:
 	void rebuildWalls();
 
 	//
+	// private methods
+	//
+private:
+
+	// maze generation algorithms
+	void primGeneration();
+
+	//
 	// static methods
 	//
+public:
 
 	static int getBlockWidthPX();
 };
