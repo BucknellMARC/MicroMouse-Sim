@@ -1,20 +1,24 @@
-#ifndef MAZE_H
-#define MAZE_H
+#ifndef VIRTUALMAZE_H
+#define VIRTUALMAZE_H
+
+/*
+ * Contains a way to visualize what the robot sees when searching
+ * through the maze.  It will be able to differentiate between
+ * walls the robot does and doesn't know about
+ */
 
 #include <vector>
 using namespace std;
 
 #include "define.h"
+#include "MazeMap.h"
 #include "Rectangle.h"
 
-class VirtualMaze {
+class VirtualMaze : public MazeMap {
 private:
 	//
 	// class members
 	//
-
-	bool** horizontalWalls;
-	bool** verticalWalls;
 
 	vector<Rectangle> walls;
 
