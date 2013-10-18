@@ -1,6 +1,13 @@
 #ifndef VIRTUALMAZE_CPP
 #define VIRTUALMAZE_CPP
 
+/*
+ * VirtualMaze is used to render the maze on screen it
+ * contains Rectangles that draw walls and inherits
+ * MazeMap which is what the robot will use to keep
+ * track of where it is
+ */
+
 #include <GL/gl.h>
 #include <stdio.h>
 #include <vector>
@@ -21,15 +28,26 @@ VirtualMaze::VirtualMaze()
 	//
 
 	// assign value to the walls
-	for (int row = 0; row < (MAZE_HEIGHT+1); row++) {
+	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizontalWalls[row][col] = WALL;
+			horizontalWalls[row][col] = FREE;
 		}
 	}
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < (MAZE_WIDTH+1); col++) {
-			verticalWalls[row][col] = WALL;
+		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
+			verticalWalls[row][col] = FREE;
 		}
+	}
+
+	// make sure there are boundaries on the rest of the maze
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		verticalWalls[row][0] = WALL;
+		verticalWalls[row][MAZE_WIDTH] = WALL;
+	}
+
+	for (int col = 0; col < MAZE_WIDTH; col++) {
+		horizontalWalls[0][col] = WALL;
+		horizontalWalls[MAZE_HEIGHT][col] = WALL;
 	}
 
 	// now draw the walls
@@ -58,7 +76,7 @@ void VirtualMaze::rebuildWalls() {
 
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int column = 0; column < (MAZE_WIDTH+1); column++) {
+		for (int column = 0; column < (MAZE_WIDTH + 1); column++) {
 			if (verticalWalls[row][column] == WALL) {
 				int x = column * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
@@ -71,7 +89,7 @@ void VirtualMaze::rebuildWalls() {
 	}
 
 	// build the columns
-	for (int row = 0; row < MAZE_HEIGHT+1; row++) {
+	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
 			if (horizontalWalls[row][column] == WALL) {
 				int x = column * blockWidthPX;

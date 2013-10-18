@@ -1,6 +1,8 @@
 #ifndef ROBOT_CPP
 #define ROBOT_CPP
 
+#include <stdio.h>
+
 #include "Robot.h"
 
 //
@@ -17,17 +19,28 @@ Robot::Robot()
 Robot::Robot(int xPos, int yPos) {
 	this->xPos = xPos;
 	this->yPos = yPos;
+
+	this->direction = EAST;
+
+	this->mazeMap = new MazeMap();
 }
 
 void Robot::run() {
+	printf("--Robot::run()--\n");
 
+	// turn around if we are in front of a wall
+	if (lookForward()) {
+		printf("turning backwards...\n");
+		turn(LEFT);
+	}
+
+	// try and drive forward
+	driveForward();
 }
 
-void Robot::turn(Direction direction) {
-	this->direction = direction;
-}
+Direction Robot::rotationToDirection(Rotation rotation) {
+	Direction direction = this->direction;
 
-void Robot::turn(Rotation rotation) {
 	if (rotation == LEFT) {
 		switch (direction) {
 		case NORTH:
@@ -57,16 +70,54 @@ void Robot::turn(Rotation rotation) {
 			break;
 		case WEST:
 			direction = NORTH;
+			break;
 		}
 	}
-	else {
-		// if u-turn, just turn right twice..
-		turn(RIGHT);
-		turn(RIGHT);
+	else if (rotation == BACKWARDS) {
+		switch (direction) {
+		case NORTH:
+			direction = SOUTH;
+			break;
+		case EAST:
+			direction = WEST;
+			break;
+		case SOUTH:
+			direction = NORTH;
+			break;
+		case WEST:
+			direction = EAST;
+			break;
+		}
 	}
+
+	return direction;
+}
+
+void Robot::turn(Direction direction) {
+	this->direction = direction;
+}
+
+void Robot::turn(Rotation rotation) {
+	// set the new direction
+	direction = rotationToDirection(rotation);
 }
 
 bool Robot::driveForward() {
+	switch (direction) {
+	case NORTH:
+		yPos++;
+		break;
+	case EAST:
+		xPos++;
+		break;
+	case SOUTH:
+		yPos--;
+		break;
+	case WEST:
+		xPos--;
+		break;
+	}
+
 	return true;
 }
 

@@ -1,25 +1,16 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "VirtualMaze.h"
-
-enum Direction {
-	EAST = 0,
-	SOUTH = 1,
-	WEST = 2,
-	NORTH = 3
-};
-
-enum Rotation {
-	LEFT,
-	RIGHT,
-	BACKWARDS
-};
+#include "define.h"
+#include "MazeMap.h"
 
 class Robot {
 protected:
+	// position and direction the robot is facing
 	int xPos, yPos;
 	Direction direction;
+
+	MazeMap* mazeMap;
 
 protected:
 	//
@@ -35,6 +26,12 @@ public:
 	//
 
 	void run();
+
+	Direction rotationToDirection(Rotation rotation);
+
+	virtual bool lookForward()	= 0;
+	virtual bool lookLeft()		= 0;
+	virtual bool lookRight()	= 0;
 
 	virtual void turn(Direction direction);
 	virtual void turn(Rotation rotation);

@@ -7,6 +7,8 @@
  * can travel.
  */
 
+#include "define.h"
+
 enum WallState {
 	WALL,
 	FREE,
@@ -33,7 +35,7 @@ public:
 	// main methods
 	//
 
-
+	bool doesWallExist(int x, int y, Direction direction);
 };
 
 #endif

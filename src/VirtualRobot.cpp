@@ -1,16 +1,23 @@
 #ifndef VIRTUALROBOT_CPP
 #define VIRTUALROBOT_CPP
 
+#include <stdio.h>
 #include <GL/gl.h>
 
 #include "VirtualRobot.h"
 
-VirtualRobot::VirtualRobot()
+VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	: Robot(0, 0)
 {
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
-	this->rectangle = new Rectangle(yPos * blockWidthPX, yPos * blockWidthPX, robotSizePX, robotSizePX);
+	int x = xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int y = yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+
+	this->rectangle = new Rectangle(x, y, robotSizePX, robotSizePX);
+
+	// save the pointer to the virtual maze
+	this->virtualMaze = virtualMaze;
 }
 
 void VirtualRobot::draw() {
@@ -19,12 +26,28 @@ void VirtualRobot::draw() {
 	rectangle->draw();
 }
 
+bool VirtualRobot::lookForward() {
+	return virtualMaze->doesWallExist(xPos, yPos, direction);
+}
+
+bool VirtualRobot::lookLeft() {
+	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(LEFT));
+}
+
+bool VirtualRobot::lookRight() {
+	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(RIGHT));
+}
+
 bool VirtualRobot::driveForward() {
 	// try to move with the maze representation
-	if (!Robot::driveForward()) {
+	if (lookForward()) {
 		return false;
 	}
 
+	// perform parent drive forward
+	Robot::driveForward();
+
+	// then move the rectangle
 	switch (direction) {
 	case NORTH:
 		rectangle->translate(0, VirtualMaze::getBlockWidthPX());

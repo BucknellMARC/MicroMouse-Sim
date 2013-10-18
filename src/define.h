@@ -11,4 +11,20 @@
 #define MAZE_WIDTH 16
 #define MAZE_HEIGHT 16
 
+// meaning of direction
+enum Direction {
+	EAST,
+	SOUTH,
+	WEST,
+	NORTH
+};
+
+// meaning of rotation
+enum Rotation {
+	FORWARDS,
+	LEFT,
+	RIGHT,
+	BACKWARDS
+};
+
 #endif
