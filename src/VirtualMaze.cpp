@@ -9,7 +9,9 @@
  */
 
 #include <GL/gl.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include <vector>
 using namespace std;
 
@@ -30,24 +32,48 @@ VirtualMaze::VirtualMaze()
 	// assign value to the walls
 	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizontalWalls[row][col] = FREE;
+			horizontalWalls[row][col] = WALL;
 		}
 	}
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
-			verticalWalls[row][col] = FREE;
+			verticalWalls[row][col] = WALL;
 		}
 	}
 
-	// make sure there are boundaries on the rest of the maze
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		verticalWalls[row][0] = WALL;
-		verticalWalls[row][MAZE_WIDTH] = WALL;
+	// init the random number generator the
+	// seed is just going to be the current time
+	int seed = time(NULL);
+	srand(seed);
+
+	// free up some of the walls at random
+	for (int row = 1; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
+			if ((rand() % 10) > 5) {
+				horizontalWalls[row][col] = FREE;
+			}
+		}
+	}
+	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
+		for (int col = 1; col < MAZE_WIDTH; col++) {
+			if ((rand() % 10) > 5) {
+				verticalWalls[row][col] = FREE;
+			}
+		}
 	}
 
-	for (int col = 0; col < MAZE_WIDTH; col++) {
-		horizontalWalls[0][col] = WALL;
-		horizontalWalls[MAZE_HEIGHT][col] = WALL;
+	// start in the center and push location back
+	int x = MAZE_WIDTH / 2;
+	int y = MAZE_HEIGHT / 2;
+	while (x != 0) {
+		verticalWalls[y][x] = FREE;
+
+		x--;
+	}
+	while (y != 0) {
+		horizontalWalls[y][x] = FREE;
+
+		y--;
 	}
 
 	// now draw the walls
