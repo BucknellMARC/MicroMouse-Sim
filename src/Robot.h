@@ -3,25 +3,43 @@
 
 #include "VirtualMaze.h"
 
-class Robot {
-private:
-	int xPos, yPos;
-	VirtualMaze* maze;
+enum Direction {
+	EAST = 0,
+	SOUTH = 1,
+	WEST = 2,
+	NORTH = 3
+};
 
-public:
+enum Rotation {
+	LEFT,
+	RIGHT,
+	BACKWARDS
+};
+
+class Robot {
+protected:
+	int xPos, yPos;
+	Direction direction;
+
+protected:
 	//
 	// constructor
 	//
 
 	Robot();
 	Robot(int xPos, int yPos);
-	Robot(int xPos, int yPos, VirtualMaze* maze);
 
+public:
 	//
 	// main methods
 	//
 
-	virtual void run();
+	void run();
+
+	virtual void turn(Direction direction);
+	virtual void turn(Rotation rotation);
+
+	virtual bool driveForward();
 };
 
 #endif
