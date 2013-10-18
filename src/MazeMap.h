@@ -36,6 +36,8 @@ public:
 	//
 
 	bool doesWallExist(int x, int y, Direction direction);
+
+	void setWall(WallState state, int x, int y, Direction direction);
 };
 
 #endif
