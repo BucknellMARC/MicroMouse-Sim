@@ -27,4 +27,10 @@ enum Rotation {
 	BACKWARDS
 };
 
+// 2 dimensional point
+struct Point {
+	int x;
+	int y;
+};
+
 #endif
