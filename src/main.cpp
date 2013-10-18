@@ -1,14 +1,18 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <GL/glut.h>
 
 #include "define.h"
 #include "VirtualMaze.h"
+#include "VirtualRobot.h"
 
 void initWindow(int* argc, char** argv);
 void startRenderLoop();
+void logic();
 void renderScene();
 
 VirtualMaze* firstMaze;
+VirtualRobot* firstRobot;
 
 int main(int argc, char** argv) {
 	// initialize glut
@@ -19,6 +23,7 @@ int main(int argc, char** argv) {
 	//
 
 	firstMaze = new VirtualMaze();
+	firstRobot = new VirtualRobot(firstMaze);
 
 	// start the main loop
 	startRenderLoop();
@@ -48,15 +53,35 @@ void initWindow(int* argc, char** argv) {
 void startRenderLoop() {
 	// send the rendering loop to GLUT and start the main loop
 	glutDisplayFunc(renderScene);
+	glutIdleFunc(renderScene);
 	glutMainLoop();
+}
+
+void logic() {
+	printf("-----logic()-----\n");
+	firstRobot->run();
 }
 
 // the rendering loop
 void renderScene() {
+	//
+	// perform rendering logic
+	//
+
+	logic();
+
+	//
+	// draw stuff
+	//
+
 	// clear the buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	firstMaze->draw();
+	firstRobot->draw();
 
 	glutSwapBuffers();
+
+	// sleep for 100 milliseconds so i can see what is going on
+	usleep(100000);
 }
