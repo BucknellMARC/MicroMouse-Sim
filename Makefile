@@ -6,7 +6,7 @@ DEP_PATH := $(BUILD_PATH)/deps
 
 # compilers
 CC := gcc
-CXX := gcc
+CXX := g++
 
 # libraries
 OPENGL_LIB := -lGL -lGLU -lglut
