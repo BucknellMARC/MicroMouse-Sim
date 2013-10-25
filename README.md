@@ -22,7 +22,7 @@ These are the main functions of the class, basically lets you get or set the sta
 
 Graphics
 --------
-This program comes with a simple, friendly graphics API that simplifies rendering with OP
+This program comes with a simple, friendly graphics API that allow OpenGL novices to draw objects on the screen.  Screen layout is unusual for a normal graphics application in that the screen space is in units of pixels and starts at the bottom left corner of the window.  This makes placement more intuitive for people who are used to graphing in mathematics.
 
 To draw a rectangle with a position of *x*, *y* and dimensions of *width*, *height* - all in pixel coordinates:
 
