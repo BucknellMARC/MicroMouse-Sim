@@ -5,6 +5,7 @@
 #include "define.h"
 #include "VirtualMaze.h"
 #include "VirtualRobot.h"
+#include "Circle.h"
 
 void initWindow(int* argc, char** argv);
 void startRenderLoop();
@@ -84,4 +85,20 @@ void renderScene() {
 
 	// sleep for 100 milliseconds so i can see what is going on
 	usleep(100000);
+}
+
+//
+// Functions from define.h
+//
+
+void pixelPointToGLPoint(float x, float y, float* outX, float* outY) {
+	// convert X and Y coords to GL screen space
+	*outX = 2.0f * x / (float)SCREEN_WIDTH - 1.0f;
+	*outY = 2.0f * y / (float)SCREEN_HEIGHT - 1.0f;
+}
+
+void pixelDimToGLDim(float width, float height, float* outWidth, float* outHeight) {
+	// convert width and height to GL screen space
+	*outWidth = 2.0f * width / (float)SCREEN_WIDTH;
+	*outHeight = 2.0f * height / (float)SCREEN_HEIGHT;
 }

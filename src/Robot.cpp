@@ -28,6 +28,12 @@ Robot::Robot(int xPos, int yPos) {
 void Robot::run() {
 	printf("--Robot::run()--\n");
 
+	// turn right if the robot can...
+	if (!lookRight()) {
+		printf("Turning right\n");
+		turn(RIGHT);
+	}
+
 	// turn around if we are in front of a wall
 	if (lookForward()) {
 		printf("turning backwards...\n");

@@ -52,4 +52,23 @@ bool MazeMap::doesWallExist(int x, int y, Direction direction) {
 	return (wallState == WALL);
 }
 
+// sets the desired wall to a new state
+void MazeMap::setWall(WallState state, int x, int y, Direction direction) {
+	// set the proper thing depending on direction
+	switch (direction) {
+	case NORTH:
+		horizontalWalls[y+1][x] = state;
+		break;
+	case EAST:
+		verticalWalls[y][x+1] = state;
+		break;
+	case SOUTH:
+		horizontalWalls[y][x] = state;
+		break;
+	case WEST:
+		verticalWalls[y][x] = state;
+		break;
+	}
+}
+
 #endif

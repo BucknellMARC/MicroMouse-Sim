@@ -27,4 +27,17 @@ enum Rotation {
 	BACKWARDS
 };
 
+// 2 dimensional point
+struct Point {
+	int x;
+	int y;
+};
+
+//
+// Functions
+//
+
+void pixelPointToGLPoint(float x, float y, float* outX, float* outY);
+void pixelDimToGLDim(float width, float height, float* outWidth, float* outHeight);
+
 #endif
