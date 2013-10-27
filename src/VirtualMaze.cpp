@@ -28,6 +28,15 @@ VirtualMaze::VirtualMaze()
 	: MazeMap() {
 	// perform prim generation
 	primGeneration();
+
+	// init the circle memory
+	circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
+	for (int row = 0; row < MAZE_WIDTH; row++) {
+		for (int col = 0; col < MAZE_HEIGHT; col++) {
+			int arrayPos = row * MAZE_WIDTH + col;
+			circles[arrayPos] = new Circle(row * blockWidthPX, col * blockWidthPX, wallWidthPX/2);
+		}
+	}
 }
 
 //
@@ -42,6 +51,11 @@ void VirtualMaze::draw() {
 	// draw every wall in the wall list
 	for (unsigned int n = 0; n < walls.size(); n++) {
 		walls[n].draw();
+	}
+
+	// draw every circle
+	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
+		circles[n]->draw();
 	}
 }
 
@@ -80,7 +94,7 @@ void VirtualMaze::rebuildWalls() {
 }
 
 //
-// private methods
+// Private Methods
 //
 
 // prim's algorithm
