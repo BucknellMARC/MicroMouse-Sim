@@ -22,8 +22,7 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 void VirtualRobot::draw() {
 	// draw the robot red
-	glColor3f(1.0f, 0.0f, 0.0f);
-	rectangle->draw();
+	rectangle->draw(1.0f, 0.0f, 0.0f);
 }
 
 bool VirtualRobot::lookForward() {

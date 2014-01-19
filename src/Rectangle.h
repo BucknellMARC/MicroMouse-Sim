@@ -18,6 +18,7 @@ public:
 	//
 
 	void draw();
+	void draw(float r, float g, float b);
 
 	// repositioning functions
 	void setPos(int x, int y);

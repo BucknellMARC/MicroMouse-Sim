@@ -27,6 +27,12 @@ Rectangle::Rectangle(int x, int y, int width, int height) {
 }
 
 void Rectangle::draw() {
+	draw(1, 1, 1);
+}
+
+void Rectangle::draw(float r, float g, float b) {
+	glColor3f(r, g, b);
+
 	glBegin(GL_TRIANGLES);
 		// first triangle
 		glVertex3f(glCoordsX, glCoordsY, 0.0f);
