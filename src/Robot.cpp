@@ -13,6 +13,25 @@
 Robot::Robot()
 	: Robot(0, 0)
 {
+	// init the position history and the floodmap
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			posHistory[row][col] = 0;
+			floodMap[row][col] = 0;
+		}
+	}
+
+	// init the wall map all false
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH - 1; col++) {
+			vertWallMap[row][col] = false;
+		}
+	}
+	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			horizWallMap[row][col] = false;
+		}
+	}
 }
 
 // normal use constructor
@@ -21,12 +40,10 @@ Robot::Robot(int xPos, int yPos) {
 	this->yPos = yPos;
 
 	this->direction = EAST;
-
-	this->mazeMap = new MazeMap();
 }
 
-void Robot::run() {
-	printf("--Robot::run()--\n");
+void Robot::runRightWall() {
+	printf("--Robot::runRightWall()--\n");
 
 	// turn right if the robot can...
 	if (!lookRight()) {
@@ -42,6 +59,12 @@ void Robot::run() {
 
 	// try and drive forward
 	driveForward();
+}
+
+void Robot::runFloodFill() {
+	printf("--Robot::runFloodFill()--\n");
+
+	// init the flood fill if it hasn't been
 }
 
 Direction Robot::rotationToDirection(Rotation rotation) {
@@ -123,6 +146,9 @@ bool Robot::driveForward() {
 		xPos--;
 		break;
 	}
+
+	// increment the history counter for that position
+	posHistory[yPos][xPos]++;
 
 	return true;
 }

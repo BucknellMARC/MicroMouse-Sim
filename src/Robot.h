@@ -10,7 +10,11 @@ protected:
 	int xPos, yPos;
 	Direction direction;
 
-	MazeMap* mazeMap;
+	int posHistory[MAZE_HEIGHT][MAZE_WIDTH];
+	int floodMap[MAZE_HEIGHT][MAZE_WIDTH];			// flood map holds distanced to target location
+
+	bool vertWallMap[MAZE_HEIGHT][MAZE_WIDTH-1];	// vertical walls are between grid spaces
+	bool horizWallMap[MAZE_HEIGHT-1][MAZE_WIDTH];	// horiz walls go across a grid space
 
 protected:
 	//
@@ -25,7 +29,8 @@ public:
 	// main methods
 	//
 
-	void run();
+	void runRightWall();
+	void runFloodFill();
 
 	Direction rotationToDirection(Rotation rotation);
 

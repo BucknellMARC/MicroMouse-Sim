@@ -60,7 +60,7 @@ void startRenderLoop() {
 
 void logic() {
 	printf("-----logic()-----\n");
-	firstRobot->run();
+	firstRobot->runRightWall();
 }
 
 // the rendering loop
