@@ -25,21 +25,15 @@ void VirtualRobot::draw() {
 	rectangle->draw(1.0f, 0.0f, 0.0f);
 }
 
-bool VirtualRobot::lookForward() {
-	return virtualMaze->doesWallExist(xPos, yPos, direction);
-}
-
-bool VirtualRobot::lookLeft() {
-	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(LEFT));
-}
-
-bool VirtualRobot::lookRight() {
-	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(RIGHT));
+bool VirtualRobot::look(Rotation rotation) {
+	//if (posHistory[xPos][yPos] == 0) {
+	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(rotation));
+	//}
 }
 
 bool VirtualRobot::driveForward() {
 	// try to move with the maze representation
-	if (lookForward()) {
+	if (look(FORWARDS)) {
 		return false;
 	}
 

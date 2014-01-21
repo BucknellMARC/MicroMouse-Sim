@@ -1,6 +1,8 @@
 #ifndef VIRTUALROBOT_H
 #define VIRTUALROBOT_H
 
+#include "define.h"
+
 #include "Robot.h"
 #include "VirtualMaze.h"
 
@@ -25,9 +27,7 @@ public:
 
 	void draw();
 
-	bool lookForward();
-	bool lookLeft();
-	bool lookRight();
+	bool look(Rotation rotation);
 
 	bool driveForward();
 };

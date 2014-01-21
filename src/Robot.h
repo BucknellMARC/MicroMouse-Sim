@@ -29,14 +29,15 @@ public:
 	// main methods
 	//
 
+	// movement algorithms
 	void runRightWall();
 	void runFloodFill();
 
-	Direction rotationToDirection(Rotation rotation);
+	Direction	rotationToDirection(Rotation rotation);
+	bool		rotationToCoords(Rotation rotation, int* out);
 
-	virtual bool lookForward()	= 0;
-	virtual bool lookLeft()		= 0;
-	virtual bool lookRight()	= 0;
+	// virtual functions
+	virtual bool look(Rotation rotation);			// returns true if the robot is
 
 	virtual void turn(Direction direction);
 	virtual void turn(Rotation rotation);
