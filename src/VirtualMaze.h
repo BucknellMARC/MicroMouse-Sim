@@ -15,11 +15,13 @@ using namespace std;
 #include "Rectangle.h"
 #include "Circle.h"
 
-class VirtualMaze : public MazeMap {
+class VirtualMaze {
 private:
 	//
 	// class members
 	//
+
+	MazeMap* mazeMap;
 
 	vector<Rectangle> walls;
 	Circle** circles;
@@ -44,6 +46,10 @@ public:
 
 	void draw();
 	void rebuildWalls();
+
+	MazeMap* getMazeMap();
+
+	~VirtualMaze();
 
 	//
 	// private methods

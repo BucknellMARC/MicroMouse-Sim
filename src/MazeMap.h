@@ -9,32 +9,24 @@
 
 #include "define.h"
 
-class MazeMap {
-protected:
-	//
-	// main members
-	//
-
+typedef struct {
 	bool horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
 	bool vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
 
-public:
-	//
-	// constructors
-	//
+} MazeMap;
 
-	MazeMap();
+// constructor
+MazeMap* mazemap_create();
 
-	//
-	// main methods
-	//
+//
+// main methods
+//
 
-	bool doesWallExist(int x, int y, Direction direction);
+bool mazemap_doesWallExist(MazeMap* mazeMap, int x, int y, Direction direction);
+void mazemap_setWall(MazeMap* mazeMap, bool state, int x, int y, Direction direction);
 
-	void setWall(bool state, int x, int y, Direction direction);
+bool mazemap_getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook);
 
-protected:
-	bool getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook);
-};
+void mazemap_destroy(MazeMap* mm);
 
 #endif

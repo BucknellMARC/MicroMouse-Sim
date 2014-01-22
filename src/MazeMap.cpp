@@ -1,17 +1,21 @@
 #ifndef MAZEMAP_CPP
 #define MAZEMAP_CPP
 
+#include <stdlib.h>
+
 #include "define.h"
 #include "MazeMap.h"
 
-MazeMap::MazeMap() {
+MazeMap* mazemap_create() {
+	MazeMap* mm = (MazeMap*)calloc(1, sizeof(MazeMap));
 
+	return mm;
 }
 
-bool MazeMap::doesWallExist(int x, int y, Direction direction) {
+bool mazemap_doesWallExist(MazeMap* mazeMap, int x, int y, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
-	bool success = getLookPositions(x, y, direction, &xLook, &yLook);
+	bool success = mazemap_getLookPositions(x, y, direction, &xLook, &yLook);
 
 	// if the look position was out of bounds, there is a wall
 	if (!success) {
@@ -20,18 +24,18 @@ bool MazeMap::doesWallExist(int x, int y, Direction direction) {
 
 	// only return true if we know the wall actually exists
 	if (direction == NORTH || direction == SOUTH) {
-		return horizWalls[yLook][xLook];
+		return mazeMap->horizWalls[yLook][xLook];
 	}
 	else {
-		return vertWalls[yLook][xLook];
+		return mazeMap->vertWalls[yLook][xLook];
 	}
 }
 
 // sets the desired wall to a new state
-void MazeMap::setWall(bool state, int x, int y, Direction direction) {
+void mazemap_setWall(MazeMap* mazeMap, bool state, int x, int y, Direction direction) {
 	// get the proper look
 	int xLook, yLook;
-	bool success = getLookPositions(x, y, direction, &xLook, &yLook);
+	bool success = mazemap_getLookPositions(x, y, direction, &xLook, &yLook);
 
 	if (!success) {
 		return;
@@ -39,14 +43,14 @@ void MazeMap::setWall(bool state, int x, int y, Direction direction) {
 
 	// assign to the proper array
 	if (direction == NORTH || direction == SOUTH) {
-		horizWalls[yLook][xLook] = state;
+		mazeMap->horizWalls[yLook][xLook] = state;
 	}
 	else {
-		vertWalls[yLook][xLook] = state;
+		mazeMap->vertWalls[yLook][xLook] = state;
 	}
 }
 
-bool MazeMap::getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook) {
+bool mazemap_getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook) {
 	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:
@@ -81,6 +85,10 @@ bool MazeMap::getLookPositions(int x, int y, Direction direction, int* xLook, in
 
 
 	return true;
+}
+
+void mazemap_destroy(MazeMap* mm) {
+	free(mm);
 }
 
 #endif

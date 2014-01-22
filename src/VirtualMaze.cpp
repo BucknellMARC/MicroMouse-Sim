@@ -15,17 +15,19 @@
 #include <vector>
 using namespace std;
 
-#include "VirtualMaze.h"
 
 #include "define.h"
 #include "Rectangle.h"
+#include "MazeMap.h"
 
+#include "VirtualMaze.h"
 //
 // constructors
 //
 
-VirtualMaze::VirtualMaze()
-	: MazeMap() {
+VirtualMaze::VirtualMaze() {
+	mazeMap = mazemap_create();
+
 	// perform prim generation
 	primGeneration();
 
@@ -67,7 +69,7 @@ void VirtualMaze::rebuildWalls() {
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int column = 0; column < (MAZE_WIDTH - 1); column++) {
-			if (vertWalls[row][column]) {
+			if (mazeMap->vertWalls[row][column]) {
 				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
@@ -81,7 +83,7 @@ void VirtualMaze::rebuildWalls() {
 	// build the columns
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
-			if (horizWalls[row][column]) {
+			if (mazeMap->horizWalls[row][column]) {
 				int x = column * blockWidthPX;
 				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
@@ -91,6 +93,15 @@ void VirtualMaze::rebuildWalls() {
 			}
 		}
 	}
+}
+
+MazeMap* VirtualMaze::getMazeMap() {
+	return mazeMap;
+}
+
+VirtualMaze::~VirtualMaze() {
+	// deallocate the MazeMap
+	mazemap_destroy(mazeMap);
 }
 
 //
@@ -109,12 +120,12 @@ void VirtualMaze::primGeneration() {
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			vertWalls[row][col] = true;
+			mazeMap->vertWalls[row][col] = true;
 		}
 	}
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizWalls[row][col] = true;
+			mazeMap->horizWalls[row][col] = true;
 		}
 	}
 
@@ -137,7 +148,6 @@ void VirtualMaze::primGeneration() {
 
 	// loop until the active wall list is zero
 	while (activeWallList.size() > 0) {
-		//printf("Wall looping...\n");
 
 		// get a random location from the wall list
 		int currentPos = rand() % activeWallList.size();
@@ -172,7 +182,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			setWall(false, current.x, current.y, direction);
+			mazemap_setWall(mazeMap, false, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;
