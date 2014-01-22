@@ -66,9 +66,9 @@ void VirtualMaze::rebuildWalls() {
 
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int column = 0; column < (MAZE_WIDTH + 1); column++) {
-			if (verticalWalls[row][column] == WALL) {
-				int x = column * blockWidthPX - wallWidthPX / 2;
+		for (int column = 0; column < (MAZE_WIDTH - 1); column++) {
+			if (vertWalls[row][column]) {
+				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
 				Rectangle rectangle(x, y, wallWidthPX, blockWidthPX);
@@ -79,11 +79,11 @@ void VirtualMaze::rebuildWalls() {
 	}
 
 	// build the columns
-	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
+	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
-			if (horizontalWalls[row][column] == WALL) {
+			if (horizWalls[row][column]) {
 				int x = column * blockWidthPX;
-				int y = row * blockWidthPX - wallWidthPX / 2;
+				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
 				Rectangle rectangle(x, y, blockWidthPX, wallWidthPX);
 
@@ -106,15 +106,15 @@ void VirtualMaze::primGeneration() {
 
 	printf("Starting prim generation...\n");
 
-	// wall out the entire maze
+	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
-			verticalWalls[row][col] = WALL;
+		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
+			vertWalls[row][col] = true;
 		}
 	}
-	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
+	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizontalWalls[row][col] = WALL;
+			horizWalls[row][col] = true;
 		}
 	}
 
@@ -137,24 +137,20 @@ void VirtualMaze::primGeneration() {
 
 	// loop until the active wall list is zero
 	while (activeWallList.size() > 0) {
-		printf("Wall looping...\n");
+		//printf("Wall looping...\n");
 
 		// get a random location from the wall list
 		int currentPos = rand() % activeWallList.size();
 		Point current = activeWallList[currentPos];
 
-		printf("---Current Point---\n");
-		printf("Pos: %i\n", currentPos);
-		printf("X: %i\tY:%i\n", current.x, current.y);
-
 		// lists the direction that the active spot can go in...
 		vector<Direction> canGo;
 
 		// figure out what is part of the maze and what is not
-		if ((current.y + 1) < MAZE_HEIGHT && !partOfMaze[current.y + 1][current.x]) {
+		if (current.y < (MAZE_HEIGHT - 1) && !partOfMaze[current.y + 1][current.x]) {
 			canGo.push_back(NORTH);
 		}
-		if ((current.x + 1) < MAZE_WIDTH && !partOfMaze[current.y][current.x + 1]) {
+		if (current.x < (MAZE_WIDTH - 1) && !partOfMaze[current.y][current.x + 1]) {
 			canGo.push_back(EAST);
 		}
 		if (current.y > 0 && !partOfMaze[current.y - 1][current.x]) {
@@ -176,7 +172,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			setWall(FREE, current.x, current.y, direction);
+			setWall(false, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;

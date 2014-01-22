@@ -5,70 +5,82 @@
 #include "MazeMap.h"
 
 MazeMap::MazeMap() {
-	// init the memory space for the wall states
-	horizontalWalls = new WallState*[MAZE_HEIGHT + 1];
-	for (int n = 0; n < (MAZE_HEIGHT + 1); n++) {
-		horizontalWalls[n] = new WallState[MAZE_WIDTH];
-	}
 
-	verticalWalls = new WallState*[MAZE_HEIGHT];
-	for (int n = 0; n < MAZE_HEIGHT; n++) {
-		verticalWalls[n] = new WallState[MAZE_WIDTH + 1];
-	}
-
-	// now initialize everything in the unknown state
-	for (int row = 0; row < (MAZE_HEIGHT + 1); row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizontalWalls[row][col] = UNKNOWN;
-		}
-	}
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < (MAZE_WIDTH + 1); col++) {
-			verticalWalls[row][col] = UNKNOWN;
-		}
-	}
 }
 
 bool MazeMap::doesWallExist(int x, int y, Direction direction) {
-	WallState wallState;
-
 	// get the wall from wall list
-	switch (direction) {
-	case NORTH:
-		wallState = horizontalWalls[y+1][x];
-		break;
-	case EAST:
-		wallState = verticalWalls[y][x+1];
-		break;
-	case SOUTH:
-		wallState = horizontalWalls[y][x];
-		break;
-	case WEST:
-		wallState = verticalWalls[y][x];
-		break;
+	int xLook, yLook;
+	bool success = getLookPositions(x, y, direction, &xLook, &yLook);
+
+	// if the look position was out of bounds, there is a wall
+	if (!success) {
+		return true;
 	}
 
 	// only return true if we know the wall actually exists
-	return (wallState == WALL);
+	if (direction == NORTH || direction == SOUTH) {
+		return horizWalls[yLook][xLook];
+	}
+	else {
+		return vertWalls[yLook][xLook];
+	}
 }
 
 // sets the desired wall to a new state
-void MazeMap::setWall(WallState state, int x, int y, Direction direction) {
-	// set the proper thing depending on direction
+void MazeMap::setWall(bool state, int x, int y, Direction direction) {
+	// get the proper look
+	int xLook, yLook;
+	bool success = getLookPositions(x, y, direction, &xLook, &yLook);
+
+	if (!success) {
+		return;
+	}
+
+	// assign to the proper array
+	if (direction == NORTH || direction == SOUTH) {
+		horizWalls[yLook][xLook] = state;
+	}
+	else {
+		vertWalls[yLook][xLook] = state;
+	}
+}
+
+bool MazeMap::getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook) {
+	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:
-		horizontalWalls[y+1][x] = state;
-		break;
 	case EAST:
-		verticalWalls[y][x+1] = state;
+		*xLook = x;
+		*yLook = y;
 		break;
+
 	case SOUTH:
-		horizontalWalls[y][x] = state;
+		*xLook = x;
+		*yLook = y - 1;
 		break;
+
 	case WEST:
-		verticalWalls[y][x] = state;
+		*xLook = x - 1;
+		*yLook = y;
 		break;
 	}
+
+	// there is a wall if we are looking out of bounds
+	if (*xLook < 0 || *yLook < 0) {
+		return false;
+	}
+
+	// check for other random bounds
+	if (direction == EAST && x == (MAZE_WIDTH - 1)) {
+		return false;
+	}
+	if (direction == NORTH && y == (MAZE_HEIGHT - 1)) {
+		return false;
+	}
+
+
+	return true;
 }
 
 #endif

@@ -9,20 +9,14 @@
 
 #include "define.h"
 
-enum WallState {
-	WALL,
-	FREE,
-	UNKNOWN
-};
-
 class MazeMap {
 protected:
 	//
 	// main members
 	//
 
-	WallState** horizontalWalls;
-	WallState** verticalWalls;
+	bool horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
+	bool vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
 
 public:
 	//
@@ -37,7 +31,10 @@ public:
 
 	bool doesWallExist(int x, int y, Direction direction);
 
-	void setWall(WallState state, int x, int y, Direction direction);
+	void setWall(bool state, int x, int y, Direction direction);
+
+protected:
+	bool getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook);
 };
 
 #endif
