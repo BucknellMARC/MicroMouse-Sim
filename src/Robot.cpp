@@ -1,89 +1,71 @@
 #ifndef ROBOT_CPP
 #define ROBOT_CPP
 
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "Robot.h"
 
-//
-// constructors
-//
-
-// default constructor
-Robot::Robot()
-	: Robot(0, 0)
+// default initializer
+Robot* robot_create(int xPos, int yPos, MazeMap* mm)
 {
-	// init the position history and the floodmap
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			posHistory[row][col] = 0;
-			floodMap[row][col] = 0;
-		}
-	}
+	Robot* robot = (Robot*)calloc(1, sizeof(Robot));
 
-	// init the wall map all false
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH - 1; col++) {
-			vertWallMap[row][col] = false;
-		}
-	}
-	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			horizWallMap[row][col] = false;
-		}
-	}
+	// assign the initial position to the robot
+	robot->xPos = xPos;
+	robot->yPos = yPos;
+
+	robot->direction = EAST;
+
+	robot->mazeMap = mm;
+
+	return robot;
 }
 
-// normal use constructor
-Robot::Robot(int xPos, int yPos) {
-	this->xPos = xPos;
-	this->yPos = yPos;
-
-	this->direction = EAST;
-}
-
-void Robot::runRightWall() {
-	printf("--Robot::runRightWall()--\n");
-
-	// turn right if the robot can...
-	if (!look(RIGHT)) {
-		printf("Turning right\n");
-		turn(RIGHT);
+void robot_runRightWall(Robot* robot) {
+	// turn right if you can
+	if (robot_look(robot, RIGHT)) {
+		robot_turn(robot, RIGHT);
 	}
 
-	// turn around if we are in front of a wall
-	if (look(FORWARDS)) {
-		printf("turning backwards...\n");
-		turn(LEFT);
+	if (!robot_look(robot, FORWARDS)) {
+		robot_turn(robot, LEFT);
+		return;
 	}
 
-	// try and drive forward
-	driveForward();
+	robot_driveForward(robot);
 }
 
-void Robot::runFloodFill() {
+void robot_runFloodFill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
 	// init the flood fill if it hasn't been
 }
 
-Direction Robot::rotationToDirection(Rotation rotation) {
-	Direction direction = this->direction;
+Direction robot_rotationToDirection(Robot* robot, Rotation rotation) {
+	// holds the direction that the lookup table converts to
+	Direction direction = robot->direction;
 
 	if (rotation == LEFT) {
 		switch (direction) {
 		case NORTH:
 			direction = WEST;
 			break;
+
 		case EAST:
 			direction = NORTH;
 			break;
+
 		case SOUTH:
 			direction = EAST;
 			break;
+
 		case WEST:
 			direction = SOUTH;
 			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
 		}
 	}
 	else if (rotation == RIGHT) {
@@ -91,15 +73,21 @@ Direction Robot::rotationToDirection(Rotation rotation) {
 		case NORTH:
 			direction = EAST;
 			break;
+
 		case EAST:
 			direction = SOUTH;
 			break;
+
 		case SOUTH:
 			direction = WEST;
 			break;
+
 		case WEST:
 			direction = NORTH;
 			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
 		}
 	}
 	else if (rotation == BACKWARDS) {
@@ -107,26 +95,37 @@ Direction Robot::rotationToDirection(Rotation rotation) {
 		case NORTH:
 			direction = SOUTH;
 			break;
+
 		case EAST:
 			direction = WEST;
 			break;
+
 		case SOUTH:
 			direction = NORTH;
 			break;
+
 		case WEST:
 			direction = EAST;
 			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
 		}
 	}
 
 	return direction;
 }
 
-bool Robot::rotationToCoords(Rotation rotation, int* out) {
+/*
+bool robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 	// look forward
 	// get direction to look
-	Direction direct = rotationToDirection(rotation);
+	Direction direct = robot_rotationToDirection(robot, rotation);
 	int xCoord, yCoord;
+
+	// pull the positions from the robot
+	int xPos = robot->xPos;
+	int yPos = robot->yPos;
 
 	switch(direct) {
 	case NORTH:
@@ -162,73 +161,102 @@ bool Robot::rotationToCoords(Rotation rotation, int* out) {
 	// otherwise, the coordinates were out of bounds
 	return false;
 }
+*/
 
-bool Robot::look(Rotation rotation) {
+bool robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
-	Direction direction = rotationToDirection(rotation);
-	int xLook, yLook;
+	Direction direction = robot_rotationToDirection(robot, rotation);
+
+	return !mazemap_doesWallExist(robot->mazeMap, robot->xPos, robot->yPos, direction);
+
+	/*
+	int xPos = robot->xPos;
+	int yPos = robot->yPos;
 
 	switch(direction) {
 	case NORTH:
-	case WEST:
 		xLook = xPos;
+		yLook = yPos - 1;
+		break;
+
+	case WEST:
+		xLook = xPos - 1;
 		yLook = yPos;
 		break;
 
 	case EAST:
-		xLook = xPos + 1;
+	case SOUTH:
+		xLook = xPos;
 		yLook = yPos;
 		break;
 
-	case SOUTH:
-		xLook = xPos;
-		yLook = yPos + 1;
-		break;
+	default:
+		printf("Error: Robot is in an unexpected state!\n");
 	}
 
 	// don't access the arrays if stuff is out of bounds
-	if (xLook >= MAZE_WIDTH || yLook >= MAZE_HEIGHT) {
+	if (xLook > -1 || yLook > -1) {
 		return false;
 	}
 
 	// get data from proper location
 	if (direction == NORTH || direction == SOUTH) {
-		return vertWallMap[yLook][xLook];
+		return !robot->mazeMap->vertWalls[yLook][xLook];
 	}
 	else {
-		return horizWallMap[yLook][xLook];
+		return !robot->mazeMap->horizWalls[yLook][xLook];
 	}
+	*/
 }
 
-void Robot::turn(Direction direction) {
-	this->direction = direction;
+void robot_turn(Robot* robot, Direction direction) {
+	robot->direction = direction;
 }
 
-void Robot::turn(Rotation rotation) {
+void robot_turn(Robot* robot, Rotation rotation) {
 	// set the new direction
-	direction = rotationToDirection(rotation);
+	//printf("Original direction: %d\n", (int)robot->direction);
+
+	robot->direction = robot_rotationToDirection(robot, rotation);
+
+	//printf("New Direction: %d\n\n", (int)robot->direction);
 }
 
-bool Robot::driveForward() {
+bool robot_driveForward(Robot* robot) {
+	Direction direction = robot->direction;
+
+	printf("X: %d\tY:%d\n", robot->xPos, robot->yPos);
+	printf("Forwards: %d\nLeft: %d\nRight: %d\n", robot_look(robot, FORWARDS), robot_look(robot, LEFT), robot_look(robot, RIGHT));
+
 	switch (direction) {
 	case NORTH:
-		yPos++;
+		robot->yPos++;
 		break;
+
 	case EAST:
-		xPos++;
+		robot->xPos++;
 		break;
+
 	case SOUTH:
-		yPos--;
+		robot->yPos--;
 		break;
+
 	case WEST:
-		xPos--;
+		robot->xPos--;
 		break;
+
+	default:
+		printf("Error: Robot is in an unexpected state!\n");
 	}
 
 	// increment the history counter for that position
-	posHistory[yPos][xPos]++;
+	//robot->posHistory[robot->yPos][robot->xPos]++;
 
 	return true;
+}
+
+void robot_destroy(Robot* robot) {
+	free(robot);
 }
 
 #endif

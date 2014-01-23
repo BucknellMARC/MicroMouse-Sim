@@ -6,10 +6,10 @@
 #include "Robot.h"
 #include "VirtualMaze.h"
 
-class VirtualRobot : public Robot {
+class VirtualRobot {
 private:
+	Robot* robot;
 	Rectangle* rectangle;
-
 	VirtualMaze* virtualMaze;
 
 	static const int robotSizePX = 15;
@@ -25,11 +25,13 @@ public:
 	// main methods
 	//
 
+	void run();
+	//bool driveForward();
+
 	void draw();
 
-	bool look(Rotation rotation);
-
-	bool driveForward();
+	// deconstructor
+	~VirtualRobot();
 };
 
 #endif

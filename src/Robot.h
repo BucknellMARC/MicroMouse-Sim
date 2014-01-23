@@ -4,8 +4,7 @@
 #include "define.h"
 #include "MazeMap.h"
 
-class Robot {
-protected:
+typedef struct {
 	// position and direction the robot is facing
 	int xPos, yPos;
 	Direction direction;
@@ -13,36 +12,29 @@ protected:
 	int posHistory[MAZE_HEIGHT][MAZE_WIDTH];
 	int floodMap[MAZE_HEIGHT][MAZE_WIDTH];			// flood map holds distanced to target location
 
-	bool vertWallMap[MAZE_HEIGHT][MAZE_WIDTH-1];	// vertical walls are between grid spaces
-	bool horizWallMap[MAZE_HEIGHT-1][MAZE_WIDTH];	// horiz walls go across a grid space
+	MazeMap* mazeMap;
+} Robot;
 
-protected:
-	//
-	// constructor
-	//
+// constructor
+Robot* robot_create(int xPos, int yPos, MazeMap* mm);
 
-	Robot();
-	Robot(int xPos, int yPos);
+// movement algorithms
+void robot_runRightWall(Robot* robot);
+void robot_runFloodFill(Robot* robot);
 
-public:
-	//
-	// main methods
-	//
+// rotation assists
+Direction	robot_rotationToDirection(Robot* robot, Rotation rotation);
+//bool		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
 
-	// movement algorithms
-	void runRightWall();
-	void runFloodFill();
+// interfacing
+bool robot_look(Robot* robot, Rotation rotation);			// returns true if the robot can move to that position
 
-	Direction	rotationToDirection(Rotation rotation);
-	bool		rotationToCoords(Rotation rotation, int* out);
+void robot_turn(Robot* robot, Direction direction);
+void robot_turn(Robot* robot, Rotation rotation);
 
-	// virtual functions
-	virtual bool look(Rotation rotation);			// returns true if the robot is
+bool robot_driveForward(Robot* robot);
 
-	virtual void turn(Direction direction);
-	virtual void turn(Rotation rotation);
-
-	virtual bool driveForward();
-};
+// deconstructor
+void robot_destroy(Robot* robot);
 
 #endif

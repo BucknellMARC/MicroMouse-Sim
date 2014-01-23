@@ -4,15 +4,18 @@
 #include <stdio.h>
 #include <GL/gl.h>
 
+#include "Robot.h"
 #include "VirtualRobot.h"
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
-	: Robot(0, 0)
 {
+	// create the robot
+	robot = robot_create(0, 0, virtualMaze->getMazeMap());
+
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
-	int x = xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
-	int y = yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int x = robot->xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int y = robot->yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
 
 	this->rectangle = new Rectangle(x, y, robotSizePX, robotSizePX);
 
@@ -20,17 +23,21 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	this->virtualMaze = virtualMaze;
 }
 
-void VirtualRobot::draw() {
-	// draw the robot red
-	rectangle->draw(1.0f, 0.0f, 0.0f);
+void VirtualRobot::run() {
+
+	// run the algorithm
+	robot_runRightWall(robot);
+
+	// calculate and update the new position
+	int blockWidthPX = VirtualMaze::getBlockWidthPX();
+	int offset = blockWidthPX / 2 - robotSizePX / 2;
+
+	int newX = blockWidthPX * robot->xPos + offset;
+	int newY = blockWidthPX * robot->yPos + offset;
+	rectangle->setPos(newX, newY);
 }
 
-bool VirtualRobot::look(Rotation rotation) {
-	//if (posHistory[xPos][yPos] == 0) {
-	return virtualMaze->doesWallExist(xPos, yPos, rotationToDirection(rotation));
-	//}
-}
-
+/*
 bool VirtualRobot::driveForward() {
 	// try to move with the maze representation
 	if (look(FORWARDS)) {
@@ -38,10 +45,10 @@ bool VirtualRobot::driveForward() {
 	}
 
 	// perform parent drive forward
-	Robot::driveForward();
+	robot_driveForward(robot);
 
 	// then move the rectangle
-	switch (direction) {
+	switch (robot->direction) {
 	case NORTH:
 		rectangle->translate(0, VirtualMaze::getBlockWidthPX());
 		break;
@@ -57,6 +64,17 @@ bool VirtualRobot::driveForward() {
 	}
 
 	return true;
+}
+*/
+
+void VirtualRobot::draw() {
+	// draw the robot red
+	rectangle->draw(1.0f, 0.0f, 0.0f);
+}
+
+VirtualRobot::~VirtualRobot() {
+	// destroy the robot
+	robot_destroy(robot);
 }
 
 #endif

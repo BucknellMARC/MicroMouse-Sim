@@ -47,7 +47,7 @@ void initWindow(int* argc, char** argv) {
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// create the window
-	glutCreateWindow("My First GLUT");
+	glutCreateWindow("My First GLUT\n");
 }
 
 // starts the rendering loop which will draw the simulation
@@ -59,8 +59,7 @@ void startRenderLoop() {
 }
 
 void logic() {
-	printf("-----logic()-----\n");
-	firstRobot->runRightWall();
+	firstRobot->run();
 }
 
 // the rendering loop
