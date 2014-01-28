@@ -24,7 +24,11 @@ OBJ_FILES	:= $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(CXX_SOURCES))
 BINARY		:= $(BUILD_PATH)/mm-sim
 
 # global rule, depends on main binary
-all: $(BINARY)
+all: dirs $(BINARY)
+	
+dirs:
+	mkdir -p $(DEP_PATH) $(BUILD_PATH) $(OBJ_PATH)
+
 	
 # rule to build main binary
 $(BINARY): $(OBJ_FILES)
@@ -33,7 +37,6 @@ $(BINARY): $(OBJ_FILES)
 
 # rule to build dependencies
 $(DEP_PATH)/%.d: $(SRC_PATH)/%.cpp
-	@mkdir -p $(DEP_PATH)
 	echo -n "$(OBJ_PATH)/" > $@
 	$(CXX) -MM $^ >> $@
 
@@ -42,10 +45,10 @@ $(DEP_PATH)/%.d: $(SRC_PATH)/%.cpp
 
 # general rule for object files
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-	@mkdir -p $(OBJ_PATH)
 	$(CXX) $(CXXFLAGS) -c $(patsubst $(OBJ_PATH)/%.o, $(SRC_PATH)/%.cpp, $@) -o $@
 	
 # delete the directories and put back in the structure
+.PHONY:
 clean:
 	rm -rf $(BUILD_PATH)
 	rm -rf $(DEP_PATH)
