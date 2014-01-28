@@ -45,7 +45,7 @@ $(DEP_PATH)/%.d: $(SRC_PATH)/%.cpp
 
 # general rule for object files
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $(patsubst $(OBJ_PATH)/%.o, $(SRC_PATH)/%.cpp, $@) -o $@
+	$(CXX) $(CXXFLAGS) -c $^ -o $@
 	
 # delete the directories and put back in the structure
 .PHONY:
