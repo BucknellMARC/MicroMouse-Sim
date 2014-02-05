@@ -44,9 +44,9 @@ dirs:
 	mkdir -p $(DEP_PATH) $(BUILD_PATH)
 	
 # rule to build main binary
-$(BINARY): $(LOGIC_OBJ) $(GRAPHICS_OBJ)
+mm-sim: $(LOGIC_OBJ) $(GRAPHICS_OBJ) $(SRC_PATH)/main.cpp
 	@echo "Linking $(BINARY)"
-	$(CXX) $(LDFLAGS) -o $(BINARY) $(LOGIC_OBJ) $(GRAPHICS_OBJ)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(BINARY) $^
 
 # rule to build dependencies
 $(DEP_PATH)/%.graphics.d: $(SRC_PATH)/%.cpp
