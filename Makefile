@@ -14,7 +14,7 @@ CXX := g++
 OPENGL_LIB := -lGL -lGLU -lglut
 
 # cflags
-CFLAGS := -Wall -I $(SRC_PATH) -I $(LOGIC_PATH) -I $(GRAPHICS_PATH)
+CFLAGS := -Wall -I $(SRC_PATH)
 CXXFLAGS := $(CFLAGS)
 LDFLAGS := -lstdc++ $(OPENGL_LIB)
 
@@ -22,50 +22,53 @@ LDFLAGS := -lstdc++ $(OPENGL_LIB)
 LOGIC_SOURCES	:= $(wildcard $(LOGIC_PATH)/*.cpp)
 LOGIC_NAMES		:= $(basename $(LOGIC_SOURCES))
 LOGIC_DEP		:= $(addprefix $(DEP_PATH)/, $(notdir $(LOGIC_NAMES)))
-LOGIC_DEP		:= $(addsuffix .logic.d, $(LOGIC_DEP))
+LOGIC_DEP		:= $(addsuffix .d, $(LOGIC_DEP))
 LOGIC_OBJ		:= $(addprefix $(BUILD_PATH)/, $(notdir $(LOGIC_NAMES)))
-LOGIC_OBJ		:= $(addsuffix .logic.o, $(LOGIC_OBJ))
+LOGIC_OBJ		:= $(addsuffix .o, $(LOGIC_OBJ))
 
 # graphics
 GRAPHICS_SOURCES	:= $(wildcard $(GRAPHICS_PATH)/*.cpp)
 GRAPHICS_NAMES		:= $(basename $(GRAPHICS_SOURCES))
 GRAPHICS_DEP		:= $(addprefix $(DEP_PATH)/, $(notdir $(GRAPHICS_NAMES)))
-GRAPHICS_DEP		:= $(addsuffix .graphics.d, $(GRAPHICS_DEP))
+GRAPHICS_DEP		:= $(addsuffix .d, $(GRAPHICS_DEP))
 GRAPHICS_OBJ		:= $(addprefix $(BUILD_PATH)/, $(notdir $(GRAPHICS_NAMES)))
-GRAPHICS_OBJ		:= $(addsuffix .graphics.o, $(GRAPHICS_OBJ))
+GRAPHICS_OBJ		:= $(addsuffix .o, $(GRAPHICS_OBJ))
 
 # the final application
 BINARY := mm-sim
 
 # global rule, depends on main binary
-all: dirs $(BINARY)
+all: dirs $(LOGIC_DEP) $(GRAPHICS_DEP) $(BINARY)
 	
 dirs:
 	mkdir -p $(DEP_PATH) $(BUILD_PATH)
 	
 # rule to build main binary
 mm-sim: $(LOGIC_OBJ) $(GRAPHICS_OBJ) $(SRC_PATH)/main.cpp
-	@echo "Linking $(BINARY)"
+	@echo -n "Linking mm-sim..."
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(BINARY) $^
+	@echo "done!"
 
 # rule to build dependencies
-$(DEP_PATH)/%.graphics.d: $(SRC_PATH)/%.cpp
-	echo -n "$(OBJ_PATH)/" > $@
-	$(CXX) -MM $^ >> $@
-	
-$(DEP_PATH)/%.logic.d: $(SRC_PATH)/%.c
-	echo -n "$(OBJ_PATH)/" > $@
-	$(CXX) -MM $^ >> $@
+$(DEP_PATH)/%.d: $(LOGIC_PATH)/%.cpp
+	@mkdir -p $(DEP_PATH) $(BUILD_PATH)
+	@echo -n "$(BUILD_PATH)/" > $@
+	$(CXX) $(CXXFLAGS) -MM $< >> $@
+
+$(DEP_PATH)/%.d: $(GRAPHICS_PATH)/%.cpp
+	@mkdir -p $(DEP_PATH) $(BUILD_PATH)
+	@echo -n "$(BUILD_PATH)/" > $@
+	$(CXX) $(CXXFLAGS) -MM $< >> $@
 
 # include the dependencies
 -include $(LOGIC_DEP)
 -include $(GRAPHICS_DEP)
 
-$(BUILD_PATH)/%.logic.o: $(LOGIC_PATH)/%.cpp
-	$(CXX) $(CFLAGS) -c $^ -o $@
+$(BUILD_PATH)/%.o: $(LOGIC_PATH)/%.cpp
+	$(CXX) $(CFLAGS) -c $< -o $@
 
-$(BUILD_PATH)/%.graphics.o: $(GRAPHICS_PATH)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $^ -o $@
+$(BUILD_PATH)/%.o: $(GRAPHICS_PATH)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 	
 # delete the directories and put back in the structure
 .PHONY:

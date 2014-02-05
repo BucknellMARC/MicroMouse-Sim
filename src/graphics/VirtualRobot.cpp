@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <GL/gl.h>
 
-#include "Robot.h"
+#include "logic/Robot.h"
 #include "VirtualRobot.h"
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)

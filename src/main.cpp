@@ -3,9 +3,9 @@
 #include <GL/glut.h>
 
 #include "define.h"
-#include "VirtualMaze.h"
-#include "VirtualRobot.h"
-#include "Circle.h"
+#include "graphics/VirtualMaze.h"
+#include "graphics/VirtualRobot.h"
+#include "graphics/Circle.h"
 
 void initWindow(int* argc, char** argv);
 void startRenderLoop();

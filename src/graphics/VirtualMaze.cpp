@@ -18,7 +18,7 @@ using namespace std;
 
 #include "define.h"
 #include "Rectangle.h"
-#include "MazeMap.h"
+#include "logic/MazeMap.h"
 
 #include "VirtualMaze.h"
 //

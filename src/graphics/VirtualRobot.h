@@ -3,7 +3,7 @@
 
 #include "define.h"
 
-#include "Robot.h"
+#include "logic/Robot.h"
 #include "VirtualMaze.h"
 
 class VirtualRobot {
