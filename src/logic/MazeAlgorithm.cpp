@@ -1,6 +1,8 @@
 #ifndef MAZE_ALGORITHM_C
 #define MAZE_ALGORITHM_C
 
+#include <string.h>
+
 #include "MazeAlgorithm.h"
 #include "MazeMap.h"
 
@@ -10,16 +12,14 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 	// blanks out the array to null values
 	memset(in, MALGO_FF_BAD, sizeof(ff_map));
 
-	int[][] array = in->array;
-
 	// set the inner four values to 0 (this is the target)
 	int centerRow = MAZE_HEIGHT / 2;
 	int centerCol = MAZE_WIDTH / 2;
 
-	array[centerRow][centerCol] = 0;
-	array[centerRow][centerCol + 1] = 0;
-	array[centerRow + 1][centerCol] = 0;
-	array[centerRow + 1][centerCol + 1] = 0;
+	in->array[centerRow][centerCol] = 0;
+	in->array[centerRow][centerCol + 1] = 0;
+	in->array[centerRow + 1][centerCol] = 0;
+	in->array[centerRow + 1][centerCol + 1] = 0;
 
 	// now keep looping in each direction until the values have been populated
 	bool isPopulated = false;
@@ -34,10 +34,10 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 				
 				// see if there is an adjacent wall; if not and adjacent tile has a meaningful value,
 				// then set current tile to one greater
-				int nextCount = array[row][col + 1];
+				int nextCount = in->array[row][col + 1];
 				bool wallExists = mazemap_doesWallExist(mm, col, row, EAST);
 				if (!wallExists && nextCount != MALGO_FF_BAD) {
-					array[row][col] = nextCount + 1;
+					in->array[row][col] = nextCount + 1;
 
 					filledCells++;
 				}
@@ -59,9 +59,10 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 
 				// see if there is an adjacent wall; if not and adjacent tile has a meaningful value,
 				// then set current tile to one greaterint nextCount = array[row + 1][col];
+				int nextCount = in->array[row + 1][col];
 				bool wallExists = mazemap_doesWallExist(mm, col, row, NORTH);	// bottom left is (0,0)
 				if (!wallExists && nextCount != MALGO_FF_BAD) {
-					array[row][col] = nextCount + 1;
+					in->array[row][col] = nextCount + 1;
 
 					filledCells++;
 				}
