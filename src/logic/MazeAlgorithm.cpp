@@ -7,6 +7,7 @@
 #include "MazeMap.h"
 
 // computes the flood fill for the first time (center is the target)
+// ** UNTESTED **
 void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 {
 	// blanks out the array to null values
@@ -76,6 +77,50 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 
 		// check to see if both the rows and the columns have been populated
 		isPopulated = (rowsPopulated == MAZE_HEIGHT) & (colsPopulated == MAZE_WIDTH);
+	}
+}
+
+// retargets the flood fill map
+// ** UNTESTED **	-- this will be wrong with the middle zero blocks
+void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
+{
+	// find the current target
+	int currentX = MALGO_FF_BAD;
+	int currentY = MALGO_FF_BAD;
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			int value = in->array[row][col];
+
+			if (value == 0) {
+				currentX = col;
+				currentY = row;
+
+				break;
+			}
+		}
+
+		// if inner forloop found a match, break out of this one
+		if (currentX != MALGO_FF_BAD) {
+			break;
+		}
+	}
+
+	// the new difference will be the current value of the new target
+	int difference = in->array[currentY][currentX];
+
+	// displace the rest of the array
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+
+			// make sure the value is always positive
+			int curValue = in->array[row][col];
+			if (difference > curValue) {
+				in->array[row][col] = difference - curValue;
+			}
+			else {
+				in->array[row][col] = curValue - difference;
+			}
+		}
 	}
 }
 
