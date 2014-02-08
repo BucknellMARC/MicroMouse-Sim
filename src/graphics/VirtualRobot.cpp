@@ -3,9 +3,12 @@
 
 #include <stdio.h>
 #include <GL/gl.h>
+#include <string.h>
 
 #include "logic/Robot.h"
+#include "logic/MazeAlgorithm.h"
 #include "VirtualRobot.h"
+#include "Display.h"
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
@@ -21,6 +24,9 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	// save the pointer to the virtual maze
 	this->virtualMaze = virtualMaze;
+
+	// compute the flood fill
+	malgo_floodfill_compute(virtualMaze->getMazeMap(), &floodFillMap);
 }
 
 void VirtualRobot::run() {
@@ -70,6 +76,14 @@ bool VirtualRobot::driveForward() {
 void VirtualRobot::draw() {
 	// draw the robot red
 	rectangle->draw(1.0f, 0.0f, 0.0f);
+
+	// draw the flood fill
+	ff_draw(&floodFillMap);
+
+}
+
+ff_map *VirtualRobot::getFloodFillMap() {
+	return &floodFillMap;
 }
 
 VirtualRobot::~VirtualRobot() {

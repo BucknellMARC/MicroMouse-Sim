@@ -47,6 +47,10 @@ public:
 	void draw();
 	void rebuildWalls();
 
+	//
+	// getters
+	//
+
 	MazeMap* getMazeMap();
 
 	~VirtualMaze();

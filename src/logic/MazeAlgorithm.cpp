@@ -7,15 +7,14 @@
 #include "MazeMap.h"
 
 // computes the flood fill for the first time (center is the target)
-// ** UNTESTED **
 void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 {
 	// blanks out the array to null values
 	memset(in, MALGO_FF_BAD, sizeof(ff_map));
 
 	// set the inner four values to 0 (this is the target)
-	int centerRow = MAZE_HEIGHT / 2;
-	int centerCol = MAZE_WIDTH / 2;
+	int centerRow = MAZE_HEIGHT / 2 - 1;
+	int centerCol = MAZE_WIDTH / 2 - 1;
 
 	in->array[centerRow][centerCol] = 0;
 	in->array[centerRow][centerCol + 1] = 0;
@@ -24,59 +23,101 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 
 	// now keep looping in each direction until the values have been populated
 	bool isPopulated = false;
-	while(!isPopulated) {
+	//while(!isPopulated) {
+	for (int dumbshit = 0; dumbshit < 100000; dumbshit++) {
 
-		// EAST/WEST
-		int rowsPopulated = 0;
+		// SOUTH to NORTH
+		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
+			for (int col = 0; col < MAZE_WIDTH; col++) {
+				
+				int curVal = in->array[row][col];
+				if (curVal != MALGO_FF_BAD || curVal == 0) {
+					continue;
+				}
+
+				bool wallExists = mazemap_doesWallExist(mm, col, row, NORTH);	// bottom left is (0,0)
+				if (wallExists) {
+					continue;
+				}
+
+				// get the value of the next column
+				int nextVal = in->array[row + 1][col];
+
+				// if the next value isn't bad, set the current one to it + 1
+				if (nextVal != MALGO_FF_BAD) {
+					in->array[row][col] = nextVal + 1;
+				}
+			}
+		}
+
+		// NORTH to SOUTH
+		for (int row = MAZE_HEIGHT-1; row > 0; row--) {
+			for (int col = 0; col < MAZE_WIDTH; col++) {
+				
+				int curVal = in->array[row][col];
+				if (curVal != MALGO_FF_BAD || curVal == 0) {
+					continue;
+				}
+
+				bool wallExists = mazemap_doesWallExist(mm, col, row, SOUTH);	// bottom left is (0,0)
+				if (wallExists) {
+					continue;
+				}
+
+				// get next value
+				int nextVal = in->array[row - 1][col];
+
+				if (nextVal != MALGO_FF_BAD) {
+					in->array[row][col] = nextVal + 1;
+				}
+			}
+		}
+
+		// WEST to EAST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
-			int filledCells = 0;
-
 			for (int col = 0; col < (MAZE_WIDTH-1); col++) {
 				
-				// see if there is an adjacent wall; if not and adjacent tile has a meaningful value,
-				// then set current tile to one greater
-				int nextCount = in->array[row][col + 1];
-				bool wallExists = mazemap_doesWallExist(mm, col, row, EAST);
-				if (!wallExists && nextCount != MALGO_FF_BAD) {
-					in->array[row][col] = nextCount + 1;
-
-					filledCells++;
+				int curVal = in->array[row][col];
+				if (curVal != MALGO_FF_BAD || curVal == 0) {
+					continue;
 				}
 
-			}
+				bool wallExists = mazemap_doesWallExist(mm, col, row, EAST);	// bottom left is (0,0)
+				if (wallExists) {
+					continue;
+				}
 
-			// if every single cell updated, then increment the number of populated rows
-			if (filledCells == (MAZE_WIDTH-1)) {
-				rowsPopulated++;
+				// get next val
+				int nextVal = in->array[row][col + 1];
+
+				if (nextVal != MALGO_FF_BAD) {
+					in->array[row][col] = nextVal + 1;
+				}
 			}
 		}
 
-		// NORTH/SOUTH
-		int colsPopulated = 0;
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			int filledCells = 0;
+		// EAST to WEST
+		for (int row = 0; row < MAZE_HEIGHT; row++) {
+			for (int col = MAZE_WIDTH-1; col > 0; col--) {
 
-			for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
+				int curVal = in->array[row][col];
+				if (curVal != MALGO_FF_BAD || curVal == 0) {
+					continue;
+				}
 
-				// see if there is an adjacent wall; if not and adjacent tile has a meaningful value,
-				// then set current tile to one greaterint nextCount = array[row + 1][col];
-				int nextCount = in->array[row + 1][col];
-				bool wallExists = mazemap_doesWallExist(mm, col, row, NORTH);	// bottom left is (0,0)
-				if (!wallExists && nextCount != MALGO_FF_BAD) {
-					in->array[row][col] = nextCount + 1;
+				bool wallExists = mazemap_doesWallExist(mm, col, row, WEST);	// bottom left is (0,0)
+				if (wallExists) {
+					continue;
+				}
 
-					filledCells++;
+				// get the next val
+				int nextVal = in->array[row][col - 1];
+
+				if (nextVal != MALGO_FF_BAD) {
+					in->array[row][col] = nextVal + 1;
 				}
 			}
-
-			// if every single cell updated, then increment the number of 
-			if (filledCells == (MAZE_HEIGHT-1)) {
-				colsPopulated++;
-			}
 		}
-
-		// check to see if both the rows and the columns have been populated
-		isPopulated = (rowsPopulated == MAZE_HEIGHT) & (colsPopulated == MAZE_WIDTH);
 	}
 }
 
