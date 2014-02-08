@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <GL/gl.h>
+#include <string.h>
 
 #include "logic/Robot.h"
 #include "VirtualRobot.h"
@@ -22,6 +23,9 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	// save the pointer to the virtual maze
 	this->virtualMaze = virtualMaze;
+
+	// blank out the flood fill map
+	memset(&floodFillMap, 0, sizeof(ff_map));
 }
 
 void VirtualRobot::run() {
@@ -73,8 +77,12 @@ void VirtualRobot::draw() {
 	rectangle->draw(1.0f, 0.0f, 0.0f);
 
 	// draw the flood fill
-	ff_draw(NULL);
+	ff_draw(&floodFillMap);
 
+}
+
+ff_map *VirtualRobot::getFloodFillMap() {
+	return &floodFillMap;
 }
 
 VirtualRobot::~VirtualRobot() {
