@@ -11,6 +11,10 @@
 #define MAZE_WIDTH 16
 #define MAZE_HEIGHT 16
 
+// dimensions in the pixel space
+#define MAZE_WIDTH_PX SCREEN_WIDTH / MAZE_WIDTH
+#define MAZE_HEIGHT_PX SCREEN_HEIGHT / MAZE_HEIGHT
+
 // meaning of direction
 enum Direction {
 	EAST,

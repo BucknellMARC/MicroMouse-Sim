@@ -6,6 +6,7 @@
 
 #include "logic/Robot.h"
 #include "VirtualRobot.h"
+#include "Display.h"
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
@@ -70,6 +71,10 @@ bool VirtualRobot::driveForward() {
 void VirtualRobot::draw() {
 	// draw the robot red
 	rectangle->draw(1.0f, 0.0f, 0.0f);
+
+	// draw the flood fill
+	ff_draw(NULL);
+
 }
 
 VirtualRobot::~VirtualRobot() {
