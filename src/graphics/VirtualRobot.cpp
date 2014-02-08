@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "logic/Robot.h"
+#include "logic/MazeAlgorithm.h"
 #include "VirtualRobot.h"
 #include "Display.h"
 
@@ -24,8 +25,8 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	// save the pointer to the virtual maze
 	this->virtualMaze = virtualMaze;
 
-	// blank out the flood fill map
-	memset(&floodFillMap, 0, sizeof(ff_map));
+	// compute the flood fill
+	malgo_floodfill_compute(virtualMaze->getMazeMap(), &floodFillMap);
 }
 
 void VirtualRobot::run() {
