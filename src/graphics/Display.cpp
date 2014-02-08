@@ -21,14 +21,16 @@ void display_screenspace_to_pixelspace(float *x, float *y)
 
 void ff_draw(ff_map *source)
 {
-	printf("draw_ff..\n");
+	for (int row = 0; row < MAZE_WIDTH; row++) {
+		for (int col = 0; col < MAZE_HEIGHT; col++) {
+			float x = ((float)col + 0.4f) * MAZE_WIDTH_PX;
+			float y = ((float)row + 0.4f) * MAZE_HEIGHT_PX;
+			display_screenspace_to_pixelspace(&x, &y);
 
-	float x = 256;
-	float y = 256;
-	display_screenspace_to_pixelspace(&x, &y);
-
-	glRasterPos2f(x, y);
-	glutBitmapCharacter(FFD_TEXT, 'a');
+			glRasterPos2f(x, y);
+			glutBitmapCharacter(FFD_TEXT, '0');
+		}
+	}
 }
 
 #endif
