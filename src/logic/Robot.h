@@ -17,14 +17,14 @@ typedef struct {
 } Robot;
 
 // constructor
-Robot* robot_create(int xPos, int yPos, MazeMap *mm);
+Robot* robot_create(int xPos, int yPos, MazeMap* mm);
 
 // movement algorithms
-void robot_runRightWall(Robot* robot);
-void robot_runFloodFill(Robot* robot);
+void robot_run_right_wall(Robot* robot);
+void robot_run_flood_fill(Robot* robot);
 
 // rotation assists
-Direction	robot_rotationToDirection(Robot* robot, Rotation rotation);
+Direction	robot_rotation_to_direction(Robot* robot, Rotation rotation);
 //bool		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
 
 // interfacing
@@ -33,7 +33,7 @@ bool robot_look(Robot* robot, Rotation rotation);			// returns true if the robot
 void robot_turn(Robot* robot, Direction direction);
 void robot_turn(Robot* robot, Rotation rotation);
 
-bool robot_driveForward(Robot* robot);
+bool robot_drive_forward(Robot* robot);
 
 // deconstructor
 void robot_destroy(Robot* robot);

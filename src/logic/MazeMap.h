@@ -22,10 +22,10 @@ MazeMap* mazemap_create();
 // main methods
 //
 
-bool mazemap_doesWallExist(MazeMap* mazeMap, int x, int y, Direction direction);
-void mazemap_setWall(MazeMap* mazeMap, bool state, int x, int y, Direction direction);
+bool mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction);
+void mazemap_set_wall(MazeMap* mazeMap, bool state, int x, int y, Direction direction);
 
-bool mazemap_getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook);
+bool mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
 
 void mazemap_destroy(MazeMap* mm);
 

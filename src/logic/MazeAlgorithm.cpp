@@ -8,7 +8,7 @@
 #include "MazeMap.h"
 
 // computes the flood fill for the first time (center is the target)
-void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
+void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 {
 	// blanks out the array to null values
 	memset(in, MALGO_FF_BAD, sizeof(ff_map));
@@ -25,7 +25,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 	// now keep looping in each direction until the values have been populated
 	bool isPopulated = false;
 	//while(!isPopulated) {
-	for (int dumbshit = 0; dumbshit < 100000; dumbshit++) {
+	for (int stupid = 0; stupid < 100000; stupid++) {
 
 		// SOUTH to NORTH
 		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
@@ -36,7 +36,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, NORTH);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, NORTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -60,7 +60,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, SOUTH);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, SOUTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -83,7 +83,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, EAST);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, EAST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -106,7 +106,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, WEST);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, WEST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -124,7 +124,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 
 // retargets the flood fill map
 // ** UNTESTED **	-- this will be wrong with the middle zero blocks
-void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
+void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map* in)
 {
 	// find the current target
 	int currentX = MALGO_FF_BAD;
@@ -167,15 +167,15 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
 }
 
 // uses floodfill to determine where to go
-Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map *ffMap)
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map* ffMap)
 {
 	int minVal =  100000;
 	Direction minDir = EAST;
 
-	bool eastWall = mazemap_doesWallExist(mazeMap, xPos, yPos, EAST);
-	bool southWall = mazemap_doesWallExist(mazeMap, xPos, yPos, SOUTH);
-	bool westWall = mazemap_doesWallExist(mazeMap, xPos, yPos, WEST);
-	bool northWall = mazemap_doesWallExist(mazeMap, xPos, yPos, NORTH);
+	bool eastWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, EAST);
+	bool southWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, SOUTH);
+	bool westWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, WEST);
+	bool northWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, NORTH);
 
 	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
 	if (!eastWall) {
