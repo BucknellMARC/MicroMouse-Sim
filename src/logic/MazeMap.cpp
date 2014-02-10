@@ -12,10 +12,10 @@ MazeMap* mazemap_create() {
 	return mm;
 }
 
-bool mazemap_doesWallExist(MazeMap* mazeMap, int x, int y, Direction direction) {
+bool mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
-	bool success = mazemap_getLookPositions(x, y, direction, &xLook, &yLook);
+	bool success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
 
 	// if the look position was out of bounds, there is a wall
 	if (!success) {
@@ -32,10 +32,10 @@ bool mazemap_doesWallExist(MazeMap* mazeMap, int x, int y, Direction direction) 
 }
 
 // sets the desired wall to a new state
-void mazemap_setWall(MazeMap* mazeMap, bool state, int x, int y, Direction direction) {
+void mazemap_set_wall(MazeMap* mazeMap, bool state, int x, int y, Direction direction) {
 	// get the proper look
 	int xLook, yLook;
-	bool success = mazemap_getLookPositions(x, y, direction, &xLook, &yLook);
+	bool success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
 
 	if (!success) {
 		return;
@@ -50,7 +50,7 @@ void mazemap_setWall(MazeMap* mazeMap, bool state, int x, int y, Direction direc
 	}
 }
 
-bool mazemap_getLookPositions(int x, int y, Direction direction, int* xLook, int* yLook) {
+bool mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
 	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:

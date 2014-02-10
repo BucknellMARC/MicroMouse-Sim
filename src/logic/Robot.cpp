@@ -176,7 +176,7 @@ bool robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
 	Direction direction = robot_rotationToDirection(robot, rotation);
 
-	return !mazemap_doesWallExist(robot->mazeMap, robot->xPos, robot->yPos, direction);
+	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
 
 	/*
 	int xPos = robot->xPos;

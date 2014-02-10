@@ -182,7 +182,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_setWall(mazeMap, false, current.x, current.y, direction);
+			mazemap_set_wall(mazeMap, false, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;

@@ -36,7 +36,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, NORTH);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, NORTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -60,7 +60,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, SOUTH);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, SOUTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -83,7 +83,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, EAST);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, EAST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -106,7 +106,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 					continue;
 				}
 
-				bool wallExists = mazemap_doesWallExist(mm, col, row, WEST);	// bottom left is (0,0)
+				bool wallExists = mazemap_does_wall_exist(mm, col, row, WEST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -172,10 +172,10 @@ Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_
 	int minVal =  100000;
 	Direction minDir = EAST;
 
-	bool eastWall = mazemap_doesWallExist(mazeMap, xPos, yPos, EAST);
-	bool southWall = mazemap_doesWallExist(mazeMap, xPos, yPos, SOUTH);
-	bool westWall = mazemap_doesWallExist(mazeMap, xPos, yPos, WEST);
-	bool northWall = mazemap_doesWallExist(mazeMap, xPos, yPos, NORTH);
+	bool eastWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, EAST);
+	bool southWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, SOUTH);
+	bool westWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, WEST);
+	bool northWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, NORTH);
 
 	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
 	if (!eastWall) {
