@@ -35,7 +35,7 @@ void VirtualRobot::run() {
 
 	// run the algorithm
 	//robot_runRightWall(robot);
-	robot_runFloodFill(robot);
+	robot_run_flood_fill(robot);
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();

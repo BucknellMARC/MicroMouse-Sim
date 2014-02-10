@@ -23,7 +23,7 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 	return robot;
 }
 
-void robot_runRightWall(Robot* robot) {
+void robot_run_right_wall(Robot* robot) {
 	// turn right if you can
 	if (robot_look(robot, RIGHT)) {
 		robot_turn(robot, RIGHT);
@@ -34,10 +34,10 @@ void robot_runRightWall(Robot* robot) {
 		return;
 	}
 
-	robot_driveForward(robot);
+	robot_drive_forward(robot);
 }
 
-void robot_runFloodFill(Robot* robot) {
+void robot_run_flood_fill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
 	Direction dToGo = malgo_floodfill_suggest_turn(robot->xPos, robot->yPos, robot->mazeMap, &robot->map);
@@ -48,10 +48,10 @@ void robot_runFloodFill(Robot* robot) {
 	robot_turn(robot, dToGo);
 	
 	// and drive forward
-	robot_driveForward(robot);
+	robot_drive_forward(robot);
 }
 
-Direction robot_rotationToDirection(Robot* robot, Rotation rotation) {
+Direction robot_rotation_to_direction(Robot* robot, Rotation rotation) {
 	// holds the direction that the lookup table converts to
 	Direction direction = robot->direction;
 
@@ -129,7 +129,7 @@ Direction robot_rotationToDirection(Robot* robot, Rotation rotation) {
 bool robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 	// look forward
 	// get direction to look
-	Direction direct = robot_rotationToDirection(robot, rotation);
+	Direction direct = robot_rotation_to_direction(robot, rotation);
 	int xCoord, yCoord;
 
 	// pull the positions from the robot
@@ -174,7 +174,7 @@ bool robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 
 bool robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
-	Direction direction = robot_rotationToDirection(robot, rotation);
+	Direction direction = robot_rotation_to_direction(robot, rotation);
 
 	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
 
@@ -226,12 +226,12 @@ void robot_turn(Robot* robot, Rotation rotation) {
 	// set the new direction
 	//printf("Original direction: %d\n", (int)robot->direction);
 
-	robot->direction = robot_rotationToDirection(robot, rotation);
+	robot->direction = robot_rotation_to_direction(robot, rotation);
 
 	//printf("New Direction: %d\n\n", (int)robot->direction);
 }
 
-bool robot_driveForward(Robot* robot) {
+bool robot_drive_forward(Robot* robot) {
 	Direction direction = robot->direction;
 
 	printf("X: %d\tY:%d\n", robot->xPos, robot->yPos);
