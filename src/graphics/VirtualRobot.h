@@ -29,7 +29,6 @@ public:
 	//
 
 	void run();
-	//bool driveForward();
 
 	void draw();
 

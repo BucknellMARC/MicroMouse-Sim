@@ -43,36 +43,6 @@ void VirtualRobot::run() {
 	rectangle->setPos(newX, newY);
 }
 
-/*
-bool VirtualRobot::driveForward() {
-	// try to move with the maze representation
-	if (look(FORWARDS)) {
-		return false;
-	}
-
-	// perform parent drive forward
-	robot_driveForward(robot);
-
-	// then move the rectangle
-	switch (robot->direction) {
-	case NORTH:
-		rectangle->translate(0, VirtualMaze::getBlockWidthPX());
-		break;
-	case EAST:
-		rectangle->translate(VirtualMaze::getBlockWidthPX(), 0);
-		break;
-	case SOUTH:
-		rectangle->translate(0, -VirtualMaze::getBlockWidthPX());
-		break;
-	case WEST:
-		rectangle->translate(-VirtualMaze::getBlockWidthPX(), 0);
-		break;
-	}
-
-	return true;
-}
-*/
-
 void VirtualRobot::draw() {
 	// draw the robot red
 	rectangle->draw(1.0f, 0.0f, 0.0f);
