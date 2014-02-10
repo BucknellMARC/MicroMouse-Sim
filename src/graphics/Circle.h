@@ -28,8 +28,6 @@ public:
 	//
 
 	void draw();
-
-	// repositioning functions
 	void setPos(int x, int y);
 	void translate(int x, int y);
 

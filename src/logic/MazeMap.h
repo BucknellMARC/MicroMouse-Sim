@@ -10,8 +10,8 @@
 #include "define.h"
 
 typedef struct {
-	bool horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
-	bool vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
+	BOOL horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
+	BOOL vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
 
 } MazeMap;
 
@@ -22,10 +22,10 @@ MazeMap* mazemap_create();
 // main methods
 //
 
-bool mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction);
-void mazemap_set_wall(MazeMap* mazeMap, bool state, int x, int y, Direction direction);
+BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction);
+void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
 
-bool mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
+BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
 
 void mazemap_destroy(MazeMap* mm);
 

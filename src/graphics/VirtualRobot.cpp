@@ -5,8 +5,11 @@
 #include <GL/gl.h>
 #include <string.h>
 
-#include "logic/Robot.h"
-#include "logic/MazeAlgorithm.h"
+extern "C" {
+	#include "logic/Robot.h"
+	#include "logic/MazeAlgorithm.h"
+}
+
 #include "VirtualRobot.h"
 #include "Display.h"
 

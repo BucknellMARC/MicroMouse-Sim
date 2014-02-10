@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "define.h"
 #include "MazeAlgorithm.h"
 #include "MazeMap.h"
 
@@ -23,7 +24,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 	in->array[centerRow + 1][centerCol + 1] = 0;
 
 	// now keep looping in each direction until the values have been populated
-	bool isPopulated = false;
+	BOOL isPopulated = FALSE;
 	//while(!isPopulated) {
 	for (int stupid = 0; stupid < 100000; stupid++) {
 
@@ -36,7 +37,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 					continue;
 				}
 
-				bool wallExists = mazemap_does_wall_exist(mm, col, row, NORTH);	// bottom left is (0,0)
+				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, NORTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -60,7 +61,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 					continue;
 				}
 
-				bool wallExists = mazemap_does_wall_exist(mm, col, row, SOUTH);	// bottom left is (0,0)
+				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, SOUTH);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -83,7 +84,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 					continue;
 				}
 
-				bool wallExists = mazemap_does_wall_exist(mm, col, row, EAST);	// bottom left is (0,0)
+				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, EAST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -106,7 +107,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 					continue;
 				}
 
-				bool wallExists = mazemap_does_wall_exist(mm, col, row, WEST);	// bottom left is (0,0)
+				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, WEST);	// bottom left is (0,0)
 				if (wallExists) {
 					continue;
 				}
@@ -172,10 +173,10 @@ Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_
 	int minVal =  100000;
 	Direction minDir = EAST;
 
-	bool eastWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, EAST);
-	bool southWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, SOUTH);
-	bool westWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, WEST);
-	bool northWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, NORTH);
+	BOOL eastWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, EAST);
+	BOOL southWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, SOUTH);
+	BOOL westWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, WEST);
+	BOOL northWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, NORTH);
 
 	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
 	if (!eastWall) {

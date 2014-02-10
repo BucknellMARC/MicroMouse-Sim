@@ -25,15 +25,15 @@ void robot_run_flood_fill(Robot* robot);
 
 // rotation assists
 Direction	robot_rotation_to_direction(Robot* robot, Rotation rotation);
-//bool		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
+//BOOL		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
 
 // interfacing
-bool robot_look(Robot* robot, Rotation rotation);			// returns true if the robot can move to that position
+BOOL robot_look(Robot* robot, Rotation rotation);			// returns TRUE if the robot can move to that position
 
-void robot_turn(Robot* robot, Direction direction);
-void robot_turn(Robot* robot, Rotation rotation);
+void robot_turn_d(Robot* robot, Direction direction);
+void robot_turn_r(Robot* robot, Rotation rotation);
 
-bool robot_drive_forward(Robot* robot);
+BOOL robot_drive_forward(Robot* robot);
 
 // deconstructor
 void robot_destroy(Robot* robot);

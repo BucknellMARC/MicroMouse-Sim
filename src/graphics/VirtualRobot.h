@@ -3,8 +3,11 @@
 
 #include "define.h"
 
-#include "logic/Robot.h"
-#include "logic/MazeAlgorithm.h"
+extern "C" {
+	#include "logic/Robot.h"
+	#include "logic/MazeAlgorithm.h"
+}
+
 #include "VirtualMaze.h"
 
 class VirtualRobot {

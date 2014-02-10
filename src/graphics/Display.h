@@ -2,7 +2,10 @@
 #define FLOOD_FILL_DISPLAY
 
 #include "define.h"
-#include "logic/MazeAlgorithm.h"
+
+extern "C" {
+	#include "logic/MazeAlgorithm.h"
+}
 
 // convert screen space to pixel space
 void display_screenspace_to_pixelspace(int *x, int *y);

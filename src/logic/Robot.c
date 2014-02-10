@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "define.h"
 #include "Robot.h"
 #include "MazeAlgorithm.h"
 
@@ -26,11 +27,11 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 void robot_run_right_wall(Robot* robot) {
 	// turn right if you can
 	if (robot_look(robot, RIGHT)) {
-		robot_turn(robot, RIGHT);
+		robot_turn_r(robot, RIGHT);
 	}
 
 	if (!robot_look(robot, FORWARDS)) {
-		robot_turn(robot, LEFT);
+		robot_turn_r(robot, LEFT);
 		return;
 	}
 
@@ -45,7 +46,7 @@ void robot_run_flood_fill(Robot* robot) {
 	printf("direction to go: %d\n", (int)dToGo);
 
 	// turn that direction
-	robot_turn(robot, dToGo);
+	robot_turn_d(robot, dToGo);
 	
 	// and drive forward
 	robot_drive_forward(robot);
@@ -126,7 +127,7 @@ Direction robot_rotation_to_direction(Robot* robot, Rotation rotation) {
 }
 
 /*
-bool robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
+BOOL robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 	// look forward
 	// get direction to look
 	Direction direct = robot_rotation_to_direction(robot, rotation);
@@ -164,15 +165,15 @@ bool robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 		out[0] = xCoord;
 		out[1] = yCoord;
 
-		return true;
+		return TRUE;
 	}
 
 	// otherwise, the coordinates were out of bounds
-	return false;
+	return FALSE;
 }
 */
 
-bool robot_look(Robot* robot, Rotation rotation) {
+BOOL robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
 	Direction direction = robot_rotation_to_direction(robot, rotation);
 
@@ -205,7 +206,7 @@ bool robot_look(Robot* robot, Rotation rotation) {
 
 	// don't access the arrays if stuff is out of bounds
 	if (xLook > -1 || yLook > -1) {
-		return false;
+		return FALSE;
 	}
 
 	// get data from proper location
@@ -218,11 +219,11 @@ bool robot_look(Robot* robot, Rotation rotation) {
 	*/
 }
 
-void robot_turn(Robot* robot, Direction direction) {
+void robot_turn_d(Robot* robot, Direction direction) {
 	robot->direction = direction;
 }
 
-void robot_turn(Robot* robot, Rotation rotation) {
+void robot_turn_r(Robot* robot, Rotation rotation) {
 	// set the new direction
 	//printf("Original direction: %d\n", (int)robot->direction);
 
@@ -231,7 +232,7 @@ void robot_turn(Robot* robot, Rotation rotation) {
 	//printf("New Direction: %d\n\n", (int)robot->direction);
 }
 
-bool robot_drive_forward(Robot* robot) {
+BOOL robot_drive_forward(Robot* robot) {
 	Direction direction = robot->direction;
 
 	printf("X: %d\tY:%d\n", robot->xPos, robot->yPos);
@@ -261,7 +262,7 @@ bool robot_drive_forward(Robot* robot) {
 	// increment the history counter for that position
 	//robot->posHistory[robot->yPos][robot->xPos]++;
 
-	return true;
+	return TRUE;
 }
 
 void robot_destroy(Robot* robot) {

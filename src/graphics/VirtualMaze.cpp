@@ -18,7 +18,10 @@ using namespace std;
 
 #include "define.h"
 #include "Rectangle.h"
-#include "logic/MazeMap.h"
+
+extern "C" {
+	#include "logic/MazeMap.h"
+}
 
 #include "VirtualMaze.h"
 //
@@ -61,7 +64,7 @@ void VirtualMaze::draw() {
 	}
 }
 
-// recreates the walls based on the boolean arrays
+// recreates the walls based on the BOOLean arrays
 void VirtualMaze::rebuildWalls() {
 	// empty the vector
 	walls.clear();
@@ -120,20 +123,20 @@ void VirtualMaze::primGeneration() {
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			mazeMap->vertWalls[row][col] = true;
+			mazeMap->vertWalls[row][col] = TRUE;
 		}
 	}
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			mazeMap->horizWalls[row][col] = true;
+			mazeMap->horizWalls[row][col] = TRUE;
 		}
 	}
 
 	// init variable that keeps track of whether or not square is part of the maze
-	bool partOfMaze[MAZE_HEIGHT][MAZE_WIDTH];
+	BOOL partOfMaze[MAZE_HEIGHT][MAZE_WIDTH];
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			partOfMaze[row][col] = false;
+			partOfMaze[row][col] = FALSE;
 		}
 	}
 
@@ -182,7 +185,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_set_wall(mazeMap, false, current.x, current.y, direction);
+			mazemap_set_wall(mazeMap, FALSE, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;
@@ -202,7 +205,7 @@ void VirtualMaze::primGeneration() {
 			}
 
 			// make the destination part of the maze
-			partOfMaze[destination.y][destination.x] = true;
+			partOfMaze[destination.y][destination.x] = TRUE;
 
 			// add it to the wall lsit
 			activeWallList.push_back(destination);

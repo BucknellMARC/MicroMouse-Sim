@@ -15,27 +15,33 @@
 #define MAZE_WIDTH_PX SCREEN_WIDTH / MAZE_WIDTH
 #define MAZE_HEIGHT_PX SCREEN_HEIGHT / MAZE_HEIGHT
 
+typedef int BOOL;
+#define TRUE 1
+#define FALSE 0
+
 // meaning of direction
-enum Direction {
+typedef enum {
 	EAST = 0,
 	SOUTH = 1,
 	WEST = 2,
 	NORTH = 3
-};
+} Direction;
 
 // meaning of rotation
-enum Rotation {
+typedef enum {
 	FORWARDS,
 	LEFT,
 	RIGHT,
 	BACKWARDS
-};
+} Rotation;
 
-// 2 dimensional point
-struct Point {
-	int x;
-	int y;
-};
+#ifdef GPP
+	// 2 dimensional point
+	struct Point {
+		int x;
+		int y;
+	};	
+#endif
 
 //
 // Functions

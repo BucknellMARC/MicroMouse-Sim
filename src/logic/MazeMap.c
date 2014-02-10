@@ -12,17 +12,17 @@ MazeMap* mazemap_create() {
 	return mm;
 }
 
-bool mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction) {
+BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
-	bool success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
 
 	// if the look position was out of bounds, there is a wall
 	if (!success) {
-		return true;
+		return TRUE;
 	}
 
-	// only return true if we know the wall actually exists
+	// only return TRUE if we know the wall actually exists
 	if (direction == NORTH || direction == SOUTH) {
 		return mazeMap->horizWalls[yLook][xLook];
 	}
@@ -32,10 +32,10 @@ bool mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 }
 
 // sets the desired wall to a new state
-void mazemap_set_wall(MazeMap* mazeMap, bool state, int x, int y, Direction direction) {
+void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
 	// get the proper look
 	int xLook, yLook;
-	bool success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
 
 	if (!success) {
 		return;
@@ -50,7 +50,7 @@ void mazemap_set_wall(MazeMap* mazeMap, bool state, int x, int y, Direction dire
 	}
 }
 
-bool mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
+BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
 	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:
@@ -72,19 +72,19 @@ bool mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 
 	// there is a wall if we are looking out of bounds
 	if (*xLook < 0 || *yLook < 0) {
-		return false;
+		return FALSE;
 	}
 
 	// check for other random bounds
 	if (direction == EAST && x == (MAZE_WIDTH - 1)) {
-		return false;
+		return FALSE;
 	}
 	if (direction == NORTH && y == (MAZE_HEIGHT - 1)) {
-		return false;
+		return FALSE;
 	}
 
 
-	return true;
+	return FALSE;
 }
 
 void mazemap_destroy(MazeMap* mm) {

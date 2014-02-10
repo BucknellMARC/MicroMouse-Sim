@@ -11,7 +11,11 @@
 using namespace std;
 
 #include "define.h"
-#include "logic/MazeMap.h"
+
+extern "C" {
+	#include "logic/MazeMap.h"
+}
+
 #include "Rectangle.h"
 #include "Circle.h"
 

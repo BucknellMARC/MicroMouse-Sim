@@ -15,11 +15,11 @@ OPENGL_LIB := -lGL -lGLU -lglut
 
 # cflags
 CFLAGS := -Wall -I $(SRC_PATH)
-CXXFLAGS := $(CFLAGS)
+CXXFLAGS := $(CFLAGS) -D GPP
 LDFLAGS := -lstdc++ $(OPENGL_LIB)
 
 # logic
-LOGIC_SOURCES	:= $(wildcard $(LOGIC_PATH)/*.cpp)
+LOGIC_SOURCES	:= $(wildcard $(LOGIC_PATH)/*.c)
 LOGIC_NAMES		:= $(basename $(LOGIC_SOURCES))
 LOGIC_DEP		:= $(addprefix $(DEP_PATH)/, $(notdir $(LOGIC_NAMES)))
 LOGIC_DEP		:= $(addsuffix .d, $(LOGIC_DEP))
@@ -50,10 +50,10 @@ mm-sim: $(LOGIC_OBJ) $(GRAPHICS_OBJ) $(SRC_PATH)/main.cpp
 	@echo "done!"
 
 # rule to build dependencies
-$(DEP_PATH)/%.d: $(LOGIC_PATH)/%.cpp
+$(DEP_PATH)/%.d: $(LOGIC_PATH)/%.c
 	@mkdir -p $(DEP_PATH) $(BUILD_PATH)
 	@echo -n "$(BUILD_PATH)/" > $@
-	$(CXX) $(CXXFLAGS) -MM $< >> $@
+	$(CC) $(CFLAGS) -MM $< >> $@
 
 $(DEP_PATH)/%.d: $(GRAPHICS_PATH)/%.cpp
 	@mkdir -p $(DEP_PATH) $(BUILD_PATH)
@@ -64,8 +64,8 @@ $(DEP_PATH)/%.d: $(GRAPHICS_PATH)/%.cpp
 -include $(LOGIC_DEP)
 -include $(GRAPHICS_DEP)
 
-$(BUILD_PATH)/%.o: $(LOGIC_PATH)/%.cpp
-	$(CXX) $(CFLAGS) -c $< -o $@
+$(BUILD_PATH)/%.o: $(LOGIC_PATH)/%.c
+	$(CC) -std=c99 $(CFLAGS) -c $< -o $@
 
 $(BUILD_PATH)/%.o: $(GRAPHICS_PATH)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
