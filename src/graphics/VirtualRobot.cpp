@@ -27,12 +27,15 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	// compute the flood fill
 	malgo_floodfill_compute(virtualMaze->getMazeMap(), &floodFillMap);
+
+	robot->map = floodFillMap;
 }
 
 void VirtualRobot::run() {
 
 	// run the algorithm
-	robot_runRightWall(robot);
+	//robot_runRightWall(robot);
+	robot_runFloodFill(robot);
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
