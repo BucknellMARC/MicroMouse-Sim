@@ -14,6 +14,6 @@ typedef struct {
 // flood fill algorithms
 void malgo_floodfill_compute(MazeMap *mm, ff_map *in);
 void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in);
-void malgo_floodfill_make_move(int xPos, int yPos, ff_map *map);
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, ff_map *map);
 
 #endif

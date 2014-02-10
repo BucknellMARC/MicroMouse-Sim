@@ -165,4 +165,47 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
 	}
 }
 
+// uses floodfill to determine where to go
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, ff_map *map)
+{
+	int east = 0; int south = 1; int west = 2; int east = 3;
+	int minVal = 0xffffffff;
+	int max = 0;
+
+	// check east
+	if (xPos + 1 < MAZE_WIDTH && map->array[yPos][xPos + 1] < minVal) {
+		minVal = map->array[yPos][xPos + 1];
+		max = east;
+	}
+
+	// south
+	if (yPos - 1 > -1 && map->array[yPos - 1][xPos] < minVal) {
+		minVal = map->array[yPos - 1][xPos];
+		max = south;
+	}
+
+	// west
+	if (xPos - 1 > -1 && map->array[yPos][xPos - 1] < minVal) {
+		minVal = map->array[yPos][xPos - 1];
+		max = west;
+	}
+
+	// and north
+	if (yPos + 1 < MAZE_HEIGHT && map->array[yPos + 1][xPos] < max) {
+		minVal = map->array[yPos + 1][xPos];
+		max = north;
+	}
+
+	switch(max) {
+		case 0:
+			return EAST;
+		case 1: 
+			return SOUTH;
+		case 2:
+			return WEST;
+		case 3:
+			return EAST;
+	}
+}
+
 #endif
