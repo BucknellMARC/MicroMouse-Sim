@@ -84,7 +84,7 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 	}
 
 
-	return FALSE;
+	return TRUE;
 }
 
 void mazemap_destroy(MazeMap* mm) {
