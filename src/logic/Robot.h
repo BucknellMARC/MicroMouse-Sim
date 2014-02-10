@@ -3,6 +3,7 @@
 
 #include "define.h"
 #include "MazeMap.h"
+#include "MazeAlgorithm.h"
 
 typedef struct {
 	// position and direction the robot is facing
@@ -10,13 +11,13 @@ typedef struct {
 	Direction direction;
 
 	int posHistory[MAZE_HEIGHT][MAZE_WIDTH];
-	int floodMap[MAZE_HEIGHT][MAZE_WIDTH];			// flood map holds distanced to target location
+	ff_map map;
 
 	MazeMap* mazeMap;
 } Robot;
 
 // constructor
-Robot* robot_create(int xPos, int yPos, MazeMap* mm);
+Robot* robot_create(int xPos, int yPos, MazeMap *mm);
 
 // movement algorithms
 void robot_runRightWall(Robot* robot);

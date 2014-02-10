@@ -17,10 +17,10 @@
 
 // meaning of direction
 enum Direction {
-	EAST,
-	SOUTH,
-	WEST,
-	NORTH
+	EAST = 0,
+	SOUTH = 1,
+	WEST = 2,
+	NORTH = 3
 };
 
 // meaning of rotation

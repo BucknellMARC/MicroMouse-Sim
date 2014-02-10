@@ -1,6 +1,7 @@
 #ifndef MAZE_ALGORITHM_C
 #define MAZE_ALGORITHM_C
 
+#include <stdio.h>
 #include <string.h>
 
 #include "MazeAlgorithm.h"
@@ -166,46 +167,59 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
 }
 
 // uses floodfill to determine where to go
-Direction malgo_floodfill_suggest_turn(int xPos, int yPos, ff_map *map)
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map *ffMap)
 {
-	int east = 0; int south = 1; int west = 2; int east = 3;
-	int minVal = 0xffffffff;
-	int max = 0;
+	int minVal =  100000;
+	Direction minDir = EAST;
 
-	// check east
-	if (xPos + 1 < MAZE_WIDTH && map->array[yPos][xPos + 1] < minVal) {
-		minVal = map->array[yPos][xPos + 1];
-		max = east;
+	bool eastWall = mazemap_doesWallExist(mazeMap, xPos, yPos, EAST);
+	bool southWall = mazemap_doesWallExist(mazeMap, xPos, yPos, SOUTH);
+	bool westWall = mazemap_doesWallExist(mazeMap, xPos, yPos, WEST);
+	bool northWall = mazemap_doesWallExist(mazeMap, xPos, yPos, NORTH);
+
+	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
+	if (!eastWall) {
+		eastVal = ffMap->array[yPos][xPos + 1];
+	}
+	if (!southWall) {
+		southVal = ffMap->array[yPos - 1][xPos];
+	}
+	if (!westWall) {
+		westVal = ffMap->array[yPos][xPos - 1];
+	}
+	if (!northWall) {
+		northVal = ffMap->array[yPos + 1][xPos];
 	}
 
-	// south
-	if (yPos - 1 > -1 && map->array[yPos - 1][xPos] < minVal) {
-		minVal = map->array[yPos - 1][xPos];
-		max = south;
+	//printf("East: %d", eastWall);
+	//printf("South: %d", southWall);
+	//printf("West: %d", westWall);
+	//printf("North: %d", northWall);
+
+	printf("E: %d, S: %d, W: %d, N: %d\n", eastWall, southWall, westWall, northWall);
+	printf("E: %d, S: %d, W: %d, N: %d\n", eastVal, southVal, westVal, northVal);
+
+	if (!eastWall && eastVal < minVal) {
+		printf("east is min\n");
+		minDir = EAST;
+		minVal = eastVal;
+	}
+	if (!southWall && southVal < minVal) {
+		printf("south is min\n");
+		minDir = SOUTH;
+		minVal = southVal;
+	}
+	if (!westWall && westVal < minVal) {
+		printf("west is min\n");
+		minDir = WEST;
+		minVal = westVal;
+	}
+	if (!northWall && northVal < minVal) {
+		printf("north is min\n");
+		minDir = NORTH;
 	}
 
-	// west
-	if (xPos - 1 > -1 && map->array[yPos][xPos - 1] < minVal) {
-		minVal = map->array[yPos][xPos - 1];
-		max = west;
-	}
-
-	// and north
-	if (yPos + 1 < MAZE_HEIGHT && map->array[yPos + 1][xPos] < max) {
-		minVal = map->array[yPos + 1][xPos];
-		max = north;
-	}
-
-	switch(max) {
-		case 0:
-			return EAST;
-		case 1: 
-			return SOUTH;
-		case 2:
-			return WEST;
-		case 3:
-			return EAST;
-	}
+	return minDir;
 }
 
 #endif

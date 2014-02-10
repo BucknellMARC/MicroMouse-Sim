@@ -5,9 +5,10 @@
 #include <stdio.h>
 
 #include "Robot.h"
+#include "MazeAlgorithm.h"
 
 // default initializer
-Robot* robot_create(int xPos, int yPos, MazeMap* mm)
+Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 {
 	Robot* robot = (Robot*)calloc(1, sizeof(Robot));
 
@@ -39,7 +40,15 @@ void robot_runRightWall(Robot* robot) {
 void robot_runFloodFill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
-	// init the flood fill if it hasn't been
+	Direction dToGo = malgo_floodfill_suggest_turn(robot->xPos, robot->yPos, robot->mazeMap, &robot->map);
+
+	printf("direction to go: %d\n", (int)dToGo);
+
+	// turn that direction
+	robot_turn(robot, dToGo);
+	
+	// and drive forward
+	robot_driveForward(robot);
 }
 
 Direction robot_rotationToDirection(Robot* robot, Rotation rotation) {

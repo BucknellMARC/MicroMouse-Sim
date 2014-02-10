@@ -3,7 +3,6 @@
 
 #include "define.h"
 #include "MazeMap.h"
-#include "Robot.h"
 
 typedef struct {
 	int array[MAZE_HEIGHT][MAZE_WIDTH];
@@ -14,6 +13,6 @@ typedef struct {
 // flood fill algorithms
 void malgo_floodfill_compute(MazeMap *mm, ff_map *in);
 void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in);
-Direction malgo_floodfill_suggest_turn(int xPos, int yPos, ff_map *map);
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map *ffMap);
 
 #endif
