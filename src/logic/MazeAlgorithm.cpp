@@ -25,7 +25,7 @@ void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 	// now keep looping in each direction until the values have been populated
 	bool isPopulated = false;
 	//while(!isPopulated) {
-	for (int dumbshit = 0; dumbshit < 100000; dumbshit++) {
+	for (int stupid = 0; stupid < 100000; stupid++) {
 
 		// SOUTH to NORTH
 		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
