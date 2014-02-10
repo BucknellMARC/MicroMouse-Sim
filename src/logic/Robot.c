@@ -41,7 +41,7 @@ void robot_run_right_wall(Robot* robot) {
 void robot_run_flood_fill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
-	Direction dToGo = malgo_floodfill_suggest_turn(robot->xPos, robot->yPos, robot->mazeMap, &robot->map);
+	Direction dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, &robot->map);
 
 	printf("direction to go: %d\n", (int)dToGo);
 

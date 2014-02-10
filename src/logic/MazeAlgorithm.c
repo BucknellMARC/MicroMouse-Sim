@@ -168,7 +168,7 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map* in)
 }
 
 // uses floodfill to determine where to go
-Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map* ffMap)
+Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, ff_map* ffMap)
 {
 	int minVal =  100000;
 	Direction minDir = EAST;
