@@ -8,7 +8,7 @@
 #include "MazeMap.h"
 
 // computes the flood fill for the first time (center is the target)
-void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
+void malgo_floodfill_compute(MazeMap* mm, ff_map* in)
 {
 	// blanks out the array to null values
 	memset(in, MALGO_FF_BAD, sizeof(ff_map));
@@ -124,7 +124,7 @@ void malgo_floodfill_compute(MazeMap *mm, ff_map *in)
 
 // retargets the flood fill map
 // ** UNTESTED **	-- this will be wrong with the middle zero blocks
-void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
+void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map* in)
 {
 	// find the current target
 	int currentX = MALGO_FF_BAD;
@@ -167,7 +167,7 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, ff_map *in)
 }
 
 // uses floodfill to determine where to go
-Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map *ffMap)
+Direction malgo_floodfill_suggest_turn(int xPos, int yPos, MazeMap *mazeMap, ff_map* ffMap)
 {
 	int minVal =  100000;
 	Direction minDir = EAST;
