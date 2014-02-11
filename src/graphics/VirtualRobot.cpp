@@ -29,7 +29,6 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	this->virtualMaze = virtualMaze;
 
 	// compute the flood fill
-	FFMap floodFillMap;
 	malgo_floodfill_compute(virtualMaze->getMazeMap(), floodFillMap);
 
 	robot->ffMap = floodFillMap;

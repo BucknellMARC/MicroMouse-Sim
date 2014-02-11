@@ -16,6 +16,8 @@ private:
 	Rectangle* rectangle;
 	VirtualMaze* virtualMaze;
 
+	FFMap floodFillMap;
+
 	static const int robotSizePX = 15;
 
 public:

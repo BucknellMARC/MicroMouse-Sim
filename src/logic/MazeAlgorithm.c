@@ -12,7 +12,11 @@
 void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 {
 	// blanks out the array to null values
-	memset(in, MALGO_FF_BAD, sizeof(FFMap));
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			in[row][col] = MALGO_FF_BAD;
+		}
+	}
 
 	// set the inner four values to 0 (this is the target)
 	int centerRow = MAZE_HEIGHT / 2 - 1;
