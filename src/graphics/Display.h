@@ -11,6 +11,6 @@ extern "C" {
 void display_screenspace_to_pixelspace(int *x, int *y);
 
 // flood fill drawing function
-void ff_draw(ff_map *source);
+void ff_draw(FFMapPtr source);
 
 #endif

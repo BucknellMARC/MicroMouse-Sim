@@ -16,8 +16,6 @@ private:
 	Rectangle* rectangle;
 	VirtualMaze* virtualMaze;
 
-	ff_map floodFillMap;
-
 	static const int robotSizePX = 15;
 
 public:
@@ -39,7 +37,7 @@ public:
 	// getters
 	//
 
-	ff_map *getFloodFillMap();
+	FFMapPtr getFloodFillMap();
 
 	// deconstructor
 	~VirtualRobot();

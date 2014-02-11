@@ -20,11 +20,11 @@ void display_screenspace_to_pixelspace(float *x, float *y)
 	*y = 2.0 * yVal / (float)SCREEN_HEIGHT - 1.0f;
 }
 
-void ff_draw(ff_map *source)
+void ff_draw(FFMapPtr source)
 {
 	for (int row = 0; row < MAZE_WIDTH; row++) {
 		for (int col = 0; col < MAZE_HEIGHT; col++) {
-			int val = source->array[row][col];
+			int val = source[row][col];
 
 			// convert the value to text
 			char charsToPrint[10];

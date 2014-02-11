@@ -29,9 +29,10 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	this->virtualMaze = virtualMaze;
 
 	// compute the flood fill
-	malgo_floodfill_compute(virtualMaze->getMazeMap(), &floodFillMap);
+	FFMap floodFillMap;
+	malgo_floodfill_compute(virtualMaze->getMazeMap(), floodFillMap);
 
-	robot->map = floodFillMap;
+	robot->ffMap = floodFillMap;
 }
 
 void VirtualRobot::run() {
@@ -54,12 +55,12 @@ void VirtualRobot::draw() {
 	rectangle->draw(1.0f, 0.0f, 0.0f);
 
 	// draw the flood fill
-	ff_draw(&floodFillMap);
+	ff_draw(robot->ffMap);
 
 }
 
-ff_map *VirtualRobot::getFloodFillMap() {
-	return &floodFillMap;
+FFMapPtr VirtualRobot::getFloodFillMap() {
+	return robot->ffMap;
 }
 
 VirtualRobot::~VirtualRobot() {

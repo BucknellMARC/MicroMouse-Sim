@@ -11,7 +11,7 @@ typedef struct {
 	Direction direction;
 
 	int posHistory[MAZE_HEIGHT][MAZE_WIDTH];
-	ff_map map;
+	FFMapPtr ffMap;
 
 	MazeMap* mazeMap;
 } Robot;
