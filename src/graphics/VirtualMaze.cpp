@@ -68,15 +68,12 @@ void VirtualMaze::draw() {
 		}
 
 		// if robot has scanned the map, draw as white
+		float c = 1.0f;
 		if (robotSeesWall) {
-			glColor3f(1.0f, 1.0f, 1.0f);
-		}
-		// otherwise, draw as grey
-		else {
-			glColor3f(0.5f, 0.5f, 0.5f);
+			c = 0.5f;
 		}
 
-		wall.rectangle.draw();
+		wall.rectangle.draw(c, c, c);
 	}
 
 	// set the draw color to white
