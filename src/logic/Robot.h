@@ -10,7 +10,7 @@ typedef struct {
 	int xPos, yPos;
 	Direction direction;
 
-	int posHistory[MAZE_HEIGHT][MAZE_WIDTH];
+	MazeArray posHistory[MAZE_HEIGHT][MAZE_WIDTH];
 	FFMapPtr ffMap;
 
 	MazeMap* mazeMap;

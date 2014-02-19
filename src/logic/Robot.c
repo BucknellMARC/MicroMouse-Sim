@@ -19,6 +19,13 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 
 	robot->direction = EAST;
 
+	// zero out the maze array
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			robot->posHistory[row][col] = 0;
+		}
+	}
+
 	robot->mazeMap = mm;
 
 	return robot;
