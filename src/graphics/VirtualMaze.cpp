@@ -30,6 +30,7 @@ extern "C" {
 
 VirtualMaze::VirtualMaze() {
 	mazeMap = mazemap_create();
+	robotMazeMap = NULL;
 
 	// perform prim generation
 	primGeneration();
@@ -50,13 +51,36 @@ VirtualMaze::VirtualMaze() {
 
 // draws the maze
 void VirtualMaze::draw() {
-	// set the draw color to white
-	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// draw every wall in the wall list
 	for (unsigned int n = 0; n < walls.size(); n++) {
-		walls[n].draw();
+		Wall wall = walls[n];
+		int x = wall.x;
+		int y = wall.y;
+
+		// check if the robot has seen the wall
+		BOOL robotSeesWall = FALSE;
+		if (wall.isHorizontal && robotMazeMap->horizWalls[y][x]) {
+			robotSeesWall = TRUE;
+		}
+		if (!wall.isHorizontal && robotMazeMap->vertWalls[y][x]) {
+			robotSeesWall = TRUE;
+		}
+
+		// if robot has scanned the map, draw as white
+		if (robotSeesWall) {
+			glColor3f(1.0f, 1.0f, 1.0f);
+		}
+		// otherwise, draw as grey
+		else {
+			glColor3f(0.5f, 0.5f, 0.5f);
+		}
+
+		wall.rectangle.draw();
 	}
+
+	// set the draw color to white
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// draw every circle
 	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
@@ -76,9 +100,18 @@ void VirtualMaze::rebuildWalls() {
 				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
+				// init a rectangle
 				Rectangle rectangle(x, y, wallWidthPX, blockWidthPX);
 
-				walls.push_back(rectangle);
+				// init a wall
+				Wall wall;
+				wall.rectangle = rectangle;
+				wall.x = x;
+				wall.y = y;
+				wall.isHorizontal = TRUE;
+
+				// push back the wall
+				walls.push_back(wall);
 			}
 		}
 	}
@@ -90,12 +123,25 @@ void VirtualMaze::rebuildWalls() {
 				int x = column * blockWidthPX;
 				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
+				// init a rectangle
 				Rectangle rectangle(x, y, blockWidthPX, wallWidthPX);
 
-				walls.push_back(rectangle);
+				// init a wall
+				Wall wall;
+				wall.rectangle = rectangle;
+				wall.x = x;
+				wall.y = y;
+				wall.isHorizontal = FALSE;
+
+				walls.push_back(wall);
 			}
 		}
 	}
+}
+
+void VirtualMaze::bindRobotMap(MazeMap* robotMazeMap)
+{
+	this->robotMazeMap = robotMazeMap;
 }
 
 MazeMap* VirtualMaze::getMazeMap() {

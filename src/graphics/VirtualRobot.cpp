@@ -1,6 +1,7 @@
 #ifndef VIRTUALROBOT_CPP
 #define VIRTUALROBOT_CPP
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <GL/gl.h>
 #include <string.h>
@@ -8,6 +9,7 @@
 extern "C" {
 	#include "logic/Robot.h"
 	#include "logic/MazeAlgorithm.h"
+	#include "logic/MazeMap.h"
 }
 
 #include "VirtualRobot.h"
@@ -15,8 +17,9 @@ extern "C" {
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
-	// create the robot
-	robot = robot_create(0, 0, virtualMaze->getMazeMap());
+	// create the robot using a blank maze map
+	MazeMap* robotMM = (MazeMap*)calloc(1, sizeof(MazeMap));
+	robot = robot_create(0, 0, robotMM);
 
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
@@ -29,9 +32,9 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	this->virtualMaze = virtualMaze;
 
 	// compute the flood fill
-	malgo_floodfill_compute(virtualMaze->getMazeMap(), floodFillMap);
-
-	robot->ffMap = floodFillMap;
+	//malgo_floodfill_compute(virtualMaze->getMazeMap(), floodFillMap);
+	//
+	//robot->ffMap = floodFillMap;
 }
 
 void VirtualRobot::run() {
