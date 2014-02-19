@@ -227,4 +227,19 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 	return minDir;
 }
 
+Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+{
+	// right now just turn right if there is a wall in front
+	BOOL wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
+	if (wallExists) {
+		return curDirection;
+	}
+
+	// this is real crappy but I promise I will fix
+	if (curDirection != NORTH) {
+		return NORTH;
+	}
+	return SOUTH;
+}
+
 #endif

@@ -18,4 +18,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in);
 void malgo_floodfill_recompute_target(int targetX, int targetY, FFMapPtr in);
 Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap* mazeMap, FFMapPtr ffMap);
 
+
+// exploration algorithm
+Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 #endif
