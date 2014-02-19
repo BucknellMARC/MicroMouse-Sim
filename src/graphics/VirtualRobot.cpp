@@ -21,6 +21,10 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	MazeMap* robotMM = (MazeMap*)calloc(1, sizeof(MazeMap));
 	robot = robot_create(0, 0, robotMM);
 
+	// bind the robot maze map to the virtualmaze
+	virtualMaze->bindRobotMap(robotMM);
+
+
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
 	int x = robot->xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
@@ -41,7 +45,7 @@ void VirtualRobot::run() {
 
 	// run the algorithm
 	//robot_runRightWall(robot);
-	robot_run_flood_fill(robot);
+	//robot_run_flood_fill(robot);
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
@@ -57,7 +61,7 @@ void VirtualRobot::draw() {
 	rectangle->draw(1.0f, 0.0f, 0.0f);
 
 	// draw the flood fill
-	ff_draw(robot->ffMap);
+	//ff_draw(robot->ffMap);
 
 }
 
