@@ -55,22 +55,22 @@ void VirtualMaze::draw() {
 	// draw every wall in the wall list
 	for (unsigned int n = 0; n < walls.size(); n++) {
 		Wall wall = walls[n];
-		int x = wall.x;
-		int y = wall.y;
+		int row = wall.row;
+		int col = wall.col;
 
 		// check if the robot has seen the wall
 		BOOL robotSeesWall = FALSE;
-		if (wall.isHorizontal && robotMazeMap->horizWalls[y][x]) {
+		if (wall.isHorizontal && robotMazeMap->horizWalls[row][col]) {
 			robotSeesWall = TRUE;
 		}
-		if (!wall.isHorizontal && robotMazeMap->vertWalls[y][x]) {
+		if (!wall.isHorizontal && robotMazeMap->vertWalls[row][col]) {
 			robotSeesWall = TRUE;
 		}
 
 		// if robot has scanned the map, draw as white
-		float c = 1.0f;
+		float c = 0.5f;
 		if (robotSeesWall) {
-			c = 0.5f;
+			c = 1.0f;
 		}
 
 		wall.rectangle.draw(c, c, c);
@@ -103,8 +103,8 @@ void VirtualMaze::rebuildWalls() {
 				// init a wall
 				Wall wall;
 				wall.rectangle = rectangle;
-				wall.x = x;
-				wall.y = y;
+				wall.row = row;
+				wall.col = column;
 				wall.isHorizontal = TRUE;
 
 				// push back the wall
@@ -126,8 +126,8 @@ void VirtualMaze::rebuildWalls() {
 				// init a wall
 				Wall wall;
 				wall.rectangle = rectangle;
-				wall.x = x;
-				wall.y = y;
+				wall.row = row;
+				wall.col = column;
 				wall.isHorizontal = FALSE;
 
 				walls.push_back(wall);

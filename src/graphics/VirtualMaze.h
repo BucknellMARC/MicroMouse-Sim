@@ -21,7 +21,7 @@ extern "C" {
 
 typedef struct {
 	Rectangle rectangle;
-	int x, y;
+	int row, col;
 	BOOL isHorizontal;
 } Wall;
 
