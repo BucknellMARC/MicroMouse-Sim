@@ -42,7 +42,7 @@ void robot_run(Robot* robot) {
 
 	// only drive forward if there is no wall
 	BOOL wallForward = mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
-	if (!wallForward) {
+	if (!wallForward && rotation != BACKWARDS) {
 		robot_drive_forward(robot);
 	}
 }

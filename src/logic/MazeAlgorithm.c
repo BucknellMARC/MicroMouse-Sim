@@ -232,16 +232,15 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 
 Rotation malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
-	Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
-	printf("%i %i\n", curDirection, left);
-	BOOL leftWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
-	if (!leftWall) {
-		return LEFT;
+	Direction right = mazemap_rotation_to_direction(curDirection, RIGHT);
+	BOOL rightWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
+	if (!rightWall) {
+		return RIGHT;
 	}
 
 	BOOL forwardWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
 	if (forwardWall) {
-		return LEFT;
+		return BACKWARDS;
 	}
 
 	// otherwise, drive forward
