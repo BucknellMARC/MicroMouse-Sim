@@ -24,7 +24,6 @@ void robot_run_right_wall(Robot* robot);
 void robot_run_flood_fill(Robot* robot);
 
 // rotation assists
-Direction	robot_rotation_to_direction(Robot* robot, Rotation rotation);
 //BOOL		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
 
 // interfacing

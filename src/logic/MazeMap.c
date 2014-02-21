@@ -91,4 +91,85 @@ void mazemap_destroy(MazeMap* mm) {
 	free(mm);
 }
 
+//
+// helper methods
+//
+
+Direction mazemap_rotation_to_direction(Direction direction, Rotation rotation)
+{
+	if (rotation == LEFT) {
+		switch (direction) {
+		case NORTH:
+			direction = WEST;
+			break;
+
+		case EAST:
+			direction = NORTH;
+			break;
+
+		case SOUTH:
+			direction = EAST;
+			break;
+
+		case WEST:
+			direction = SOUTH;
+			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
+		}
+	}
+	else if (rotation == RIGHT) {
+		switch (direction) {
+		case NORTH:
+			direction = EAST;
+			break;
+
+		case EAST:
+			direction = SOUTH;
+			break;
+
+		case SOUTH:
+			direction = WEST;
+			break;
+
+		case WEST:
+			direction = NORTH;
+			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
+		}
+	}
+	else if (rotation == BACKWARDS) {
+		switch (direction) {
+		case NORTH:
+			direction = SOUTH;
+			break;
+
+		case EAST:
+			direction = WEST;
+			break;
+
+		case SOUTH:
+			direction = NORTH;
+			break;
+
+		case WEST:
+			direction = EAST;
+			break;
+
+		default:
+			printf("Error: Robot is in an unexpected state!\n");
+		}
+	}
+
+	return direction;
+}
+
+Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection)
+{
+	printf("Error: mazemap_direction_to_rotation() not implemented!\n");
+}
+
 #endif

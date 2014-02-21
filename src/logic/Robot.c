@@ -60,80 +60,6 @@ void robot_run_flood_fill(Robot* robot) {
 	robot_drive_forward(robot);
 }
 
-Direction robot_rotation_to_direction(Robot* robot, Rotation rotation) {
-	// holds the direction that the lookup table converts to
-	Direction direction = robot->direction;
-
-	if (rotation == LEFT) {
-		switch (direction) {
-		case NORTH:
-			direction = WEST;
-			break;
-
-		case EAST:
-			direction = NORTH;
-			break;
-
-		case SOUTH:
-			direction = EAST;
-			break;
-
-		case WEST:
-			direction = SOUTH;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-	else if (rotation == RIGHT) {
-		switch (direction) {
-		case NORTH:
-			direction = EAST;
-			break;
-
-		case EAST:
-			direction = SOUTH;
-			break;
-
-		case SOUTH:
-			direction = WEST;
-			break;
-
-		case WEST:
-			direction = NORTH;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-	else if (rotation == BACKWARDS) {
-		switch (direction) {
-		case NORTH:
-			direction = SOUTH;
-			break;
-
-		case EAST:
-			direction = WEST;
-			break;
-
-		case SOUTH:
-			direction = NORTH;
-			break;
-
-		case WEST:
-			direction = EAST;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-
-	return direction;
-}
-
 /*
 BOOL robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 	// look forward
@@ -183,7 +109,7 @@ BOOL robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
 
 BOOL robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
-	Direction direction = robot_rotation_to_direction(robot, rotation);
+	Direction direction = mazemap_rotation_to_direction(robot->direction, rotation);
 
 	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
 
@@ -235,7 +161,7 @@ void robot_turn_r(Robot* robot, Rotation rotation) {
 	// set the new direction
 	//printf("Original direction: %d\n", (int)robot->direction);
 
-	robot->direction = robot_rotation_to_direction(robot, rotation);
+	robot->direction = mazemap_rotation_to_direction(robot->direction, rotation);
 
 	//printf("New Direction: %d\n\n", (int)robot->direction);
 }

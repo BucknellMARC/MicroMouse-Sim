@@ -29,4 +29,12 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 
 void mazemap_destroy(MazeMap* mm);
 
+//
+// helper methods
+//
+
+Direction mazemap_rotation_to_direction(Direction curDirection, Rotation rotation);
+Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection);
+
+
 #endif
