@@ -68,7 +68,7 @@ void VirtualMaze::draw() {
 		}
 
 		// if robot has scanned the map, draw as white
-		float c = 0.5f;
+		float c = 0.25f;
 		if (robotSeesWall) {
 			c = 1.0f;
 		}
