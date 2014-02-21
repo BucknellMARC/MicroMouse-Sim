@@ -23,9 +23,6 @@ Robot* robot_create(int xPos, int yPos, MazeMap* mm);
 void robot_run_right_wall(Robot* robot);
 void robot_run_flood_fill(Robot* robot);
 
-// rotation assists
-//BOOL		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
-
 // interfacing
 BOOL robot_look(Robot* robot, Rotation rotation);			// returns TRUE if the robot can move to that position
 

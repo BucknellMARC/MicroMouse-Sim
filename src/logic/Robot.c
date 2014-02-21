@@ -60,97 +60,11 @@ void robot_run_flood_fill(Robot* robot) {
 	robot_drive_forward(robot);
 }
 
-/*
-BOOL robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
-	// look forward
-	// get direction to look
-	Direction direct = robot_rotation_to_direction(robot, rotation);
-	int xCoord, yCoord;
-
-	// pull the positions from the robot
-	int xPos = robot->xPos;
-	int yPos = robot->yPos;
-
-	switch(direct) {
-	case NORTH:
-		xCoord = xPos;
-		yCoord = yPos - 1;
-		break;
-
-	case EAST:
-		xCoord = xPos + 1;
-		yCoord = yPos;
-		break;
-
-	case SOUTH:
-		xCoord = xPos;
-		yCoord = yPos + 1;
-		break;
-
-	case WEST:
-		xCoord = xPos - 1;
-		yCoord = yPos;
-		break;
-	}
-
-	// if the coordinates are still in the bounds, return meaningful result
-	if (xCoord > 0 && xCoord < MAZE_WIDTH &&
-			yCoord > 0 && yCoord < MAZE_HEIGHT) {
-		out[0] = xCoord;
-		out[1] = yCoord;
-
-		return TRUE;
-	}
-
-	// otherwise, the coordinates were out of bounds
-	return FALSE;
-}
-*/
-
 BOOL robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
 	Direction direction = mazemap_rotation_to_direction(robot->direction, rotation);
 
 	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
-
-	/*
-	int xPos = robot->xPos;
-	int yPos = robot->yPos;
-
-	switch(direction) {
-	case NORTH:
-		xLook = xPos;
-		yLook = yPos - 1;
-		break;
-
-	case WEST:
-		xLook = xPos - 1;
-		yLook = yPos;
-		break;
-
-	case EAST:
-	case SOUTH:
-		xLook = xPos;
-		yLook = yPos;
-		break;
-
-	default:
-		printf("Error: Robot is in an unexpected state!\n");
-	}
-
-	// don't access the arrays if stuff is out of bounds
-	if (xLook > -1 || yLook > -1) {
-		return FALSE;
-	}
-
-	// get data from proper location
-	if (direction == NORTH || direction == SOUTH) {
-		return !robot->mazeMap->vertWalls[yLook][xLook];
-	}
-	else {
-		return !robot->mazeMap->horizWalls[yLook][xLook];
-	}
-	*/
 }
 
 void robot_turn_d(Robot* robot, Direction direction) {
