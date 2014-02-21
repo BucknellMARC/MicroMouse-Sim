@@ -43,6 +43,9 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 void VirtualRobot::run() {
 
+	// feed in the raw wall sensor input
+	
+
 	// run the algorithm
 	//robot_runRightWall(robot);
 	//robot_run_flood_fill(robot);

@@ -8,6 +8,9 @@
 #include "MazeAlgorithm.h"
 #include "MazeMap.h"
 
+// data members
+WallSensorInput rawWalls;
+
 // computes the flood fill for the first time (center is the target)
 void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 {
