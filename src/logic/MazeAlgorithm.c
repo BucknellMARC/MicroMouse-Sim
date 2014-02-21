@@ -230,23 +230,22 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 	return minDir;
 }
 
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Rotation malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
-	// check to the right
 	Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
-	BOOL wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
-	if (!wallExists) {
-		return left;
+	printf("%i %i\n", curDirection, left);
+	BOOL leftWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
+	if (!leftWall) {
+		return LEFT;
 	}
 
-	// right now just turn right if there is a wall in front
-	wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
-	if (!wallExists) {
-		return curDirection;
+	BOOL forwardWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
+	if (forwardWall) {
+		return LEFT;
 	}
 
-	// otherwise, u-turn
-	return mazemap_rotation_to_direction(curDirection, BACKWARDS);
+	// otherwise, drive forward
+	return FORWARDS;
 }
 
 #endif

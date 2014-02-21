@@ -33,32 +33,24 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 }
 
 void robot_run(Robot* robot) {
-	Direction toGo = malgo_explore_suggest(
+	Rotation rotation = malgo_explore_suggest(
 		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, robot->posHistory
 		);
 
-	robot_turn_d(robot, toGo);
-	robot_drive_forward(robot);
-}
+	robot_turn_r(robot, rotation);
+	printf("%i\n", rotation);
 
-void robot_run_right_wall(Robot* robot) {
-	// turn right if you can
-	if (robot_look(robot, RIGHT)) {
-		robot_turn_r(robot, RIGHT);
+	// only drive forward if there is no wall
+	BOOL wallForward = mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
+	if (!wallForward) {
+		robot_drive_forward(robot);
 	}
-
-	if (!robot_look(robot, FORWARDS)) {
-		robot_turn_r(robot, LEFT);
-		return;
-	}
-
-	robot_drive_forward(robot);
 }
 
 void robot_run_flood_fill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
-	Direction dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, robot->ffMap);
+	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, robot->ffMap);
 
 	printf("direction to go: %d\n", (int)dToGo);
 
