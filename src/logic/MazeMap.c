@@ -33,7 +33,8 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 
 // sets the desired wall to a new state
 void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
-	// get the proper look
+	
+	// get the proper array position, will return false if the value is out of bounds
 	int xLook, yLook;
 	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
 
