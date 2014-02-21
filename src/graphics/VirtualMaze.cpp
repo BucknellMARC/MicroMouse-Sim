@@ -52,43 +52,8 @@ VirtualMaze::VirtualMaze() {
 // draws the maze
 void VirtualMaze::draw() {
 
-	// draw every wall in the wall list
-	for (unsigned int n = 0; n < walls.size(); n++) {
-		Wall wall = walls[n];
-		int row = wall.row;
-		int col = wall.col;
-
-		// check if the robot has seen the wall
-		BOOL robotSeesWall = FALSE;
-		if (wall.isHorizontal && robotMazeMap->horizWalls[row][col]) {
-			robotSeesWall = TRUE;
-		}
-		if (!wall.isHorizontal && robotMazeMap->vertWalls[row][col]) {
-			robotSeesWall = TRUE;
-		}
-
-		// if robot has scanned the map, draw as white
-		float c = 0.25f;
-		if (robotSeesWall) {
-			c = 1.0f;
-		}
-
-		wall.rectangle.draw(c, c, c);
-	}
-
 	// set the draw color to white
 	glColor3f(1.0f, 1.0f, 1.0f);
-
-	// draw every circle
-	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
-		circles[n]->draw();
-	}
-}
-
-// recreates the walls based on the BOOLean arrays
-void VirtualMaze::rebuildWalls() {
-	// empty the vector
-	walls.clear();
 
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
@@ -100,15 +65,12 @@ void VirtualMaze::rebuildWalls() {
 				// init a rectangle
 				Rectangle rectangle(x, y, wallWidthPX, blockWidthPX);
 
-				// init a wall
-				Wall wall;
-				wall.rectangle = rectangle;
-				wall.row = row;
-				wall.col = column;
-				wall.isHorizontal = TRUE;
-
-				// push back the wall
-				walls.push_back(wall);
+				if (robotMazeMap->vertWalls[row][column]) {
+					rectangle.draw(1.0f, 1.0f, 1.0f);
+				}
+				else {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
+				}
 			}
 		}
 	}
@@ -122,17 +84,23 @@ void VirtualMaze::rebuildWalls() {
 
 				// init a rectangle
 				Rectangle rectangle(x, y, blockWidthPX, wallWidthPX);
+				rectangle.draw(0.25f, 0.25f, 0.25f);
 
-				// init a wall
-				Wall wall;
-				wall.rectangle = rectangle;
-				wall.row = row;
-				wall.col = column;
-				wall.isHorizontal = FALSE;
-
-				walls.push_back(wall);
+				if (robotMazeMap->horizWalls[row][column]) {
+					rectangle.draw(1.0f, 1.0f, 1.0f);
+				}
+				else {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
+				}
 			}
 		}
+	}
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	// draw every circle
+	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
+		circles[n]->draw();
 	}
 }
 
@@ -254,9 +222,6 @@ void VirtualMaze::primGeneration() {
 			activeWallList.push_back(destination);
 		}
 	}
-
-	// rebuild the graphical walls
-	rebuildWalls();
 }
 
 //

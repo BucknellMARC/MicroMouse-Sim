@@ -34,7 +34,6 @@ private:
 	MazeMap* mazeMap;
 	MazeMap* robotMazeMap;
 
-	vector<Wall> walls;
 	Circle** circles;
 
 	//
@@ -56,7 +55,6 @@ public:
 	//
 
 	void draw();
-	void rebuildWalls();
 
 	void bindRobotMap(MazeMap* robotMazeMap);
 
