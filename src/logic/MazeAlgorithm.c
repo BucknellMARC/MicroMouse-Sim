@@ -217,7 +217,7 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 		minDir = SOUTH;
 		minVal = southVal;
 	}
-	if (!westWall && westVal < minVal) {
+	if (!westWall&& westVal < minVal) {
 		printf("west is min\n");
 		minDir = WEST;
 		minVal = westVal;
@@ -232,17 +232,21 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 
 Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
+	// check to the right
+	Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
+	BOOL wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
+	if (!wallExists) {
+		return left;
+	}
+
 	// right now just turn right if there is a wall in front
-	BOOL wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
-	if (wallExists) {
+	wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
+	if (!wallExists) {
 		return curDirection;
 	}
 
-	// this is real crappy but I promise I will fix
-	if (curDirection != NORTH) {
-		return NORTH;
-	}
-	return SOUTH;
+	// otherwise, u-turn
+	return mazemap_rotation_to_direction(curDirection, BACKWARDS);
 }
 
 #endif

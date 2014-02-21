@@ -20,6 +20,7 @@ typedef struct {
 Robot* robot_create(int xPos, int yPos, MazeMap* mm);
 
 // movement algorithms
+void robot_run(Robot* robot);
 void robot_run_right_wall(Robot* robot);
 void robot_run_flood_fill(Robot* robot);
 

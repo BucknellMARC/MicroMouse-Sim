@@ -32,6 +32,15 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 	return robot;
 }
 
+void robot_run(Robot* robot) {
+	Direction toGo = malgo_explore_suggest(
+		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, robot->posHistory
+		);
+
+	robot_turn_d(robot, toGo);
+	robot_drive_forward(robot);
+}
+
 void robot_run_right_wall(Robot* robot) {
 	// turn right if you can
 	if (robot_look(robot, RIGHT)) {

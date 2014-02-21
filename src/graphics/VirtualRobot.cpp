@@ -44,11 +44,10 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 void VirtualRobot::run() {
 
 	// feed in the raw wall sensor input
-	
+	feedSensorData();
 
-	// run the algorithm
-	//robot_runRightWall(robot);
-	//robot_run_flood_fill(robot);
+	// run the robot drive code
+	robot_run(robot);
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
@@ -57,6 +56,26 @@ void VirtualRobot::run() {
 	int newX = blockWidthPX * robot->xPos + offset;
 	int newY = blockWidthPX * robot->yPos + offset;
 	rectangle->setPos(newX, newY);
+}
+
+void VirtualRobot::feedSensorData() {
+	// get the full map
+	MazeMap* virtualMap = virtualMaze->getMazeMap();
+	int x = robot->xPos;
+	int y = robot->yPos;
+
+	// load in information about surroundings
+	BOOL northWall = mazemap_does_wall_exist(virtualMap, x, y, NORTH);
+	BOOL eastWall = mazemap_does_wall_exist(virtualMap, x, y, EAST);
+	BOOL southWall = mazemap_does_wall_exist(virtualMap, x, y, SOUTH);
+	BOOL westWall = mazemap_does_wall_exist(virtualMap, x, y, WEST);
+
+	// plug the data from the virtual maze into the robot's maze map
+	MazeMap* robotMap = robot->mazeMap;
+	mazemap_set_wall(robotMap, northWall, x, y, NORTH);
+	mazemap_set_wall(robotMap, eastWall, x, y, EAST);
+	mazemap_set_wall(robotMap, southWall, x, y, SOUTH);
+	mazemap_set_wall(robotMap, westWall, x, y, WEST);
 }
 
 void VirtualRobot::draw() {
