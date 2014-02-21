@@ -16,16 +16,9 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 	// assign the initial position to the robot
 	robot->xPos = xPos;
 	robot->yPos = yPos;
-
 	robot->direction = EAST;
-
-	// zero out the maze array
-	MazeArrayPtr php = robot->posHistory;
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			php[row][col] = 0;
-		}
-	}
+	
+	robot->isExploring = TRUE;
 
 	robot->mazeMap = mm;
 
@@ -33,9 +26,18 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 }
 
 void robot_run(Robot* robot) {
-	Rotation rotation = malgo_explore_suggest(
-		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, robot->posHistory
+	// run exploration if the robot is exploring
+	Rotation rotation;
+	if (robot->isExploring) {
+	rotation = malgo_explore_suggest(
+		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, NULL
 		);
+	}
+	// otherwise run the flood fill algorithm
+	else {
+		robot_run_flood_fill(robot);
+		return;
+	}
 
 	robot_turn_r(robot, rotation);
 	printf("%i\n", rotation);

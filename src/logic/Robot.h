@@ -9,8 +9,8 @@ typedef struct {
 	// position and direction the robot is facing
 	int xPos, yPos;
 	Direction direction;
+	BOOL isExploring;
 
-	MazeArray posHistory[MAZE_HEIGHT][MAZE_WIDTH];
 	FFMapPtr ffMap;
 
 	MazeMap* mazeMap;
