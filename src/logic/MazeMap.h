@@ -9,9 +9,16 @@
 
 #include "define.h"
 
+// holds the state of the wall
+typedef enum {
+	WALL = 1,
+	NOWALL = 0,
+	UNKNOWN = -1
+} WallState;
+
 typedef struct {
-	BOOL horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
-	BOOL vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
+	WallState horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
+	WallState vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
 
 } MazeMap;
 

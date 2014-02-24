@@ -134,12 +134,12 @@ void VirtualMaze::primGeneration() {
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			mazeMap->vertWalls[row][col] = TRUE;
+			mazeMap->vertWalls[row][col] = WALL;
 		}
 	}
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			mazeMap->horizWalls[row][col] = TRUE;
+			mazeMap->horizWalls[row][col] = WALL;
 		}
 	}
 
@@ -196,7 +196,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_set_wall(mazeMap, FALSE, current.x, current.y, direction);
+			mazemap_set_wall(mazeMap, NOWALL, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;
