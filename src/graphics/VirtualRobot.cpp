@@ -79,12 +79,13 @@ void VirtualRobot::feedSensorData() {
 }
 
 void VirtualRobot::draw() {
-	// draw the robot red
-	rectangle->draw(1.0f, 0.0f, 0.0f);
-
-	// draw the flood fill
-	//ff_draw(robot->ffMap);
-
+	// draw the robot yellow if exploring, red if solving
+	if (robot->isExploring) {
+		rectangle->draw(1.0f, 1.0f, 0.0f);
+	}
+	else {
+		rectangle->draw(1.0f, 0.0f, 0.0f);
+	}
 }
 
 FFMapPtr VirtualRobot::getFloodFillMap() {
