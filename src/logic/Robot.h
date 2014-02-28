@@ -9,9 +9,9 @@ typedef struct {
 	// position and direction the robot is facing
 	int xPos, yPos;
 	Direction direction;
+	BOOL isExploring;
 
-	MazeArray posHistory[MAZE_HEIGHT][MAZE_WIDTH];
-	FFMapPtr ffMap;
+	FFMap ffMap;
 
 	MazeMap* mazeMap;
 } Robot;
@@ -20,12 +20,8 @@ typedef struct {
 Robot* robot_create(int xPos, int yPos, MazeMap* mm);
 
 // movement algorithms
-void robot_run_right_wall(Robot* robot);
+void robot_run(Robot* robot);
 void robot_run_flood_fill(Robot* robot);
-
-// rotation assists
-Direction	robot_rotation_to_direction(Robot* robot, Rotation rotation);
-//BOOL		robot_rotationToCoords(Robot* robot, Rotation rotation, int* out);
 
 // interfacing
 BOOL robot_look(Robot* robot, Rotation rotation);			// returns TRUE if the robot can move to that position

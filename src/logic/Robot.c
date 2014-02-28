@@ -16,40 +16,70 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 	// assign the initial position to the robot
 	robot->xPos = xPos;
 	robot->yPos = yPos;
-
 	robot->direction = EAST;
-
-	// zero out the maze array
-	MazeArrayPtr php = robot->posHistory;
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			php[row][col] = 0;
-		}
-	}
+	
+	robot->isExploring = TRUE;
 
 	robot->mazeMap = mm;
 
 	return robot;
 }
 
-void robot_run_right_wall(Robot* robot) {
-	// turn right if you can
-	if (robot_look(robot, RIGHT)) {
-		robot_turn_r(robot, RIGHT);
+void robot_run(Robot* robot) {
+	// check to see if the robot has explored the whole maze
+	BOOL exploredMaze = TRUE;
+
+	// actually performed check
+	MazeMap* rmm = robot->mazeMap;
+	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			if (rmm->horizWalls[row][col] == UNKNOWN) {
+				exploredMaze = FALSE;
+			}
+		}
+	}
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH - 1; col++) {
+			if (rmm->vertWalls[row][col] == UNKNOWN) {
+				exploredMaze = FALSE;
+			}
+		}
 	}
 
-	if (!robot_look(robot, FORWARDS)) {
-		robot_turn_r(robot, LEFT);
+	// if the maze has been fully explored, calculate the flood fill map and set the flag
+	if (robot->isExploring && exploredMaze) {
+		robot->isExploring = FALSE;
+	
+		malgo_floodfill_compute(robot->mazeMap, robot->ffMap);
+	}
+
+	// run exploration if the robot is exploring
+	Rotation rotation;
+	if (robot->isExploring) {
+	rotation = malgo_explore_suggest(
+		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, NULL
+		);
+	}
+	// otherwise run the flood fill algorithm
+	else {
+		robot_run_flood_fill(robot);
 		return;
 	}
 
-	robot_drive_forward(robot);
+	robot_turn_r(robot, rotation);
+	printf("%i\n", rotation);
+
+	// only drive forward if there is no wall
+	BOOL wallForward = mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
+	if (!wallForward && rotation != BACKWARDS) {
+		robot_drive_forward(robot);
+	}
 }
 
 void robot_run_flood_fill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
-	Direction dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, robot->ffMap);
+	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, robot->ffMap);
 
 	printf("direction to go: %d\n", (int)dToGo);
 
@@ -60,171 +90,11 @@ void robot_run_flood_fill(Robot* robot) {
 	robot_drive_forward(robot);
 }
 
-Direction robot_rotation_to_direction(Robot* robot, Rotation rotation) {
-	// holds the direction that the lookup table converts to
-	Direction direction = robot->direction;
-
-	if (rotation == LEFT) {
-		switch (direction) {
-		case NORTH:
-			direction = WEST;
-			break;
-
-		case EAST:
-			direction = NORTH;
-			break;
-
-		case SOUTH:
-			direction = EAST;
-			break;
-
-		case WEST:
-			direction = SOUTH;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-	else if (rotation == RIGHT) {
-		switch (direction) {
-		case NORTH:
-			direction = EAST;
-			break;
-
-		case EAST:
-			direction = SOUTH;
-			break;
-
-		case SOUTH:
-			direction = WEST;
-			break;
-
-		case WEST:
-			direction = NORTH;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-	else if (rotation == BACKWARDS) {
-		switch (direction) {
-		case NORTH:
-			direction = SOUTH;
-			break;
-
-		case EAST:
-			direction = WEST;
-			break;
-
-		case SOUTH:
-			direction = NORTH;
-			break;
-
-		case WEST:
-			direction = EAST;
-			break;
-
-		default:
-			printf("Error: Robot is in an unexpected state!\n");
-		}
-	}
-
-	return direction;
-}
-
-/*
-BOOL robot_rotationToCoords(Robot* robot, Rotation rotation, int* out) {
-	// look forward
-	// get direction to look
-	Direction direct = robot_rotation_to_direction(robot, rotation);
-	int xCoord, yCoord;
-
-	// pull the positions from the robot
-	int xPos = robot->xPos;
-	int yPos = robot->yPos;
-
-	switch(direct) {
-	case NORTH:
-		xCoord = xPos;
-		yCoord = yPos - 1;
-		break;
-
-	case EAST:
-		xCoord = xPos + 1;
-		yCoord = yPos;
-		break;
-
-	case SOUTH:
-		xCoord = xPos;
-		yCoord = yPos + 1;
-		break;
-
-	case WEST:
-		xCoord = xPos - 1;
-		yCoord = yPos;
-		break;
-	}
-
-	// if the coordinates are still in the bounds, return meaningful result
-	if (xCoord > 0 && xCoord < MAZE_WIDTH &&
-			yCoord > 0 && yCoord < MAZE_HEIGHT) {
-		out[0] = xCoord;
-		out[1] = yCoord;
-
-		return TRUE;
-	}
-
-	// otherwise, the coordinates were out of bounds
-	return FALSE;
-}
-*/
-
 BOOL robot_look(Robot* robot, Rotation rotation) {
 	// get the direction
-	Direction direction = robot_rotation_to_direction(robot, rotation);
+	Direction direction = mazemap_rotation_to_direction(robot->direction, rotation);
 
 	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
-
-	/*
-	int xPos = robot->xPos;
-	int yPos = robot->yPos;
-
-	switch(direction) {
-	case NORTH:
-		xLook = xPos;
-		yLook = yPos - 1;
-		break;
-
-	case WEST:
-		xLook = xPos - 1;
-		yLook = yPos;
-		break;
-
-	case EAST:
-	case SOUTH:
-		xLook = xPos;
-		yLook = yPos;
-		break;
-
-	default:
-		printf("Error: Robot is in an unexpected state!\n");
-	}
-
-	// don't access the arrays if stuff is out of bounds
-	if (xLook > -1 || yLook > -1) {
-		return FALSE;
-	}
-
-	// get data from proper location
-	if (direction == NORTH || direction == SOUTH) {
-		return !robot->mazeMap->vertWalls[yLook][xLook];
-	}
-	else {
-		return !robot->mazeMap->horizWalls[yLook][xLook];
-	}
-	*/
 }
 
 void robot_turn_d(Robot* robot, Direction direction) {
@@ -235,7 +105,7 @@ void robot_turn_r(Robot* robot, Rotation rotation) {
 	// set the new direction
 	//printf("Original direction: %d\n", (int)robot->direction);
 
-	robot->direction = robot_rotation_to_direction(robot, rotation);
+	robot->direction = mazemap_rotation_to_direction(robot->direction, rotation);
 
 	//printf("New Direction: %d\n\n", (int)robot->direction);
 }

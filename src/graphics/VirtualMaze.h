@@ -19,6 +19,12 @@ extern "C" {
 #include "Rectangle.h"
 #include "Circle.h"
 
+typedef struct {
+	Rectangle rectangle;
+	int row, col;
+	BOOL isHorizontal;
+} Wall;
+
 class VirtualMaze {
 private:
 	//
@@ -26,8 +32,8 @@ private:
 	//
 
 	MazeMap* mazeMap;
+	MazeMap* robotMazeMap;
 
-	vector<Rectangle> walls;
 	Circle** circles;
 
 	//
@@ -49,7 +55,8 @@ public:
 	//
 
 	void draw();
-	void rebuildWalls();
+
+	void bindRobotMap(MazeMap* robotMazeMap);
 
 	//
 	// getters

@@ -8,6 +8,9 @@
 #include "MazeAlgorithm.h"
 #include "MazeMap.h"
 
+// data members
+WallSensorInput rawWalls;
+
 // computes the flood fill for the first time (center is the target)
 void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 {
@@ -214,7 +217,7 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 		minDir = SOUTH;
 		minVal = southVal;
 	}
-	if (!westWall && westVal < minVal) {
+	if (!westWall&& westVal < minVal) {
 		printf("west is min\n");
 		minDir = WEST;
 		minVal = westVal;
@@ -227,19 +230,21 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 	return minDir;
 }
 
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Rotation malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
-	// right now just turn right if there is a wall in front
-	BOOL wallExists = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
-	if (wallExists) {
-		return curDirection;
+	Direction right = mazemap_rotation_to_direction(curDirection, RIGHT);
+	BOOL rightWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
+	if (!rightWall) {
+		return RIGHT;
 	}
 
-	// this is real crappy but I promise I will fix
-	if (curDirection != NORTH) {
-		return NORTH;
+	BOOL forwardWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
+	if (forwardWall) {
+		return BACKWARDS;
 	}
-	return SOUTH;
+
+	// otherwise, drive forward
+	return FORWARDS;
 }
 
 #endif

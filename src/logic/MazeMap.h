@@ -9,9 +9,16 @@
 
 #include "define.h"
 
+// holds the state of the wall
+typedef enum {
+	WALL = 1,
+	NOWALL = 0,
+	UNKNOWN = -1
+} WallState;
+
 typedef struct {
-	BOOL horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
-	BOOL vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
+	WallState horizWalls[MAZE_HEIGHT - 1][MAZE_WIDTH];
+	WallState vertWalls[MAZE_HEIGHT][MAZE_WIDTH - 1];
 
 } MazeMap;
 
@@ -28,5 +35,13 @@ void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction dire
 BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
 
 void mazemap_destroy(MazeMap* mm);
+
+//
+// helper methods
+//
+
+Direction mazemap_rotation_to_direction(Direction curDirection, Rotation rotation);
+Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection);
+
 
 #endif

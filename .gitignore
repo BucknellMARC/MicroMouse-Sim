@@ -11,3 +11,5 @@ deps/
 
 *.o
 *.d
+*.sublime-workspace
+*.sublime-project

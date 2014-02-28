@@ -30,6 +30,7 @@ extern "C" {
 
 VirtualMaze::VirtualMaze() {
 	mazeMap = mazemap_create();
+	robotMazeMap = NULL;
 
 	// perform prim generation
 	primGeneration();
@@ -50,35 +51,26 @@ VirtualMaze::VirtualMaze() {
 
 // draws the maze
 void VirtualMaze::draw() {
+
 	// set the draw color to white
 	glColor3f(1.0f, 1.0f, 1.0f);
-
-	// draw every wall in the wall list
-	for (unsigned int n = 0; n < walls.size(); n++) {
-		walls[n].draw();
-	}
-
-	// draw every circle
-	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
-		circles[n]->draw();
-	}
-}
-
-// recreates the walls based on the BOOLean arrays
-void VirtualMaze::rebuildWalls() {
-	// empty the vector
-	walls.clear();
 
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int column = 0; column < (MAZE_WIDTH - 1); column++) {
-			if (mazeMap->vertWalls[row][column]) {
+			if (mazeMap->vertWalls[row][column] == WALL) {
 				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
+				// init a rectangle
 				Rectangle rectangle(x, y, wallWidthPX, blockWidthPX);
 
-				walls.push_back(rectangle);
+				if (robotMazeMap->vertWalls[row][column] == UNKNOWN) {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
+				}
+				else {
+					rectangle.draw(1.0f, 1.0f, 1.0f);
+				}
 			}
 		}
 	}
@@ -86,16 +78,35 @@ void VirtualMaze::rebuildWalls() {
 	// build the columns
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
-			if (mazeMap->horizWalls[row][column]) {
+			if (mazeMap->horizWalls[row][column] == WALL) {
 				int x = column * blockWidthPX;
 				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
+				// init a rectangle
 				Rectangle rectangle(x, y, blockWidthPX, wallWidthPX);
+				rectangle.draw(0.25f, 0.25f, 0.25f);
 
-				walls.push_back(rectangle);
+				if (robotMazeMap->horizWalls[row][column] == UNKNOWN) {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
+				}
+				else {
+					rectangle.draw(1.0f, 1.0f, 1.0f);
+				}
 			}
 		}
 	}
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	// draw every circle
+	for (int n = 0; n < (MAZE_WIDTH * MAZE_HEIGHT); n++) {
+		circles[n]->draw();
+	}
+}
+
+void VirtualMaze::bindRobotMap(MazeMap* robotMazeMap)
+{
+	this->robotMazeMap = robotMazeMap;
 }
 
 MazeMap* VirtualMaze::getMazeMap() {
@@ -123,12 +134,12 @@ void VirtualMaze::primGeneration() {
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			mazeMap->vertWalls[row][col] = TRUE;
+			mazeMap->vertWalls[row][col] = WALL;
 		}
 	}
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			mazeMap->horizWalls[row][col] = TRUE;
+			mazeMap->horizWalls[row][col] = WALL;
 		}
 	}
 
@@ -185,7 +196,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_set_wall(mazeMap, FALSE, current.x, current.y, direction);
+			mazemap_set_wall(mazeMap, NOWALL, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;
@@ -211,9 +222,6 @@ void VirtualMaze::primGeneration() {
 			activeWallList.push_back(destination);
 		}
 	}
-
-	// rebuild the graphical walls
-	rebuildWalls();
 }
 
 //
