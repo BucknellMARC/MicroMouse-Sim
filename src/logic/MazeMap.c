@@ -37,10 +37,10 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 
 	// only return TRUE if we know the wall actually exists
 	if (direction == NORTH || direction == SOUTH) {
-		return mazeMap->horizWalls[yLook][xLook];
+		return (mazeMap->horizWalls[yLook][xLook] == WALL);
 	}
 	else {
-		return mazeMap->vertWalls[yLook][xLook];
+		return (mazeMap->vertWalls[yLook][xLook] == WALL);
 	}
 }
 
@@ -55,12 +55,17 @@ void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction dire
 		return;
 	}
 
+	WallState theRealState = NOWALL;
+	if (state) {
+		theRealState = WALL;
+	}
+
 	// assign to the proper array
 	if (direction == NORTH || direction == SOUTH) {
-		mazeMap->horizWalls[yLook][xLook] = state;
+		mazeMap->horizWalls[yLook][xLook] = theRealState;
 	}
 	else {
-		mazeMap->vertWalls[yLook][xLook] = state;
+		mazeMap->vertWalls[yLook][xLook] = theRealState;
 	}
 }
 

@@ -11,7 +11,7 @@ typedef struct {
 	Direction direction;
 	BOOL isExploring;
 
-	FFMapPtr ffMap;
+	FFMap ffMap;
 
 	MazeMap* mazeMap;
 } Robot;

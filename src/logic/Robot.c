@@ -47,8 +47,8 @@ void robot_run(Robot* robot) {
 	}
 
 	// if the maze has been fully explored, calculate the flood fill map and set the flag
-	if (exploredMaze) {
-		robot->isExploring = TRUE;
+	if (robot->isExploring && exploredMaze) {
+		robot->isExploring = FALSE;
 	
 		malgo_floodfill_compute(robot->mazeMap, robot->ffMap);
 	}
