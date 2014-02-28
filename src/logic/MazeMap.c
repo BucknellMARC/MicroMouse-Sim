@@ -2,12 +2,25 @@
 #define MAZEMAP_CPP
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "define.h"
 #include "MazeMap.h"
 
 MazeMap* mazemap_create() {
 	MazeMap* mm = (MazeMap*)calloc(1, sizeof(MazeMap));
+
+	// inits all the walls to the UNKNOWN state
+	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			mm->horizWalls[row][col] = UNKNOWN;
+		}
+	}
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
+			mm->vertWalls[row][col] = UNKNOWN;
+		}
+	}
 
 	return mm;
 }
@@ -171,6 +184,7 @@ Direction mazemap_rotation_to_direction(Direction direction, Rotation rotation)
 Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection)
 {
 	printf("Error: mazemap_direction_to_rotation() not implemented!\n");
+	return FORWARDS;
 }
 
 #endif

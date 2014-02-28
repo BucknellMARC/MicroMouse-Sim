@@ -18,7 +18,7 @@ extern "C" {
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
 	// create the robot using a blank maze map
-	MazeMap* robotMM = (MazeMap*)calloc(1, sizeof(MazeMap));
+	MazeMap* robotMM = mazemap_create();
 	robot = robot_create(0, 0, robotMM);
 
 	// bind the robot maze map to the virtualmaze
@@ -34,11 +34,6 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	// save the pointer to the virtual maze
 	this->virtualMaze = virtualMaze;
-
-	// compute the flood fill
-	//malgo_floodfill_compute(virtualMaze->getMazeMap(), floodFillMap);
-	//
-	//robot->ffMap = floodFillMap;
 }
 
 void VirtualRobot::run() {

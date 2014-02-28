@@ -58,18 +58,18 @@ void VirtualMaze::draw() {
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int column = 0; column < (MAZE_WIDTH - 1); column++) {
-			if (mazeMap->vertWalls[row][column]) {
+			if (mazeMap->vertWalls[row][column] == WALL) {
 				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
 				// init a rectangle
 				Rectangle rectangle(x, y, wallWidthPX, blockWidthPX);
 
-				if (robotMazeMap->vertWalls[row][column]) {
-					rectangle.draw(1.0f, 1.0f, 1.0f);
+				if (robotMazeMap->vertWalls[row][column] == UNKNOWN) {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
 				}
 				else {
-					rectangle.draw(0.25f, 0.25f, 0.25f);
+					rectangle.draw(1.0f, 1.0f, 1.0f);
 				}
 			}
 		}
@@ -78,7 +78,7 @@ void VirtualMaze::draw() {
 	// build the columns
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
-			if (mazeMap->horizWalls[row][column]) {
+			if (mazeMap->horizWalls[row][column] == WALL) {
 				int x = column * blockWidthPX;
 				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
@@ -86,11 +86,11 @@ void VirtualMaze::draw() {
 				Rectangle rectangle(x, y, blockWidthPX, wallWidthPX);
 				rectangle.draw(0.25f, 0.25f, 0.25f);
 
-				if (robotMazeMap->horizWalls[row][column]) {
-					rectangle.draw(1.0f, 1.0f, 1.0f);
+				if (robotMazeMap->horizWalls[row][column] == UNKNOWN) {
+					rectangle.draw(0.25f, 0.25f, 0.25f);
 				}
 				else {
-					rectangle.draw(0.25f, 0.25f, 0.25f);
+					rectangle.draw(1.0f, 1.0f, 1.0f);
 				}
 			}
 		}

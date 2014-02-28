@@ -26,6 +26,33 @@ Robot* robot_create(int xPos, int yPos, MazeMap *mm)
 }
 
 void robot_run(Robot* robot) {
+	// check to see if the robot has explored the whole maze
+	BOOL exploredMaze = TRUE;
+
+	// actually performed check
+	MazeMap* rmm = robot->mazeMap;
+	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
+		for (int col = 0; col < MAZE_WIDTH; col++) {
+			if (rmm->horizWalls[row][col] == UNKNOWN) {
+				exploredMaze = FALSE;
+			}
+		}
+	}
+	for (int row = 0; row < MAZE_HEIGHT; row++) {
+		for (int col = 0; col < MAZE_WIDTH - 1; col++) {
+			if (rmm->vertWalls[row][col] == UNKNOWN) {
+				exploredMaze = FALSE;
+			}
+		}
+	}
+
+	// if the maze has been fully explored, calculate the flood fill map and set the flag
+	if (exploredMaze) {
+		robot->isExploring = TRUE;
+	
+		malgo_floodfill_compute(robot->mazeMap, robot->ffMap);
+	}
+
 	// run exploration if the robot is exploring
 	Rotation rotation;
 	if (robot->isExploring) {
