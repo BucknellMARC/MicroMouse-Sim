@@ -12,6 +12,7 @@
 // default initializer
 Robot robot_create(int xPos, int yPos)
 {
+	// declare a robot on the stack and zero it out
 	Robot robot;
 	memset(&robot, 0, sizeof(Robot));
 
@@ -20,8 +21,13 @@ Robot robot_create(int xPos, int yPos)
 	robot.yPos = yPos;
 	robot.direction = EAST;
 	
+	// the robot will always start out exploring
 	robot.isExploring = TRUE;
 
+	// zero out pos history
+	memset(robot.posHistory, 0, sizeof(MazeArray));
+
+	// create an empty mazemap
 	robot.mazeMap = mazemap_create();
 
 	return robot;
@@ -59,7 +65,7 @@ void robot_run(Robot* robot) {
 	Rotation rotation;
 	if (robot->isExploring) {
 	rotation = malgo_explore_suggest(
-		robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, NULL
+		robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
 		);
 	}
 	// otherwise run the flood fill algorithm
@@ -75,6 +81,9 @@ void robot_run(Robot* robot) {
 	BOOL wallForward = mazemap_does_wall_exist(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
 	if (!wallForward && rotation != BACKWARDS) {
 		robot_drive_forward(robot);
+
+		// increment the position history
+		robot->posHistory[robot->yPos][robot->xPos]++;
 	}
 }
 

@@ -12,6 +12,7 @@ typedef struct {
 	BOOL isExploring;
 
 	FFMap ffMap;
+	MazeArray posHistory;
 
 	MazeMap mazeMap;
 } Robot;
