@@ -3,24 +3,26 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "define.h"
 #include "Robot.h"
 #include "MazeAlgorithm.h"
 
 // default initializer
-Robot* robot_create(int xPos, int yPos, MazeMap *mm)
+Robot robot_create(int xPos, int yPos)
 {
-	Robot* robot = (Robot*)calloc(1, sizeof(Robot));
+	Robot robot;
+	memset(&robot, 0, sizeof(Robot));
 
 	// assign the initial position to the robot
-	robot->xPos = xPos;
-	robot->yPos = yPos;
-	robot->direction = EAST;
+	robot.xPos = xPos;
+	robot.yPos = yPos;
+	robot.direction = EAST;
 	
-	robot->isExploring = TRUE;
+	robot.isExploring = TRUE;
 
-	robot->mazeMap = mm;
+	robot.mazeMap = mazemap_create();
 
 	return robot;
 }
@@ -30,7 +32,7 @@ void robot_run(Robot* robot) {
 	BOOL exploredMaze = TRUE;
 
 	// actually performed check
-	MazeMap* rmm = robot->mazeMap;
+	MazeMap* rmm = &robot->mazeMap;
 	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
 			if (rmm->horizWalls[row][col] == UNKNOWN) {
@@ -50,14 +52,14 @@ void robot_run(Robot* robot) {
 	if (robot->isExploring && exploredMaze) {
 		robot->isExploring = FALSE;
 	
-		malgo_floodfill_compute(robot->mazeMap, robot->ffMap);
+		malgo_floodfill_compute(&robot->mazeMap, robot->ffMap);
 	}
 
 	// run exploration if the robot is exploring
 	Rotation rotation;
 	if (robot->isExploring) {
 	rotation = malgo_explore_suggest(
-		robot->xPos, robot->yPos, robot->direction, robot->mazeMap, NULL
+		robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, NULL
 		);
 	}
 	// otherwise run the flood fill algorithm
@@ -70,7 +72,7 @@ void robot_run(Robot* robot) {
 	printf("%i\n", rotation);
 
 	// only drive forward if there is no wall
-	BOOL wallForward = mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
+	BOOL wallForward = mazemap_does_wall_exist(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
 	if (!wallForward && rotation != BACKWARDS) {
 		robot_drive_forward(robot);
 	}
@@ -79,7 +81,7 @@ void robot_run(Robot* robot) {
 void robot_run_flood_fill(Robot* robot) {
 	printf("--Robot::runFloodFill()--\n");
 
-	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, robot->mazeMap, robot->ffMap);
+	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, &robot->mazeMap, robot->ffMap);
 
 	printf("direction to go: %d\n", (int)dToGo);
 
@@ -131,10 +133,6 @@ BOOL robot_drive_forward(Robot* robot) {
 	//robot->posHistory[robot->yPos][robot->xPos]++;
 
 	return TRUE;
-}
-
-void robot_destroy(Robot* robot) {
-	free(robot);
 }
 
 #endif

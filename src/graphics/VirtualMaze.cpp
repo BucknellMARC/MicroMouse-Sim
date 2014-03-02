@@ -30,7 +30,6 @@ extern "C" {
 
 VirtualMaze::VirtualMaze() {
 	mazeMap = mazemap_create();
-	robotMazeMap = NULL;
 
 	// perform prim generation
 	primGeneration();
@@ -58,7 +57,7 @@ void VirtualMaze::draw() {
 	// build the rows
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int column = 0; column < (MAZE_WIDTH - 1); column++) {
-			if (mazeMap->vertWalls[row][column] == WALL) {
+			if (mazeMap.vertWalls[row][column] == WALL) {
 				int x = (column+1) * blockWidthPX - wallWidthPX / 2;
 				int y = row * blockWidthPX;
 
@@ -78,7 +77,7 @@ void VirtualMaze::draw() {
 	// build the columns
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int column = 0; column < MAZE_WIDTH; column++) {
-			if (mazeMap->horizWalls[row][column] == WALL) {
+			if (mazeMap.horizWalls[row][column] == WALL) {
 				int x = column * blockWidthPX;
 				int y = (row+1) * blockWidthPX - wallWidthPX / 2;
 
@@ -110,12 +109,10 @@ void VirtualMaze::bindRobotMap(MazeMap* robotMazeMap)
 }
 
 MazeMap* VirtualMaze::getMazeMap() {
-	return mazeMap;
+	return &mazeMap;
 }
 
 VirtualMaze::~VirtualMaze() {
-	// deallocate the MazeMap
-	mazemap_destroy(mazeMap);
 }
 
 //
@@ -134,12 +131,12 @@ void VirtualMaze::primGeneration() {
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			mazeMap->vertWalls[row][col] = WALL;
+			mazeMap.vertWalls[row][col] = WALL;
 		}
 	}
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			mazeMap->horizWalls[row][col] = WALL;
+			mazeMap.horizWalls[row][col] = WALL;
 		}
 	}
 
@@ -196,7 +193,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_set_wall(mazeMap, NOWALL, current.x, current.y, direction);
+			mazemap_set_wall(&mazeMap, NOWALL, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;

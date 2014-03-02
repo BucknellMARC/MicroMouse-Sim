@@ -12,7 +12,7 @@ extern "C" {
 
 class VirtualRobot {
 private:
-	Robot* robot;
+	Robot robot;
 	Rectangle* rectangle;
 	VirtualMaze* virtualMaze;
 

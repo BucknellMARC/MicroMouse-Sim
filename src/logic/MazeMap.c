@@ -3,22 +3,24 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "define.h"
 #include "MazeMap.h"
 
-MazeMap* mazemap_create() {
-	MazeMap* mm = (MazeMap*)calloc(1, sizeof(MazeMap));
+MazeMap mazemap_create() {
+	MazeMap mm;
+	memset(&mm, 0, sizeof(MazeMap));
 
 	// inits all the walls to the UNKNOWN state
 	for (int row = 0; row < (MAZE_HEIGHT - 1); row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			mm->horizWalls[row][col] = UNKNOWN;
+			mm.horizWalls[row][col] = UNKNOWN;
 		}
 	}
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < (MAZE_WIDTH - 1); col++) {
-			mm->vertWalls[row][col] = UNKNOWN;
+			mm.vertWalls[row][col] = UNKNOWN;
 		}
 	}
 
@@ -110,10 +112,6 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 
 
 	return TRUE;
-}
-
-void mazemap_destroy(MazeMap* mm) {
-	free(mm);
 }
 
 //

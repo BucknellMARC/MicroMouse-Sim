@@ -13,11 +13,11 @@ typedef struct {
 
 	FFMap ffMap;
 
-	MazeMap* mazeMap;
+	MazeMap mazeMap;
 } Robot;
 
 // constructor
-Robot* robot_create(int xPos, int yPos, MazeMap* mm);
+Robot robot_create(int xPos, int yPos);
 
 // movement algorithms
 void robot_run(Robot* robot);
@@ -27,8 +27,5 @@ void robot_turn_d(Robot* robot, Direction direction);
 void robot_turn_r(Robot* robot, Rotation rotation);
 
 BOOL robot_drive_forward(Robot* robot);
-
-// deconstructor
-void robot_destroy(Robot* robot);
 
 #endif

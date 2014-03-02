@@ -17,18 +17,17 @@ extern "C" {
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
-	// create the robot using a blank maze map
-	MazeMap* robotMM = mazemap_create();
-	robot = robot_create(0, 0, robotMM);
+	// create the robot
+	robot = robot_create(0, 0);
 
 	// bind the robot maze map to the virtualmaze
-	virtualMaze->bindRobotMap(robotMM);
+	virtualMaze->bindRobotMap(&robot.mazeMap);
 
 
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
-	int x = robot->xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
-	int y = robot->yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int x = robot.xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int y = robot.yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
 
 	this->rectangle = new Rectangle(x, y, robotSizePX, robotSizePX);
 
@@ -42,22 +41,22 @@ void VirtualRobot::run() {
 	feedSensorData();
 
 	// run the robot drive code
-	robot_run(robot);
+	robot_run(&robot);
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 	int offset = blockWidthPX / 2 - robotSizePX / 2;
 
-	int newX = blockWidthPX * robot->xPos + offset;
-	int newY = blockWidthPX * robot->yPos + offset;
+	int newX = blockWidthPX * robot.xPos + offset;
+	int newY = blockWidthPX * robot.yPos + offset;
 	rectangle->setPos(newX, newY);
 }
 
 void VirtualRobot::feedSensorData() {
 	// get the full map
 	MazeMap* virtualMap = virtualMaze->getMazeMap();
-	int x = robot->xPos;
-	int y = robot->yPos;
+	int x = robot.xPos;
+	int y = robot.yPos;
 
 	// load in information about surroundings
 	BOOL northWall = mazemap_does_wall_exist(virtualMap, x, y, NORTH);
@@ -66,7 +65,7 @@ void VirtualRobot::feedSensorData() {
 	BOOL westWall = mazemap_does_wall_exist(virtualMap, x, y, WEST);
 
 	// plug the data from the virtual maze into the robot's maze map
-	MazeMap* robotMap = robot->mazeMap;
+	MazeMap* robotMap = &robot.mazeMap;
 	mazemap_set_wall(robotMap, northWall, x, y, NORTH);
 	mazemap_set_wall(robotMap, eastWall, x, y, EAST);
 	mazemap_set_wall(robotMap, southWall, x, y, SOUTH);
@@ -75,24 +74,22 @@ void VirtualRobot::feedSensorData() {
 
 void VirtualRobot::draw() {
 	// draw the robot yellow if exploring, red if solving
-	if (robot->isExploring) {
+	if (robot.isExploring) {
 		rectangle->draw(1.0f, 1.0f, 0.0f);
 	}
 	else {
 		rectangle->draw(1.0f, 0.0f, 0.0f);
 
 		// draw the flood fill once exploring is over
-		ff_draw(robot->ffMap);
+		ff_draw(robot.ffMap);
 	}
 }
 
 FFMapPtr VirtualRobot::getFloodFillMap() {
-	return robot->ffMap;
+	return robot.ffMap;
 }
 
 VirtualRobot::~VirtualRobot() {
-	// destroy the robot
-	robot_destroy(robot);
 }
 
 #endif

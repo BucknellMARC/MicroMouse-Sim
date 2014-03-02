@@ -31,7 +31,7 @@ private:
 	// class members
 	//
 
-	MazeMap* mazeMap;
+	MazeMap mazeMap;
 	MazeMap* robotMazeMap;
 
 	Circle** circles;

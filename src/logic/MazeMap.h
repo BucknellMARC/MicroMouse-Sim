@@ -23,7 +23,7 @@ typedef struct {
 } MazeMap;
 
 // constructor
-MazeMap* mazemap_create();
+MazeMap mazemap_create();
 
 //
 // main methods
@@ -34,8 +34,6 @@ BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction directi
 void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
 
 BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
-
-void mazemap_destroy(MazeMap* mm);
 
 //
 // helper methods
