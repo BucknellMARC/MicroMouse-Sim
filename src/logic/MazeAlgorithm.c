@@ -240,6 +240,9 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 
 	xTemp = xPos; yTemp = yPos;
 	mazemap_one_ahead_direction(right, &xTemp, &yTemp);
+	if (xPos == xTemp && yPos == yTemp) {
+		printf("Holyshifasjdf\n");
+	}
 	if (!wallRight && posHistory[yTemp][xTemp] < leastExploredValue) {
 		toGo = right;
 		leastExploredValue = posHistory[yTemp][xTemp];
@@ -251,7 +254,7 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 		toGo = forwards;
 	}
 
-	printf("toGo: %i\n", toGo);
+	printf("toGo: %i\tLEV: %i\tPH[y][x]: %i\n", toGo, leastExploredValue, posHistory[yPos][xPos]);
 
 	return toGo;
 }
