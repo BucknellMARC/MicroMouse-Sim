@@ -224,13 +224,14 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	BOOL wallLeft = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
 	BOOL wallRight = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
 
+	// if there are walls everywhere, turn around
 	if (wallLeft && wallRight && wallForwards) {
 		return backwards;
 	}
 
-
+	// find the least traveled direction
 	int xTemp = xPos; int yTemp = yPos;
-	Direction toGo;
+	Direction toGo = left;
 	int leastExploredValue = 100000;
 	if (!wallLeft) {
 		mazemap_one_ahead_direction(left, &xTemp, &yTemp);
@@ -246,9 +247,11 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 
 	xTemp = xPos; yTemp = yPos;
 	mazemap_one_ahead_direction(forwards, &xTemp, &yTemp);
-	if (!wallForwards) {
+	if (!wallForwards && posHistory[yTemp][xTemp] < leastExploredValue) {
 		toGo = forwards;
 	}
+
+	printf("toGo: %i\n", toGo);
 
 	return toGo;
 }
