@@ -41,6 +41,7 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 
 Direction mazemap_rotation_to_direction(Direction curDirection, Rotation rotation);
 Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection);
+void mazemap_one_ahead_direction(Direction direction, int* x, int* y);
 
 
 #endif

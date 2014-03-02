@@ -196,4 +196,25 @@ Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetD
 	return FORWARDS;
 }
 
+void mazemap_one_ahead_direction(Direction direction, int* x, int* y)
+{
+	switch(direction) {
+	case EAST:
+		*x++;
+		return;
+	case SOUTH:
+		*y--;
+		return;
+	case WEST:
+		*x--;
+		return;
+	case NORTH:
+		*y++;
+		return;
+
+	default:
+		printf("Error: Invalid direction!\n");
+	}
+}
+
 #endif
