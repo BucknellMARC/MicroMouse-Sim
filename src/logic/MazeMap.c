@@ -37,12 +37,12 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 		return TRUE;
 	}
 
-	// only return TRUE if we know the wall actually exists
+	// returns true only if we know for certain that there is no wall
 	if (direction == NORTH || direction == SOUTH) {
-		return (mazeMap->horizWalls[yLook][xLook] == WALL);
+		return (mazeMap->horizWalls[yLook][xLook] != NOWALL);
 	}
 	else {
-		return (mazeMap->vertWalls[yLook][xLook] == WALL);
+		return (mazeMap->vertWalls[yLook][xLook] != NOWALL);
 	}
 }
 
