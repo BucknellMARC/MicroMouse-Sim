@@ -134,9 +134,6 @@ BOOL robot_drive_forward(Robot* robot) {
 		printf("Error: Robot is in an unexpected state!\n");
 	}
 
-	// increment the history counter for that position
-	//robot->posHistory[robot->yPos][robot->xPos]++;
-
 	return TRUE;
 }
 
