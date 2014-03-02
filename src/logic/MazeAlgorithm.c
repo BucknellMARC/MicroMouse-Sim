@@ -31,35 +31,51 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 	in[centerRow + 1][centerCol + 1] = 0;
 
 	// now keep looping in each direction until the values have been populated
-	BOOL isPopulated = FALSE;
-	//while(!isPopulated) {
-	for (int stupid = 0; stupid < 100000; stupid++) {
+	BOOL hasCompletedNeighbor = TRUE;
+	while (hasCompletedNeighbor) {
+		hasCompletedNeighbor = FALSE;
 
 		// SOUTH to NORTH
 		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				malgo_floodfill_compute_pull_neighbor(row, col, NORTH, mm, in);
+				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, NORTH, mm, in);
+
+				if (complete) {
+					hasCompletedNeighbor = TRUE;
+				}
 			}
 		}
 
 		// NORTH to SOUTH
 		for (int row = MAZE_HEIGHT-1; row > 0; row--) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				malgo_floodfill_compute_pull_neighbor(row, col, SOUTH, mm, in);
+				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, SOUTH, mm, in);
+
+				if (complete) {
+					hasCompletedNeighbor = TRUE;
+				}
 			}
 		}
 
 		// WEST to EAST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = 0; col < (MAZE_WIDTH-1); col++) {
-				malgo_floodfill_compute_pull_neighbor(row, col, EAST, mm, in);
+				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, EAST, mm, in);
+
+				if (complete) {
+					hasCompletedNeighbor = TRUE;
+				}
 			}
 		}
 
 		// EAST to WEST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = MAZE_WIDTH-1; col > 0; col--) {
-				malgo_floodfill_compute_pull_neighbor(row, col, WEST, mm, in);
+				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, WEST, mm, in);
+
+				if (complete) {
+					hasCompletedNeighbor = TRUE;
+				}
 			}
 		}
 	}
@@ -100,6 +116,8 @@ BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction
 
 	if (nextVal != MALGO_FF_BAD) {
 		in[row][col] = nextVal + 1;
+
+		return TRUE;
 	}
 
 	return FALSE;
