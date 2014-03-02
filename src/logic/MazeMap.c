@@ -44,6 +44,12 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 	}
 }
 
+BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
+	Direction fixedDirection = mazemap_rotation_to_direction(direction, rotation);
+
+	return mazemap_does_wall_exist(mazeMap, x, y, fixedDirection);
+}
+
 // sets the desired wall to a new state
 void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
 	

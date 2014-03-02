@@ -30,6 +30,7 @@ MazeMap* mazemap_create();
 //
 
 BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction);
+BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation);
 void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
 
 BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);

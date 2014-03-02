@@ -90,13 +90,6 @@ void robot_run_flood_fill(Robot* robot) {
 	robot_drive_forward(robot);
 }
 
-BOOL robot_look(Robot* robot, Rotation rotation) {
-	// get the direction
-	Direction direction = mazemap_rotation_to_direction(robot->direction, rotation);
-
-	return !mazemap_does_wall_exist(robot->mazeMap, robot->xPos, robot->yPos, direction);
-}
-
 void robot_turn_d(Robot* robot, Direction direction) {
 	robot->direction = direction;
 }
@@ -112,9 +105,6 @@ void robot_turn_r(Robot* robot, Rotation rotation) {
 
 BOOL robot_drive_forward(Robot* robot) {
 	Direction direction = robot->direction;
-
-	printf("X: %d\tY:%d\n", robot->xPos, robot->yPos);
-	printf("Forwards: %d\nLeft: %d\nRight: %d\n", robot_look(robot, FORWARDS), robot_look(robot, LEFT), robot_look(robot, RIGHT));
 
 	switch (direction) {
 	case NORTH:
