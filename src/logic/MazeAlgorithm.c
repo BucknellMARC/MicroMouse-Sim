@@ -38,96 +38,71 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 		// SOUTH to NORTH
 		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				
-				int curVal = in[row][col];
-				if (curVal != MALGO_FF_BAD || curVal == 0) {
-					continue;
-				}
-
-				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, NORTH);	// bottom left is (0,0)
-				if (wallExists) {
-					continue;
-				}
-
-				// get the value of the next column
-				int nextVal = in[row + 1][col];
-
-				// if the next value isn't bad, set the current one to it + 1
-				if (nextVal != MALGO_FF_BAD) {
-					in[row][col] = nextVal + 1;
-				}
+				malgo_floodfill_compute_pull_neighbor(row, col, NORTH, mm, in);
 			}
 		}
 
 		// NORTH to SOUTH
 		for (int row = MAZE_HEIGHT-1; row > 0; row--) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				
-				int curVal = in[row][col];
-				if (curVal != MALGO_FF_BAD || curVal == 0) {
-					continue;
-				}
-
-				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, SOUTH);	// bottom left is (0,0)
-				if (wallExists) {
-					continue;
-				}
-
-				// get next value
-				int nextVal = in[row - 1][col];
-
-				if (nextVal != MALGO_FF_BAD) {
-					in[row][col] = nextVal + 1;
-				}
+				malgo_floodfill_compute_pull_neighbor(row, col, SOUTH, mm, in);
 			}
 		}
 
 		// WEST to EAST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = 0; col < (MAZE_WIDTH-1); col++) {
-				
-				int curVal = in[row][col];
-				if (curVal != MALGO_FF_BAD || curVal == 0) {
-					continue;
-				}
-
-				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, EAST);	// bottom left is (0,0)
-				if (wallExists) {
-					continue;
-				}
-
-				// get next val
-				int nextVal = in[row][col + 1];
-
-				if (nextVal != MALGO_FF_BAD) {
-					in[row][col] = nextVal + 1;
-				}
+				malgo_floodfill_compute_pull_neighbor(row, col, EAST, mm, in);
 			}
 		}
 
 		// EAST to WEST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = MAZE_WIDTH-1; col > 0; col--) {
-
-				int curVal = in[row][col];
-				if (curVal != MALGO_FF_BAD || curVal == 0) {
-					continue;
-				}
-
-				BOOL wallExists = mazemap_does_wall_exist(mm, col, row, WEST);	// bottom left is (0,0)
-				if (wallExists) {
-					continue;
-				}
-
-				// get the next val
-				int nextVal = in[row][col - 1];
-
-				if (nextVal != MALGO_FF_BAD) {
-					in[row][col] = nextVal + 1;
-				}
+				malgo_floodfill_compute_pull_neighbor(row, col, WEST, mm, in);
 			}
 		}
 	}
+}
+
+BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
+{
+
+	int curVal = in[row][col];
+	if (curVal != MALGO_FF_BAD || curVal == 0) {
+		return FALSE;
+	}
+
+	BOOL wallExists = mazemap_does_wall_exist(mm, col, row, direction);	// bottom left is (0,0)
+	if (wallExists) {
+		return FALSE;
+	}
+
+	// get the next val
+	int nextVal;
+	switch (direction) {
+	case EAST:
+		nextVal = in[row][col + 1];
+		break;
+	case SOUTH:
+		nextVal = in[row - 1][col];
+		break;
+	case WEST:
+		nextVal = in[row][col - 1];
+		break;
+	case NORTH:
+		nextVal = in[row + 1][col];
+		break;
+
+	default:
+		printf("Error: Invalid direction specified!\n");
+	}
+
+	if (nextVal != MALGO_FF_BAD) {
+		in[row][col] = nextVal + 1;
+	}
+
+	return FALSE;
 }
 
 // retargets the flood fill map
