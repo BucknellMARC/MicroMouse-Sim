@@ -211,32 +211,46 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 	return minDir;
 }
 
-Rotation malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
-	//if (posHistory[yPos][xPos] % 3 == 1) {
-	if (TRUE) {
-		Direction right = mazemap_rotation_to_direction(curDirection, RIGHT);
-		BOOL rightWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
-		if (!rightWall) {
-			return RIGHT;
-		}
-	}
-	else {
-		Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
-		BOOL leftWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
-		if (!leftWall) {
-			return LEFT;
-		}
+	// convert rotation to direction
+	Direction forwards = curDirection;
+	Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
+	Direction right = mazemap_rotation_to_direction(curDirection, RIGHT);
+	Direction backwards = mazemap_rotation_to_direction(curDirection, BACKWARDS);
+
+	// check to see if walls exist
+	BOOL wallForwards = mazemap_does_wall_exist(mazeMap, xPos, yPos, forwards);
+	BOOL wallLeft = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
+	BOOL wallRight = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
+
+	if (wallLeft && wallRight && wallForwards) {
+		return backwards;
 	}
 
-	// if the correct check didn't work out, then try and go forwards
-	BOOL forwardWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, curDirection);
-	if (forwardWall) {
-		return BACKWARDS;
+
+	int xTemp = xPos; int yTemp = yPos;
+	Direction toGo;
+	int leastExploredValue = 100000;
+	if (!wallLeft) {
+		mazemap_one_ahead_direction(left, &xTemp, &yTemp);
+		leastExploredValue = posHistory[yTemp][xTemp];
 	}
 
-	// otherwise, drive forward
-	return FORWARDS;
+	xTemp = xPos; yTemp = yPos;
+	mazemap_one_ahead_direction(right, &xTemp, &yTemp);
+	if (!wallRight && posHistory[yTemp][xTemp] < leastExploredValue) {
+		toGo = right;
+		leastExploredValue = posHistory[yTemp][xTemp];
+	}
+
+	xTemp = xPos; yTemp = yPos;
+	mazemap_one_ahead_direction(forwards, &xTemp, &yTemp);
+	if (!wallForwards) {
+		toGo = forwards;
+	}
+
+	return toGo;
 }
 
 #endif

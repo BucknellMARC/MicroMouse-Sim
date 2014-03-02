@@ -62,11 +62,11 @@ void robot_run(Robot* robot) {
 	}
 
 	// run exploration if the robot is exploring
-	Rotation rotation;
+	Direction direction;
 	if (robot->isExploring) {
-	rotation = malgo_explore_suggest(
-		robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
-		);
+		direction = malgo_explore_suggest(
+			robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
+			);
 	}
 	// otherwise run the flood fill algorithm
 	else {
@@ -74,11 +74,11 @@ void robot_run(Robot* robot) {
 		return;
 	}
 
-	robot_turn_r(robot, rotation);
+	robot_turn_d(robot, direction);
 
 	// only drive forward if there is no wall
 	BOOL wallForward = mazemap_does_wall_exist(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
-	if (!wallForward && rotation != BACKWARDS) {
+	if (!wallForward) {
 		robot_drive_forward(robot);
 
 		// increment the position history
