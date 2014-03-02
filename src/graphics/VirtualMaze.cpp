@@ -126,7 +126,7 @@ void VirtualMaze::primGeneration() {
 	int seed = time(NULL);
 	srand(seed);
 
-	printf("Starting prim generation...\n");
+	printf("Starting prim generation...");
 
 	// put in all the walls
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
@@ -219,6 +219,8 @@ void VirtualMaze::primGeneration() {
 			activeWallList.push_back(destination);
 		}
 	}
+
+	printf("done!\n");
 }
 
 //

@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 
 // initializes glut and opens up the rendering window
 void initWindow(int* argc, char** argv) {
-	printf("Initializing glut...\n");
+	printf("Initializing glut...");
 
 	// run preliminary init
 	glutInit(argc, argv);
@@ -48,6 +48,8 @@ void initWindow(int* argc, char** argv) {
 
 	// create the window
 	glutCreateWindow("My First GLUT\n");
+
+	printf("done!\n");
 }
 
 // starts the rendering loop which will draw the simulation
@@ -83,7 +85,7 @@ void renderScene() {
 	glutSwapBuffers();
 
 	// sleep for 100 milliseconds so i can see what is going on
-	usleep(100000);
+	//usleep(100000);
 }
 
 //

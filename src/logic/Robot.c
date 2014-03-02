@@ -75,7 +75,6 @@ void robot_run(Robot* robot) {
 	}
 
 	robot_turn_r(robot, rotation);
-	printf("%i\n", rotation);
 
 	// only drive forward if there is no wall
 	BOOL wallForward = mazemap_does_wall_exist(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
@@ -88,11 +87,8 @@ void robot_run(Robot* robot) {
 }
 
 void robot_run_flood_fill(Robot* robot) {
-	printf("--Robot::runFloodFill()--\n");
 
 	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, &robot->mazeMap, robot->ffMap);
-
-	printf("direction to go: %d\n", (int)dToGo);
 
 	// turn that direction
 	robot_turn_d(robot, dToGo);

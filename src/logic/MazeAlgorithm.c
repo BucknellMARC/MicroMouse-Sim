@@ -111,7 +111,7 @@ BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction
 		break;
 
 	default:
-		printf("Error: Invalid direction specified!\n");
+		("Error: Invalid direction specified!\n");
 	}
 
 	if (nextVal != MALGO_FF_BAD) {
@@ -192,31 +192,19 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 		northVal = ffMap[yPos + 1][xPos];
 	}
 
-	//printf("East: %d", eastWall);
-	//printf("South: %d", southWall);
-	//printf("West: %d", westWall);
-	//printf("North: %d", northWall);
-
-	printf("E: %d, S: %d, W: %d, N: %d\n", eastWall, southWall, westWall, northWall);
-	printf("E: %d, S: %d, W: %d, N: %d\n", eastVal, southVal, westVal, northVal);
-
 	if (!eastWall && eastVal < minVal) {
-		printf("east is min\n");
 		minDir = EAST;
 		minVal = eastVal;
 	}
 	if (!southWall && southVal < minVal) {
-		printf("south is min\n");
 		minDir = SOUTH;
 		minVal = southVal;
 	}
 	if (!westWall&& westVal < minVal) {
-		printf("west is min\n");
 		minDir = WEST;
 		minVal = westVal;
 	}
 	if (!northWall && northVal < minVal) {
-		printf("north is min\n");
 		minDir = NORTH;
 	}
 
