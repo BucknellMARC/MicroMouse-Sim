@@ -231,20 +231,17 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 
 	// find the least traveled direction
 	int xTemp = xPos; int yTemp = yPos;
-	Direction toGo = left;
+	Direction toGo = right;
 	int leastExploredValue = 100000;
-	if (!wallLeft) {
-		mazemap_one_ahead_direction(left, &xTemp, &yTemp);
+	if (!wallRight) {
+		mazemap_one_ahead_direction(right, &xTemp, &yTemp);
 		leastExploredValue = posHistory[yTemp][xTemp];
 	}
 
 	xTemp = xPos; yTemp = yPos;
-	mazemap_one_ahead_direction(right, &xTemp, &yTemp);
-	if (xPos == xTemp && yPos == yTemp) {
-		printf("Holyshifasjdf\n");
-	}
-	if (!wallRight && posHistory[yTemp][xTemp] < leastExploredValue) {
-		toGo = right;
+	mazemap_one_ahead_direction(left, &xTemp, &yTemp);
+	if (!wallLeft && posHistory[yTemp][xTemp] < leastExploredValue) {
+		toGo = left;
 		leastExploredValue = posHistory[yTemp][xTemp];
 	}
 
