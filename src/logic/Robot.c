@@ -61,6 +61,10 @@ void robot_run(Robot* robot) {
 		malgo_floodfill_compute(&robot->mazeMap, robot->ffMap);
 	}
 
+
+	/// Main robot run code ///
+	///////////////////////////
+
 	// run exploration if the robot is exploring
 	Direction direction;
 	if (robot->isExploring) {
