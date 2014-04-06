@@ -200,16 +200,16 @@ void mazemap_one_ahead_direction(Direction direction, int* x, int* y)
 {
 	switch(direction) {
 	case EAST:
-		*x++;
+		*x = *x + 1;
 		return;
 	case SOUTH:
-		*y--;
+		*y = *y - 1;
 		return;
 	case WEST:
-		*x--;
+		*x = *x - 1;
 		return;
 	case NORTH:
-		*y++;
+		*y = *y + 1;
 		return;
 
 	default:

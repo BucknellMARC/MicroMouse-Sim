@@ -61,12 +61,16 @@ void robot_run(Robot* robot) {
 		malgo_floodfill_compute(&robot->mazeMap, robot->ffMap);
 	}
 
+
+	/// Main robot run code ///
+	///////////////////////////
+
 	// run exploration if the robot is exploring
-	Rotation rotation;
+	Direction direction;
 	if (robot->isExploring) {
-	rotation = malgo_explore_suggest(
-		robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
-		);
+		direction = malgo_explore_suggest(
+			robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
+			);
 	}
 	// otherwise run the flood fill algorithm
 	else {
@@ -74,11 +78,11 @@ void robot_run(Robot* robot) {
 		return;
 	}
 
-	robot_turn_r(robot, rotation);
+	robot_turn_d(robot, direction);
 
 	// only drive forward if there is no wall
 	BOOL wallForward = mazemap_does_wall_exist(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
-	if (!wallForward && rotation != BACKWARDS) {
+	if (!wallForward) {
 		robot_drive_forward(robot);
 
 		// increment the position history
@@ -133,9 +137,6 @@ BOOL robot_drive_forward(Robot* robot) {
 	default:
 		printf("Error: Robot is in an unexpected state!\n");
 	}
-
-	// increment the history counter for that position
-	//robot->posHistory[robot->yPos][robot->xPos]++;
 
 	return TRUE;
 }

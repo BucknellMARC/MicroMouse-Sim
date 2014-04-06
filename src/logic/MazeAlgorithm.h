@@ -34,5 +34,5 @@ typedef struct {
 extern WallSensorInput rawWalls;
 
 // functions
-Rotation malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
+Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 #endif
