@@ -213,47 +213,15 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 
 Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
-	// convert rotation to direction
-	Direction forwards = curDirection;
-	Direction left = mazemap_rotation_to_direction(curDirection, LEFT);
-	Direction right = mazemap_rotation_to_direction(curDirection, RIGHT);
-	Direction backwards = mazemap_rotation_to_direction(curDirection, BACKWARDS);
+	Direction outDir;
 
-	// check to see if walls exist
-	BOOL wallForwards = mazemap_does_wall_exist(mazeMap, xPos, yPos, forwards);
-	BOOL wallLeft = mazemap_does_wall_exist(mazeMap, xPos, yPos, left);
-	BOOL wallRight = mazemap_does_wall_exist(mazeMap, xPos, yPos, right);
+	// stack up positions that have multiple options to go
+	// pop off only if we have traversed all locations.
+	// When we hit a dead end, find shortest path to the
+	// top location on the stack.  This should be the closest
+	// branch location to our current position.
 
-	// if there are walls everywhere, turn around
-	if (wallLeft && wallRight && wallForwards) {
-		return backwards;
-	}
-
-	// find the least traveled direction
-	int xTemp = xPos; int yTemp = yPos;
-	Direction toGo = right;
-	int leastExploredValue = 100000;
-	if (!wallRight) {
-		mazemap_one_ahead_direction(right, &xTemp, &yTemp);
-		leastExploredValue = posHistory[yTemp][xTemp];
-	}
-
-	xTemp = xPos; yTemp = yPos;
-	mazemap_one_ahead_direction(left, &xTemp, &yTemp);
-	if (!wallLeft && posHistory[yTemp][xTemp] < leastExploredValue) {
-		toGo = left;
-		leastExploredValue = posHistory[yTemp][xTemp];
-	}
-
-	xTemp = xPos; yTemp = yPos;
-	mazemap_one_ahead_direction(forwards, &xTemp, &yTemp);
-	if (!wallForwards && posHistory[yTemp][xTemp] < leastExploredValue) {
-		toGo = forwards;
-	}
-
-	printf("toGo: %i\tLEV: %i\tPH[y][x]: %i\n", toGo, leastExploredValue, posHistory[yPos][xPos]);
-
-	return toGo;
+	return NORTH; 
 }
 
 #endif
