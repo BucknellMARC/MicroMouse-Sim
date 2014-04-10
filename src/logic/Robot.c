@@ -7,7 +7,8 @@
 
 #include "define.h"
 #include "Robot.h"
-#include "MazeAlgorithm.h"
+#include "Search.h"
+#include "FloodFill.h"
 
 // default initializer
 Robot robot_create(int xPos, int yPos)

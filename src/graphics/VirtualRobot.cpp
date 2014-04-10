@@ -8,7 +8,8 @@
 
 extern "C" {
 	#include "logic/Robot.h"
-	#include "logic/MazeAlgorithm.h"
+	#include "logic/FloodFill.h"
+	#include "logic/Search.h"
 	#include "logic/MazeMap.h"
 }
 
