@@ -64,24 +64,19 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	// u-turn if there is nowhere to go
 	else if (total > 1) {
 		printf("multiple directions found\n");
-		printf("Total: %i\n", total);
-		printf("position\tX: %i\tY: %i\n", xPos, yPos);
 
 		// loop through number of times we have hit this block
 		BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
 		Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
 
-		int numTimes = searchArray[yPos][xPos];
-		for(int n = 0; n < 4; n++) {
-			// count down if this is an option
+		int numTimes = 0;
+		for (int n = 0; n < 4; n++) {
 			if (!wallArray[n]) {
-				numTimes--;
+				numTimes++;
 			}
 
-			// when we hit zero, this is the direction we are going!
-			if (numTimes == 0) {
+			if (numTimes == searchArray[yPos][xPos]) {
 				toGo = directionArray[n];
-				printf("chosen direction: %i", (int)toGo);
 				break;
 			}
 		}
@@ -112,6 +107,7 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	previousTravel[++previousTravelPos] = toGo;
 
 	// reutrn the desired direction
+	printf("chosen direction: %i\n", (int)toGo);
 	return toGo;
 }
 
