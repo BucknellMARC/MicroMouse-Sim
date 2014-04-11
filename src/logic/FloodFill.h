@@ -9,8 +9,6 @@
 //
 
 #define MALGO_FF_BAD -1
-#define MALGO_UNEXPLORED 0
-#define MALGO_EXPLORED 1
 
 // objects
 typedef MazeArray FFMap;

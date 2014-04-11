@@ -9,6 +9,7 @@ typedef struct {
 } MazePoint;
 
 // functions
+void malgo_explore_init();
 Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 
 #endif

@@ -31,6 +31,9 @@ Robot robot_create(int xPos, int yPos)
 	// create an empty mazemap
 	robot.mazeMap = mazemap_create();
 
+	// init the exploration component
+	malgo_explore_init();
+
 	return robot;
 }
 

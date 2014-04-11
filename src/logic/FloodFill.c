@@ -80,7 +80,6 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 
 BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
 {
-
 	int curVal = in[row][col];
 	if (curVal != MALGO_FF_BAD || curVal == 0) {
 		return FALSE;
@@ -108,7 +107,7 @@ BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction
 		break;
 
 	default:
-		("Error: Invalid direction specified!\n");
+		printf("Error: Invalid direction specified!\n");
 	}
 
 	if (nextVal != MALGO_FF_BAD) {
