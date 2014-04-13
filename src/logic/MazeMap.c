@@ -47,7 +47,7 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 }
 
 BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
-	Direction fixedDirection = mazemap_rotation_to_direction(direction, rotation);
+	Direction fixedDirection = rotation_to_direction(direction, rotation);
 
 	return mazemap_does_wall_exist(mazeMap, x, y, fixedDirection);
 }
@@ -114,11 +114,32 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 	return TRUE;
 }
 
+void mazemap_one_ahead_direction(Direction direction, int* x, int* y)
+{
+	switch(direction) {
+	case EAST:
+		*x = *x + 1;
+		return;
+	case SOUTH:
+		*y = *y - 1;
+		return;
+	case WEST:
+		*x = *x - 1;
+		return;
+	case NORTH:
+		*y = *y + 1;
+		return;
+
+	default:
+		printf("Error: Invalid direction!\n");
+	}
+}
+
 //
 // helper methods
 //
 
-Direction mazemap_rotation_to_direction(Direction direction, Rotation rotation)
+Direction rotation_to_direction(Direction direction, Rotation rotation)
 {
 	if (rotation == LEFT) {
 		switch (direction) {
@@ -190,31 +211,10 @@ Direction mazemap_rotation_to_direction(Direction direction, Rotation rotation)
 	return direction;
 }
 
-Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection)
+Rotation direction_to_rotation(Direction curDirection, Direction targetDirection)
 {
-	printf("Error: mazemap_direction_to_rotation() not implemented!\n");
+	printf("Error: direction_to_rotation() not implemented!\n");
 	return FORWARDS;
-}
-
-void mazemap_one_ahead_direction(Direction direction, int* x, int* y)
-{
-	switch(direction) {
-	case EAST:
-		*x = *x + 1;
-		return;
-	case SOUTH:
-		*y = *y - 1;
-		return;
-	case WEST:
-		*x = *x - 1;
-		return;
-	case NORTH:
-		*y = *y + 1;
-		return;
-
-	default:
-		printf("Error: Invalid direction!\n");
-	}
 }
 
 #endif

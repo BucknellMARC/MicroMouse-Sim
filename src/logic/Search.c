@@ -45,7 +45,7 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 		else {
 			// get the opposite direction that was pushed on the stack
 			Direction prevDir = previousTravel[previousTravelPos--];
-			Direction returnDirection = mazemap_rotation_to_direction(prevDir, BACKWARDS);
+			Direction returnDirection = rotation_to_direction(prevDir, BACKWARDS);
 			printf("returnDirection: %i\n", returnDirection);
 
 			returning = FALSE;

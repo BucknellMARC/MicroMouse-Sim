@@ -34,14 +34,13 @@ BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction directi
 void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
 
 BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
+void mazemap_one_ahead_direction(Direction direction, int* x, int* y);
 
 //
 // helper methods
 //
 
-Direction mazemap_rotation_to_direction(Direction curDirection, Rotation rotation);
-Rotation mazemap_direction_to_rotation(Direction curDirection, Direction targetDirection);
-void mazemap_one_ahead_direction(Direction direction, int* x, int* y);
-
+Direction rotation_to_direction(Direction curDirection, Rotation rotation);
+Rotation direction_to_rotation(Direction curDirection, Direction targetDirection);
 
 #endif

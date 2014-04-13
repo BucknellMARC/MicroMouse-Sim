@@ -113,7 +113,7 @@ void robot_turn_r(Robot* robot, Rotation rotation) {
 	// set the new direction
 	//printf("Original direction: %d\n", (int)robot->direction);
 
-	robot->direction = mazemap_rotation_to_direction(robot->direction, rotation);
+	robot->direction = rotation_to_direction(robot->direction, rotation);
 
 	//printf("New Direction: %d\n\n", (int)robot->direction);
 }
