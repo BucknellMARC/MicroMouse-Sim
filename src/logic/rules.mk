@@ -57,7 +57,7 @@ ASFLAGS_$(d) :=
 ### Source files
 
 # cSRCS_$(d) are the C source files we want compiled.
-cSRCS_$(d) := MazeAlgorithm.c MazeMap.c Robot.c
+cSRCS_$(d) := FloodFill.c Search.c MazeMap.c Robot.c
 
 # cppSRCS_$(d) are the C++ sources we want compiled.  We have our own
 # main.cpp, and one additional file.

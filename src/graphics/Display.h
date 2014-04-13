@@ -4,7 +4,8 @@
 #include "define.h"
 
 extern "C" {
-	#include "logic/MazeAlgorithm.h"
+	#include "logic/Search.h"
+	#include "logic/FloodFill.h"
 }
 
 // convert screen space to pixel space

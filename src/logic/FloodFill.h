@@ -21,18 +21,4 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, FFMapPtr in);
 Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap* mazeMap, FFMapPtr ffMap);
 
 
-// exploration algorithm
-
-// objects
-typedef struct {
-	BOOL isLeftWall;
-	BOOL isForwardWall;
-	BOOL isRightWall;
-} WallSensorInput;
-
-// data members
-extern WallSensorInput rawWalls;
-
-// functions
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 #endif

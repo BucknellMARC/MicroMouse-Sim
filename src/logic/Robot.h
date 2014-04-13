@@ -3,7 +3,8 @@
 
 #include "define.h"
 #include "MazeMap.h"
-#include "MazeAlgorithm.h"
+#include "Search.h"
+#include "FloodFill.h"
 
 typedef struct {
 	// position and direction the robot is facing

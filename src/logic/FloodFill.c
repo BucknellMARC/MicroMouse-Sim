@@ -5,11 +5,8 @@
 #include <string.h>
 
 #include "define.h"
-#include "MazeAlgorithm.h"
+#include "FloodFill.h"
 #include "MazeMap.h"
-
-// data members
-WallSensorInput rawWalls;
 
 // computes the flood fill for the first time (center is the target)
 void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
@@ -83,7 +80,6 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 
 BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
 {
-
 	int curVal = in[row][col];
 	if (curVal != MALGO_FF_BAD || curVal == 0) {
 		return FALSE;
@@ -111,7 +107,7 @@ BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction
 		break;
 
 	default:
-		("Error: Invalid direction specified!\n");
+		printf("Error: Invalid direction specified!\n");
 	}
 
 	if (nextVal != MALGO_FF_BAD) {
@@ -209,19 +205,6 @@ Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr
 	}
 
 	return minDir;
-}
-
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
-{
-	Direction outDir;
-
-	// stack up positions that have multiple options to go
-	// pop off only if we have traversed all locations.
-	// When we hit a dead end, find shortest path to the
-	// top location on the stack.  This should be the closest
-	// branch location to our current position.
-
-	return NORTH; 
 }
 
 #endif

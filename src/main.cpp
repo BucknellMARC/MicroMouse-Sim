@@ -85,7 +85,7 @@ void renderScene() {
 	glutSwapBuffers();
 
 	// sleep for 100 milliseconds so i can see what is going on
-	//usleep(100000);
+	usleep(100000);
 }
 
 //
