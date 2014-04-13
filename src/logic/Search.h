@@ -11,7 +11,7 @@ typedef struct {
 #define SEARCH_EXPLORED	4
 
 // functions
-void malgo_explore_init();
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
+void explore_init();
+Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 
 #endif

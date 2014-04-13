@@ -15,10 +15,10 @@ typedef MazeArray FFMap;
 typedef MazeArrayPtr FFMapPtr;
 
 // functions
-void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in);
-BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in);
-void malgo_floodfill_recompute_target(int targetX, int targetY, FFMapPtr in);
-Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap* mazeMap, FFMapPtr ffMap);
+void floodfill_compute(MazeMap* mm, FFMapPtr in);
+BOOL floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in);
+void floodfill_recompute_target(int targetX, int targetY, FFMapPtr in);
+Direction floodfill_suggest(int xPos, int yPos, MazeMap* mazeMap, FFMapPtr ffMap);
 
 
 #endif

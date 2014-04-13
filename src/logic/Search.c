@@ -11,7 +11,7 @@ BOOL returning = FALSE;			// returning state means robot is going back to previo
 Direction previousTravel[512];	// stack of previous turn directions
 int previousTravelPos = -1;		// stack pointer
 
-void malgo_explore_init()
+void explore_init()
 {
 	printf("initializing maglo_explore\n");
 
@@ -23,7 +23,7 @@ void malgo_explore_init()
 	}
 }
 
-Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
 	// stack up positions that have multiple options to go
 	// pop off only if we have traversed all locations.

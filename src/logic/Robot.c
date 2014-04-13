@@ -32,7 +32,7 @@ Robot robot_create(int xPos, int yPos)
 	robot.mazeMap = mazemap_create();
 
 	// init the exploration component
-	malgo_explore_init();
+	explore_init();
 
 	return robot;
 }
@@ -62,7 +62,7 @@ void robot_run(Robot* robot) {
 	if (robot->isExploring && exploredMaze) {
 		robot->isExploring = FALSE;
 	
-		malgo_floodfill_compute(&robot->mazeMap, robot->ffMap);
+		floodfill_compute(&robot->mazeMap, robot->ffMap);
 	}
 
 
@@ -72,7 +72,7 @@ void robot_run(Robot* robot) {
 	// run exploration if the robot is exploring
 	Direction direction;
 	if (robot->isExploring) {
-		direction = malgo_explore_suggest(
+		direction = explore_suggest(
 			robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
 			);
 	}
@@ -96,7 +96,7 @@ void robot_run(Robot* robot) {
 
 void robot_run_flood_fill(Robot* robot) {
 
-	Rotation dToGo = malgo_floodfill_suggest(robot->xPos, robot->yPos, &robot->mazeMap, robot->ffMap);
+	Rotation dToGo = floodfill_suggest(robot->xPos, robot->yPos, &robot->mazeMap, robot->ffMap);
 
 	// turn that direction
 	robot_turn_d(robot, dToGo);

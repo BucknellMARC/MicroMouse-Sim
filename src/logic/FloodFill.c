@@ -9,7 +9,7 @@
 #include "MazeMap.h"
 
 // computes the flood fill for the first time (center is the target)
-void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
+void floodfill_compute(MazeMap* mm, FFMapPtr in)
 {
 	// blanks out the array to null values
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
@@ -35,7 +35,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 		// SOUTH to NORTH
 		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, NORTH, mm, in);
+				BOOL complete = floodfill_compute_pull_neighbor(row, col, NORTH, mm, in);
 
 				if (complete) {
 					hasCompletedNeighbor = TRUE;
@@ -46,7 +46,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 		// NORTH to SOUTH
 		for (int row = MAZE_HEIGHT-1; row > 0; row--) {
 			for (int col = 0; col < MAZE_WIDTH; col++) {
-				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, SOUTH, mm, in);
+				BOOL complete = floodfill_compute_pull_neighbor(row, col, SOUTH, mm, in);
 
 				if (complete) {
 					hasCompletedNeighbor = TRUE;
@@ -57,7 +57,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 		// WEST to EAST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = 0; col < (MAZE_WIDTH-1); col++) {
-				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, EAST, mm, in);
+				BOOL complete = floodfill_compute_pull_neighbor(row, col, EAST, mm, in);
 
 				if (complete) {
 					hasCompletedNeighbor = TRUE;
@@ -68,7 +68,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 		// EAST to WEST
 		for (int row = 0; row < MAZE_HEIGHT; row++) {
 			for (int col = MAZE_WIDTH-1; col > 0; col--) {
-				BOOL complete = malgo_floodfill_compute_pull_neighbor(row, col, WEST, mm, in);
+				BOOL complete = floodfill_compute_pull_neighbor(row, col, WEST, mm, in);
 
 				if (complete) {
 					hasCompletedNeighbor = TRUE;
@@ -78,7 +78,7 @@ void malgo_floodfill_compute(MazeMap* mm, FFMapPtr in)
 	}
 }
 
-BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
+BOOL floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
 {
 	int curVal = in[row][col];
 	if (curVal != MALGO_FF_BAD || curVal == 0) {
@@ -121,7 +121,7 @@ BOOL malgo_floodfill_compute_pull_neighbor(int row, int col, Direction direction
 
 // retargets the flood fill map
 // ** UNTESTED **	-- this will be wrong with the middle zero blocks
-void malgo_floodfill_recompute_target(int targetX, int targetY, FFMapPtr in)
+void floodfill_recompute_target(int targetX, int targetY, FFMapPtr in)
 {
 	// find the current target
 	int currentX = MALGO_FF_BAD;
@@ -164,7 +164,7 @@ void malgo_floodfill_recompute_target(int targetX, int targetY, FFMapPtr in)
 }
 
 // uses floodfill to determine where to go
-Direction malgo_floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr ffMap)
+Direction floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr ffMap)
 {
 	int minVal =  100000;
 	Direction minDir = EAST;
