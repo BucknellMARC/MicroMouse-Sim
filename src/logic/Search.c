@@ -18,7 +18,7 @@ void malgo_explore_init()
 	// zero out the search array
 	for (int row = 0; row < MAZE_WIDTH; row++) {
 		for(int col = 0; col < MAZE_HEIGHT; col++) {
-			exploreHistory[row][col] = 0;
+			exploreHistory[row][col] = FALSE;
 		}
 	}
 }
@@ -31,19 +31,17 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	// top location on the stack.  This should be the closest
 	// branch location to our current position.
 
+	// mark current location as explored
+	exploreHistory[yPos][xPos] = TRUE;
+
 	// check for returning case
 	if (returning) {
 		return_code:
 		printf("returning\n");
 
-		// if the current node hasn't been fully explored, start exploring it
-		if (exploreHistory[yPos][xPos] != SEARCH_EXPLORED) {
+		if (previousTravelPos == -1) {
 			returning = FALSE;
-
-			// increment the num explored nodes counter
-			exploreHistory[yPos][xPos]++;
 		}
-		// otherwise, go backwards
 		else {
 			// get the opposite direction that was pushed on the stack
 			Direction prevDir = previousTravel[previousTravelPos--];
@@ -69,25 +67,42 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 		goto return_code;
 	}
 
-	// if there is more than one free, explore the next one that hasn't been
-	Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
-	BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
-
-	int numTimes = 0;
-	int n;
-	for (n = 0; n < 4; n++) {
-		if (numTimes == exploreHistory[yPos][xPos]) {
-			toGo = directionArray[n];
-			break;
+	int numSearched = 0;
+	if (!northWall && yPos < (MAZE_HEIGHT-1)) {
+		if (exploreHistory[yPos + 1][xPos]) {
+			numSearched++;
 		}
-
-		if (!wallArray[n]) {
-			numTimes++;
+		else {
+			toGo = NORTH;
+		}
+	}
+	if (!eastWall && xPos < (MAZE_WIDTH-1)) {
+		if (exploreHistory[yPos][xPos + 1]) {
+			numSearched++;
+		}
+		else {
+			toGo = EAST;
+		}
+	}
+	if (!southWall && yPos > 0) {
+		if (exploreHistory[yPos - 1][xPos]) {
+			numSearched++;
+		}
+		else {
+			toGo = SOUTH;
+		}
+	}
+	if (!westWall && xPos > 0) {
+		if (exploreHistory[yPos][xPos - 1]) {
+			numSearched++;
+		}
+		else {
+			toGo = WEST;
 		}
 	}
 
 	// return if there is nowhere else to go
-	if (n == 4) {
+	if (numSearched == numFree) {
 		returning = TRUE;
 		goto return_code;
 	}
@@ -95,7 +110,7 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	// save the prevous travel on the stack
 	previousTravel[++previousTravelPos] = toGo;
 
-	printf("numTimes: %i\t", numTimes);
+	printf("numSearched: %i\t", numSearched);
 	printf("toGo: %i\n", toGo);
 	return toGo;
 }
