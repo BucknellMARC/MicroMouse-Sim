@@ -7,7 +7,7 @@
 
 #include "define.h"
 #include "Robot.h"
-#include "Search.h"
+#include "Explore.h"
 #include "FloodFill.h"
 
 // default initializer

@@ -1,9 +1,9 @@
-#ifndef SEARCH_C
-#define SEARCH_C
+#ifndef EXPLORE_C
+#define EXPLORE_C
 
 #include <stdio.h>
 
-#include "Search.h"
+#include "Explore.h"
 
 MazeArray exploreHistory;		// keeps track of whether or not robot was there previously
 BOOL returning = FALSE;			// returning state means robot is going back to previous source

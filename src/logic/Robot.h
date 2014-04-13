@@ -3,7 +3,7 @@
 
 #include "define.h"
 #include "MazeMap.h"
-#include "Search.h"
+#include "Explore.h"
 #include "FloodFill.h"
 
 typedef struct {

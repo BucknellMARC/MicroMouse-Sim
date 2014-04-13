@@ -4,7 +4,7 @@
 #include "define.h"
 
 extern "C" {
-	#include "logic/Search.h"
+	#include "logic/Explore.h"
 	#include "logic/FloodFill.h"
 }
 

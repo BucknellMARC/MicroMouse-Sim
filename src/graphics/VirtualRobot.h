@@ -6,7 +6,7 @@
 extern "C" {
 	#include "logic/Robot.h"
 	#include "logic/FloodFill.h"
-	#include "logic/Search.h"
+	#include "logic/Explore.h"
 }
 
 #include "VirtualMaze.h"

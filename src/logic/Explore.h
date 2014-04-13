@@ -1,5 +1,5 @@
-#ifndef SEARCH_H
-#define SEARCH_H
+#ifndef EXPLORE_H
+#define EXPLORE_H
 
 #include "FloodFill.h"
 
