@@ -47,7 +47,7 @@ void initWindow(int* argc, char** argv) {
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	// create the window
-	glutCreateWindow("My First GLUT\n");
+	glutCreateWindow("MicroMouse Simulator [Bucknell MARC]\n");
 
 	printf("done!\n");
 }
