@@ -60,10 +60,10 @@ void VirtualRobot::feedSensorData() {
 	int y = robot.yPos;
 
 	// load in information about surroundings
-	BOOL northWall = mazemap_does_wall_exist(virtualMap, x, y, NORTH);
-	BOOL eastWall = mazemap_does_wall_exist(virtualMap, x, y, EAST);
-	BOOL southWall = mazemap_does_wall_exist(virtualMap, x, y, SOUTH);
-	BOOL westWall = mazemap_does_wall_exist(virtualMap, x, y, WEST);
+	BOOL northWall = mazemap_is_wall(virtualMap, x, y, NORTH);
+	BOOL eastWall = mazemap_is_wall(virtualMap, x, y, EAST);
+	BOOL southWall = mazemap_is_wall(virtualMap, x, y, SOUTH);
+	BOOL westWall = mazemap_is_wall(virtualMap, x, y, WEST);
 
 	// plug the data from the virtual maze into the robot's maze map
 	MazeMap* robotMap = &robot.mazeMap;

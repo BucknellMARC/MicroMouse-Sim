@@ -27,7 +27,7 @@ MazeMap mazemap_create() {
 	return mm;
 }
 
-BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction) {
+BOOL mazemap_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
 	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
@@ -46,10 +46,10 @@ BOOL mazemap_does_wall_exist(MazeMap* mazeMap, int x, int y, Direction direction
 	}
 }
 
-BOOL mazemap_does_wall_exist_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
+BOOL mazemap_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
 	Direction fixedDirection = rotation_to_direction(direction, rotation);
 
-	return mazemap_does_wall_exist(mazeMap, x, y, fixedDirection);
+	return mazemap_is_wall(mazeMap, x, y, fixedDirection);
 }
 
 // sets the desired wall to a new state
