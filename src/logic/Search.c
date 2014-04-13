@@ -5,20 +5,20 @@
 
 #include "Search.h"
 
-MazeArray searchArray;			// keeps track of whether or not robot was there previously
+MazeArray exploreHistory;		// keeps track of whether or not robot was there previously
 BOOL returning = FALSE;			// returning state means robot is going back to previous source
 
-MazePoint searchStack[128];		// stack of branch locations
-int searchStackPos = -1;		// stack pointer
-Direction previousTravel[256];	// stack of previous turn directions
+Direction previousTravel[512];	// stack of previous turn directions
 int previousTravelPos = -1;		// stack pointer
 
 void malgo_explore_init()
 {
+	printf("initializing maglo_explore\n");
+
 	// zero out the search array
 	for (int row = 0; row < MAZE_WIDTH; row++) {
 		for(int col = 0; col < MAZE_HEIGHT; col++) {
-			searchArray[row][col] = 0;
+			exploreHistory[row][col] = 0;
 		}
 	}
 }
@@ -31,64 +31,21 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 	// top location on the stack.  This should be the closest
 	// branch location to our current position.
 
-	// if the maze is in a returning state, follow the stack back
-	if (returning) {
-		printf("returning...\n");
-		if (previousTravelPos < 0) {
-			returning = FALSE;
-		}
-		else {
-			Direction returnDirection = previousTravel[previousTravelPos--];
-			return returnDirection;
-		}
-	}
-
-	// get surrounding wall map
+	// calculate possible directions that we can travel
 	BOOL northWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, NORTH);
 	BOOL eastWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, EAST);
 	BOOL southWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, SOUTH);
 	BOOL westWall = mazemap_does_wall_exist(mazeMap, xPos, yPos, WEST);
-	int total = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
+	int numFree = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
 
-	// get the direction to go
 	Direction toGo;
 
-	// keep performing depth-first search
-	if (total < 1) {
-		printf("U-turn time!\n");
-
-		returning = TRUE;
-		return mazemap_rotation_to_direction(curDirection, BACKWARDS);	
-	}
-
-	// u-turn if there is nowhere to go
-	else if (total > 1) {
-		printf("multiple directions found\n");
-
-		// loop through number of times we have hit this block
-		BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
-		Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
-
-		int numTimes = 0;
-		for (int n = 0; n < 4; n++) {
-			if (!wallArray[n]) {
-				numTimes++;
-			}
-
-			if (numTimes == searchArray[yPos][xPos]) {
-				toGo = directionArray[n];
-				break;
-			}
-		}
-	}
-
-	// pursue the one direction the robot can go
-	else {
-		// find the direction to go
+	// if there is only one free, find that one
+	if (numFree == 1) {
 		if (!northWall) {
 			toGo = NORTH;
 		}
-		else if (!eastWall) {
+		else if(!eastWall) {
 			toGo = EAST;
 		}
 		else if (!southWall) {
@@ -98,16 +55,49 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 			toGo = WEST;
 		}
 
+		if (toGo == mazemap_rotation_to_direction(curDirection, BACKWARDS)) {
+			returning = TRUE;
+		}
 	}
 
-	// increment the current position counter by one
-	searchArray[yPos][xPos]++;
+	// check for returning case
+	if (returning) {
+		printf("returning\n");
 
-	// push that direction onto the stack
+		// if the current node hasn't been fully explored, start exploring it
+		if (exploreHistory[yPos][xPos] != SEARCH_EXPLORED) {
+			returning = FALSE;
+
+			// increment the num explored nodes counter
+			exploreHistory[yPos][xPos]++;
+		}
+		// otherwise, return the last direction on the stack
+		else {
+			return previousTravel[previousTravelPos--];
+		}
+	}
+
+	// if there is more than one free, explore the next one that hasn't been
+	else {
+		Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
+		BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
+
+		int numTimes = 0;
+		for (int n = 0; n < 4; n++) {
+			if (numTimes == exploreHistory[yPos][xPos]) {
+				toGo = directionArray[n];
+				break;
+			}
+
+			if (!wallArray[n]) {
+				numTimes++;
+			}
+		}
+	}
+
+	// save the prevous travel on the stack
 	previousTravel[++previousTravelPos] = toGo;
 
-	// reutrn the desired direction
-	printf("chosen direction: %i\n", (int)toGo);
 	return toGo;
 }
 
