@@ -48,6 +48,8 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 			Direction returnDirection = mazemap_rotation_to_direction(prevDir, BACKWARDS);
 			printf("returnDirection: %i\n", returnDirection);
 
+			returning = FALSE;
+
 			return returnDirection;
 		}
 	}
