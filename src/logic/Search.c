@@ -40,24 +40,30 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 
 	Direction toGo;
 
-	// if there is only one free, find that one
+	// if there is only one way to go, return
 	if (numFree == 1) {
-		if (!northWall) {
-			toGo = NORTH;
-		}
-		else if(!eastWall) {
-			toGo = EAST;
-		}
-		else if (!southWall) {
-			toGo = SOUTH;
-		}
-		else {
-			toGo = WEST;
+		returning = TRUE;
+	}
+
+	// if there is more than one free, explore the next one that hasn't been
+	Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
+	BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
+
+	int numTimes = 0;
+	for (int n = 0; n < 4; n++) {
+		if (numTimes == exploreHistory[yPos][xPos]) {
+			toGo = directionArray[n];
+			break;
 		}
 
-		if (toGo == mazemap_rotation_to_direction(curDirection, BACKWARDS)) {
-			returning = TRUE;
+		if (!wallArray[n]) {
+			numTimes++;
 		}
+	}
+
+	// return if there is nowhere else to go
+	if (numTimes == 5) {
+		returning = TRUE;
 	}
 
 	// check for returning case
@@ -71,33 +77,21 @@ Direction malgo_explore_suggest(int xPos, int yPos, Direction curDirection, Maze
 			// increment the num explored nodes counter
 			exploreHistory[yPos][xPos]++;
 		}
-		// otherwise, return the last direction on the stack
+		// otherwise, go backwards
 		else {
-			return previousTravel[previousTravelPos--];
-		}
-	}
+			// get the opposite direction that was pushed on the stack
+			Direction prevDir = previousTravel[previousTravelPos--];
+			Direction returnDirection = mazemap_rotation_to_direction(prevDir, BACKWARDS);
+			printf("returnDirection: %i\n", returnDirection);
 
-	// if there is more than one free, explore the next one that hasn't been
-	else {
-		Direction directionArray[] = {NORTH, EAST, SOUTH, WEST};
-		BOOL wallArray[] = {northWall, eastWall, southWall, westWall};
-
-		int numTimes = 0;
-		for (int n = 0; n < 4; n++) {
-			if (numTimes == exploreHistory[yPos][xPos]) {
-				toGo = directionArray[n];
-				break;
-			}
-
-			if (!wallArray[n]) {
-				numTimes++;
-			}
+			return returnDirection;
 		}
 	}
 
 	// save the prevous travel on the stack
 	previousTravel[++previousTravelPos] = toGo;
 
+	printf("toGo: %i\n", toGo);
 	return toGo;
 }
 
