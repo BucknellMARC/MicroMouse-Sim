@@ -85,7 +85,7 @@ BOOL floodfill_compute_pull_neighbor(int row, int col, Direction direction, Maze
 		return FALSE;
 	}
 
-	BOOL wallExists = mazemap_is_wall(mm, col, row, direction);	// bottom left is (0,0)
+	BOOL wallExists = mm_is_wall(mm, col, row, direction);	// bottom left is (0,0)
 	if (wallExists) {
 		return FALSE;
 	}
@@ -169,10 +169,10 @@ Direction floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr ffMap
 	int minVal =  100000;
 	Direction minDir = EAST;
 
-	BOOL eastWall = mazemap_is_wall(mazeMap, xPos, yPos, EAST);
-	BOOL southWall = mazemap_is_wall(mazeMap, xPos, yPos, SOUTH);
-	BOOL westWall = mazemap_is_wall(mazeMap, xPos, yPos, WEST);
-	BOOL northWall = mazemap_is_wall(mazeMap, xPos, yPos, NORTH);
+	BOOL eastWall = mm_is_wall(mazeMap, xPos, yPos, EAST);
+	BOOL southWall = mm_is_wall(mazeMap, xPos, yPos, SOUTH);
+	BOOL westWall = mm_is_wall(mazeMap, xPos, yPos, WEST);
+	BOOL northWall = mm_is_wall(mazeMap, xPos, yPos, NORTH);
 
 	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
 	if (!eastWall) {

@@ -55,10 +55,10 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	}
 
 	// calculate possible directions that we can travel
-	BOOL northWall = mazemap_is_wall(mazeMap, xPos, yPos, NORTH);
-	BOOL eastWall = mazemap_is_wall(mazeMap, xPos, yPos, EAST);
-	BOOL southWall = mazemap_is_wall(mazeMap, xPos, yPos, SOUTH);
-	BOOL westWall = mazemap_is_wall(mazeMap, xPos, yPos, WEST);
+	BOOL northWall = mm_is_wall(mazeMap, xPos, yPos, NORTH);
+	BOOL eastWall = mm_is_wall(mazeMap, xPos, yPos, EAST);
+	BOOL southWall = mm_is_wall(mazeMap, xPos, yPos, SOUTH);
+	BOOL westWall = mm_is_wall(mazeMap, xPos, yPos, WEST);
 	int numFree = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
 
 	Direction toGo;

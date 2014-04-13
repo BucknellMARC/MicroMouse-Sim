@@ -23,18 +23,18 @@ typedef struct {
 } MazeMap;
 
 // constructor
-MazeMap mazemap_create();
+MazeMap mm_create();
 
 //
 // main methods
 //
 
-BOOL mazemap_is_wall(MazeMap* mazeMap, int x, int y, Direction direction);
-BOOL mazemap_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation);
-void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
+BOOL mm_is_wall(MazeMap* mazeMap, int x, int y, Direction direction);
+BOOL mm_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation);
+void mm_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
 
-BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
-void mazemap_one_ahead_direction(Direction direction, int* x, int* y);
+BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
+void mm_one_ahead_direction(Direction direction, int* x, int* y);
 
 //
 // helper methods

@@ -29,7 +29,7 @@ extern "C" {
 //
 
 VirtualMaze::VirtualMaze() {
-	mazeMap = mazemap_create();
+	mazeMap = mm_create();
 
 	// perform prim generation
 	primGeneration();
@@ -193,7 +193,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mazemap_set_wall(&mazeMap, NOWALL, current.x, current.y, direction);
+			mm_set_wall(&mazeMap, NOWALL, current.x, current.y, direction);
 
 			// get the new destination
 			Point destination = current;

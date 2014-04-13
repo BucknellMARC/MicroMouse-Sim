@@ -8,7 +8,7 @@
 #include "define.h"
 #include "MazeMap.h"
 
-MazeMap mazemap_create() {
+MazeMap mm_create() {
 	MazeMap mm;
 	memset(&mm, 0, sizeof(MazeMap));
 
@@ -27,10 +27,10 @@ MazeMap mazemap_create() {
 	return mm;
 }
 
-BOOL mazemap_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
+BOOL mm_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
-	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mm_get_look_position(x, y, direction, &xLook, &yLook);
 
 	// if the look position was out of bounds, there is a wall
 	if (!success) {
@@ -46,18 +46,18 @@ BOOL mazemap_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
 	}
 }
 
-BOOL mazemap_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
+BOOL mm_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
 	Direction fixedDirection = rotation_to_direction(direction, rotation);
 
-	return mazemap_is_wall(mazeMap, x, y, fixedDirection);
+	return mm_is_wall(mazeMap, x, y, fixedDirection);
 }
 
 // sets the desired wall to a new state
-void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
+void mm_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
 	
 	// get the proper array position, will return false if the value is out of bounds
 	int xLook, yLook;
-	BOOL success = mazemap_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mm_get_look_position(x, y, direction, &xLook, &yLook);
 
 	if (!success) {
 		return;
@@ -77,7 +77,7 @@ void mazemap_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction dire
 	}
 }
 
-BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
+BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
 	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:
@@ -114,7 +114,7 @@ BOOL mazemap_get_look_position(int x, int y, Direction direction, int* xLook, in
 	return TRUE;
 }
 
-void mazemap_one_ahead_direction(Direction direction, int* x, int* y)
+void mm_one_ahead_direction(Direction direction, int* x, int* y)
 {
 	switch(direction) {
 	case EAST:

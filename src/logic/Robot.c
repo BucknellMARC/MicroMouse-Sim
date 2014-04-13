@@ -29,7 +29,7 @@ Robot robot_create(int xPos, int yPos)
 	memset(robot.posHistory, 0, sizeof(MazeArray));
 
 	// create an empty mazemap
-	robot.mazeMap = mazemap_create();
+	robot.mazeMap = mm_create();
 
 	// init the exploration component
 	explore_init();
@@ -85,7 +85,7 @@ void robot_run(Robot* robot) {
 	robot_turn_d(robot, direction);
 
 	// only drive forward if there is no wall
-	BOOL wallForward = mazemap_is_wall(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
+	BOOL wallForward = mm_is_wall(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
 	if (!wallForward) {
 		robot_drive_forward(robot);
 
