@@ -220,6 +220,13 @@ void VirtualMaze::primGeneration() {
 		}
 	}
 
+	// create empty center space
+	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2 - 1, MAZE_HEIGHT / 2 - 1, NORTH);
+	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2 - 1, MAZE_HEIGHT / 2 - 1, EAST);
+	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2, MAZE_HEIGHT / 2, SOUTH);
+	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2, MAZE_HEIGHT / 2, WEST);
+
+
 	printf("done!\n");
 }
 
