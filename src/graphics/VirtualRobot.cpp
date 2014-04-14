@@ -22,7 +22,7 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 	robot = robot_create(0, 0);
 
 	// bind the robot maze map to the virtualmaze
-	virtualMaze->bindRobotMap(&robot.mazeMap);
+	virtualMaze->bindRobotMap(&robot.em.mazeMap);
 
 
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
@@ -65,7 +65,7 @@ void VirtualRobot::feedSensorData() {
 	BOOL westWall = mm_is_wall(virtualMap, pos, WEST);
 
 	// plug the data from the virtual maze into the robot's maze map
-	MazeMap* robotMap = &robot.mazeMap;
+	MazeMap* robotMap = &robot.em.mazeMap;
 	mm_set_wall(robotMap, northWall, pos, NORTH);
 	mm_set_wall(robotMap, eastWall, pos, EAST);
 	mm_set_wall(robotMap, southWall, pos, SOUTH);

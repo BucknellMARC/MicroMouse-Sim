@@ -17,8 +17,6 @@ typedef struct {
 	int distanceTraveled;
 
 	ExploreModule em;
-
-	MazeMap mazeMap;
 } Robot;
 
 // constructor

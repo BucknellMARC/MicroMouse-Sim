@@ -2,8 +2,11 @@
 #define EXPLORE_H
 
 #include "FloodFill.h"
+#include "MazeMap.h"
 
 typedef struct {
+	MazeMap mazeMap;
+
 	BOOL returning;
 	MazeArray exHistory;
 
@@ -15,6 +18,6 @@ typedef struct {
 
 // functions
 ExploreModule explore_create();
-Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, ExploreModule* em);
+Direction explore_suggest(Point pos, Direction curDirection, ExploreModule* em);
 
 #endif

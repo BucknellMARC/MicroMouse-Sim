@@ -25,9 +25,6 @@ Robot robot_create(int xPos, int yPos)
 	// the robot will always start out exploring
 	robot.isExploring = TRUE;
 
-	// create an empty mazemap
-	robot.mazeMap = mm_create();
-
 	// init the exploration component
 	robot.em = explore_create();
 
@@ -41,7 +38,7 @@ void robot_run(Robot* robot) {
 	BOOL exploredMaze = TRUE;
 
 	// actually performed check
-	MazeMap* rmm = &robot->mazeMap;
+	MazeMap* rmm = &robot->em.mazeMap;
 	for (int row = 0; row < MAZE_HEIGHT - 1; row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
 			if (rmm->horizWalls[row][col] == UNKNOWN) {
@@ -61,7 +58,7 @@ void robot_run(Robot* robot) {
 	if (robot->isExploring && exploredMaze) {
 		robot->isExploring = FALSE;
 	
-		floodfill_compute(&robot->mazeMap, robot->ffMap);
+		floodfill_compute(&robot->em.mazeMap, robot->ffMap);
 	}
 
 
@@ -71,9 +68,7 @@ void robot_run(Robot* robot) {
 	// run exploration if the robot is exploring
 	Direction direction;
 	if (robot->isExploring) {
-		direction = explore_suggest(
-			robot->pos, robot->direction, &robot->mazeMap, &robot->em
-			);
+		direction = explore_suggest(robot->pos, robot->direction, &robot->em);
 	}
 	// otherwise run the flood fill algorithm
 	else {
@@ -84,7 +79,7 @@ void robot_run(Robot* robot) {
 	robot_turn_d(robot, direction);
 
 	// only drive forward if there is no wall
-	BOOL wallForward = mm_is_wall(&robot->mazeMap, robot->pos, robot->direction);
+	BOOL wallForward = mm_is_wall(&robot->em.mazeMap, robot->pos, robot->direction);
 	if (!wallForward) {
 		robot_drive_forward(robot);
 	}
@@ -92,7 +87,7 @@ void robot_run(Robot* robot) {
 
 void robot_run_flood_fill(Robot* robot) {
 
-	Rotation dToGo = floodfill_suggest(robot->pos, &robot->mazeMap, robot->ffMap);
+	Rotation dToGo = floodfill_suggest(robot->pos, &robot->em.mazeMap, robot->ffMap);
 
 	// turn that direction
 	robot_turn_d(robot, dToGo);

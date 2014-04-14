@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "MazeMap.h"
+
 #include "Explore.h"
 
 Direction explore_return(ExploreModule* em);		// pops em->prevTravel and returns the opposite direction
@@ -11,6 +13,8 @@ ExploreModule explore_create()
 {
 	// init the module
 	ExploreModule em;
+
+	em.mazeMap = mm_create();
 
 	// zero out the search array
 	for (int row = 0; row < MAZE_WIDTH; row++) {
@@ -25,7 +29,7 @@ ExploreModule explore_create()
 	return em;
 }
 
-Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, ExploreModule* em)
+Direction explore_suggest(Point pos, Direction curDirection, ExploreModule* em)
 {
 	// stack up positions that have multiple options to go
 	// pop off only if we have traversed all locations.
@@ -41,10 +45,10 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, E
 	}
 
 	// calculate possible directions that we can travel
-	BOOL northWall = mm_is_wall(mazeMap, pos, NORTH);
-	BOOL eastWall = mm_is_wall(mazeMap, pos, EAST);
-	BOOL southWall = mm_is_wall(mazeMap, pos, SOUTH);
-	BOOL westWall = mm_is_wall(mazeMap, pos, WEST);
+	BOOL northWall = mm_is_wall(&em->mazeMap, pos, NORTH);
+	BOOL eastWall = mm_is_wall(&em->mazeMap, pos, EAST);
+	BOOL southWall = mm_is_wall(&em->mazeMap, pos, SOUTH);
+	BOOL westWall = mm_is_wall(&em->mazeMap, pos, WEST);
 	int numFree = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
 
 	Direction toGo;
