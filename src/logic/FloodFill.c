@@ -85,7 +85,8 @@ BOOL floodfill_compute_pull_neighbor(int row, int col, Direction direction, Maze
 		return FALSE;
 	}
 
-	BOOL wallExists = mm_is_wall(mm, col, row, direction);	// bottom left is (0,0)
+	Point pos = { col, row };
+	BOOL wallExists = mm_is_wall(mm, pos, direction);	// bottom left is (0,0)
 	if (wallExists) {
 		return FALSE;
 	}
@@ -164,28 +165,28 @@ void floodfill_recompute_target(int targetX, int targetY, FFMapPtr in)
 }
 
 // uses floodfill to determine where to go
-Direction floodfill_suggest(int xPos, int yPos, MazeMap *mazeMap, FFMapPtr ffMap)
+Direction floodfill_suggest(Point pos, MazeMap *mazeMap, FFMapPtr ffMap)
 {
 	int minVal =  100000;
 	Direction minDir = EAST;
 
-	BOOL eastWall = mm_is_wall(mazeMap, xPos, yPos, EAST);
-	BOOL southWall = mm_is_wall(mazeMap, xPos, yPos, SOUTH);
-	BOOL westWall = mm_is_wall(mazeMap, xPos, yPos, WEST);
-	BOOL northWall = mm_is_wall(mazeMap, xPos, yPos, NORTH);
+	BOOL eastWall = mm_is_wall(mazeMap, pos, EAST);
+	BOOL southWall = mm_is_wall(mazeMap, pos, SOUTH);
+	BOOL westWall = mm_is_wall(mazeMap, pos, WEST);
+	BOOL northWall = mm_is_wall(mazeMap, pos, NORTH);
 
 	int eastVal = 10000; int southVal = 10000; int westVal = 10000; int northVal = 10000;
 	if (!eastWall) {
-		eastVal = ffMap[yPos][xPos + 1];
+		eastVal = ffMap[pos.y][pos.x + 1];
 	}
 	if (!southWall) {
-		southVal = ffMap[yPos - 1][xPos];
+		southVal = ffMap[pos.y - 1][pos.x];
 	}
 	if (!westWall) {
-		westVal = ffMap[yPos][xPos - 1];
+		westVal = ffMap[pos.y][pos.x - 1];
 	}
 	if (!northWall) {
-		northVal = ffMap[yPos + 1][xPos];
+		northVal = ffMap[pos.y + 1][pos.x];
 	}
 
 	if (!eastWall && eastVal < minVal) {

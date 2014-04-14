@@ -12,6 +12,6 @@ typedef struct {
 
 // functions
 void explore_init();
-Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
+Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
 
 #endif

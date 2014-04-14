@@ -8,7 +8,7 @@
 
 typedef struct {
 	// position and direction the robot is facing
-	int xPos, yPos;
+	Point pos;
 	Direction direction;
 	BOOL isExploring;
 

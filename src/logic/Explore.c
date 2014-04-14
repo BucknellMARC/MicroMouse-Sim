@@ -25,7 +25,7 @@ void explore_init()
 	}
 }
 
-Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
 {
 	// stack up positions that have multiple options to go
 	// pop off only if we have traversed all locations.
@@ -33,7 +33,7 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	// until we reach a node that has unexplored adjacent nodes
 
 	// mark current location as explored
-	exploreHistory[yPos][xPos] = TRUE;
+	exploreHistory[pos.y][pos.x] = TRUE;
 
 	// check for returning case
 	if (returning) {
@@ -41,10 +41,10 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	}
 
 	// calculate possible directions that we can travel
-	BOOL northWall = mm_is_wall(mazeMap, xPos, yPos, NORTH);
-	BOOL eastWall = mm_is_wall(mazeMap, xPos, yPos, EAST);
-	BOOL southWall = mm_is_wall(mazeMap, xPos, yPos, SOUTH);
-	BOOL westWall = mm_is_wall(mazeMap, xPos, yPos, WEST);
+	BOOL northWall = mm_is_wall(mazeMap, pos, NORTH);
+	BOOL eastWall = mm_is_wall(mazeMap, pos, EAST);
+	BOOL southWall = mm_is_wall(mazeMap, pos, SOUTH);
+	BOOL westWall = mm_is_wall(mazeMap, pos, WEST);
 	int numFree = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
 
 	Direction toGo;
@@ -56,32 +56,32 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	}
 
 	int numSearched = 0;
-	if (!northWall && yPos < (MAZE_HEIGHT-1)) {
-		if (exploreHistory[yPos + 1][xPos]) {
+	if (!northWall && pos.y < (MAZE_HEIGHT-1)) {
+		if (exploreHistory[pos.y + 1][pos.x]) {
 			numSearched++;
 		}
 		else {
 			toGo = NORTH;
 		}
 	}
-	if (!eastWall && xPos < (MAZE_WIDTH-1)) {
-		if (exploreHistory[yPos][xPos + 1]) {
+	if (!eastWall && pos.x < (MAZE_WIDTH-1)) {
+		if (exploreHistory[pos.y][pos.x + 1]) {
 			numSearched++;
 		}
 		else {
 			toGo = EAST;
 		}
 	}
-	if (!southWall && yPos > 0) {
-		if (exploreHistory[yPos - 1][xPos]) {
+	if (!southWall && pos.y > 0) {
+		if (exploreHistory[pos.y - 1][pos.x]) {
 			numSearched++;
 		}
 		else {
 			toGo = SOUTH;
 		}
 	}
-	if (!westWall && xPos > 0) {
-		if (exploreHistory[yPos][xPos - 1]) {
+	if (!westWall && pos.x > 0) {
+		if (exploreHistory[pos.y][pos.x - 1]) {
 			numSearched++;
 		}
 		else {

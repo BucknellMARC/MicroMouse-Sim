@@ -27,8 +27,8 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
-	int x = robot.xPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
-	int y = robot.yPos * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int x = robot.pos.x * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int y = robot.pos.y * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
 
 	this->rectangle = new Rectangle(x, y, robotSizePX, robotSizePX);
 
@@ -48,29 +48,28 @@ void VirtualRobot::run() {
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 	int offset = blockWidthPX / 2 - robotSizePX / 2;
 
-	int newX = blockWidthPX * robot.xPos + offset;
-	int newY = blockWidthPX * robot.yPos + offset;
+	int newX = blockWidthPX * robot.pos.x + offset;
+	int newY = blockWidthPX * robot.pos.y + offset;
 	rectangle->setPos(newX, newY);
 }
 
 void VirtualRobot::feedSensorData() {
 	// get the full map
 	MazeMap* virtualMap = virtualMaze->getMazeMap();
-	int x = robot.xPos;
-	int y = robot.yPos;
+	Point pos = robot.pos;
 
 	// load in information about surroundings
-	BOOL northWall = mm_is_wall(virtualMap, x, y, NORTH);
-	BOOL eastWall = mm_is_wall(virtualMap, x, y, EAST);
-	BOOL southWall = mm_is_wall(virtualMap, x, y, SOUTH);
-	BOOL westWall = mm_is_wall(virtualMap, x, y, WEST);
+	BOOL northWall = mm_is_wall(virtualMap, pos, NORTH);
+	BOOL eastWall = mm_is_wall(virtualMap, pos, EAST);
+	BOOL southWall = mm_is_wall(virtualMap, pos, SOUTH);
+	BOOL westWall = mm_is_wall(virtualMap, pos, WEST);
 
 	// plug the data from the virtual maze into the robot's maze map
 	MazeMap* robotMap = &robot.mazeMap;
-	mm_set_wall(robotMap, northWall, x, y, NORTH);
-	mm_set_wall(robotMap, eastWall, x, y, EAST);
-	mm_set_wall(robotMap, southWall, x, y, SOUTH);
-	mm_set_wall(robotMap, westWall, x, y, WEST);
+	mm_set_wall(robotMap, northWall, pos, NORTH);
+	mm_set_wall(robotMap, eastWall, pos, EAST);
+	mm_set_wall(robotMap, southWall, pos, SOUTH);
+	mm_set_wall(robotMap, westWall, pos, WEST);
 }
 
 void VirtualRobot::draw() {

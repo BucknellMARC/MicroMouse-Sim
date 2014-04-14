@@ -18,7 +18,7 @@ typedef MazeArrayPtr FFMapPtr;
 void floodfill_compute(MazeMap* mm, FFMapPtr in);
 BOOL floodfill_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in);
 void floodfill_recompute_target(int targetX, int targetY, FFMapPtr in);
-Direction floodfill_suggest(int xPos, int yPos, MazeMap* mazeMap, FFMapPtr ffMap);
+Direction floodfill_suggest(Point pos, MazeMap* mazeMap, FFMapPtr ffMap);
 
 
 #endif

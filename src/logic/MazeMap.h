@@ -29,12 +29,12 @@ MazeMap mm_create();
 // main methods
 //
 
-BOOL mm_is_wall(MazeMap* mazeMap, int x, int y, Direction direction);
-BOOL mm_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation);
-void mm_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction);
+BOOL mm_is_wall(MazeMap* mazeMap, Point pos, Direction direction);
+BOOL mm_is_wall_r(MazeMap* mazeMap, Point pos, Direction direction, Rotation rotation);
+void mm_set_wall(MazeMap* mazeMap, BOOL state, Point pos, Direction direction);
 
-BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook);
-void mm_one_ahead_direction(Direction direction, int* x, int* y);
+BOOL mm_get_look_position(Point pos, Direction direction, int* xLook, int* yLook);
+void mm_one_ahead_direction(Direction direction, Point* pos);
 
 //
 // helper methods

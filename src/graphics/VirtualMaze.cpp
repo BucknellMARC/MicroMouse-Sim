@@ -193,7 +193,7 @@ void VirtualMaze::primGeneration() {
 			Direction direction = canGo[rand() % canGo.size()];
 
 			// break down the wall between the two locations
-			mm_set_wall(&mazeMap, NOWALL, current.x, current.y, direction);
+			mm_set_wall(&mazeMap, NOWALL, current, direction);
 
 			// get the new destination
 			Point destination = current;
@@ -221,10 +221,12 @@ void VirtualMaze::primGeneration() {
 	}
 
 	// create empty center space
-	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2 - 1, MAZE_HEIGHT / 2 - 1, NORTH);
-	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2 - 1, MAZE_HEIGHT / 2 - 1, EAST);
-	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2, MAZE_HEIGHT / 2, SOUTH);
-	mm_set_wall(&mazeMap, FALSE, MAZE_WIDTH / 2, MAZE_HEIGHT / 2, WEST);
+	Point oneBack = { MAZE_WIDTH / 2 - 1, MAZE_HEIGHT / 2 - 1 };
+	Point middle = { oneBack.x + 1, oneBack.y + 1 };
+	mm_set_wall(&mazeMap, FALSE, oneBack, NORTH);
+	mm_set_wall(&mazeMap, FALSE, oneBack, EAST);
+	mm_set_wall(&mazeMap, FALSE, middle, SOUTH);
+	mm_set_wall(&mazeMap, FALSE, middle, WEST);
 
 
 	printf("done!\n");

@@ -27,10 +27,10 @@ MazeMap mm_create() {
 	return mm;
 }
 
-BOOL mm_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
+BOOL mm_is_wall(MazeMap* mazeMap, Point pos, Direction direction) {
 	// get the wall from wall list
 	int xLook, yLook;
-	BOOL success = mm_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mm_get_look_position(pos, direction, &xLook, &yLook);
 
 	// if the look position was out of bounds, there is a wall
 	if (!success) {
@@ -46,18 +46,18 @@ BOOL mm_is_wall(MazeMap* mazeMap, int x, int y, Direction direction) {
 	}
 }
 
-BOOL mm_is_wall_r(MazeMap* mazeMap, int x, int y, Direction direction, Rotation rotation) {
+BOOL mm_is_wall_r(MazeMap* mazeMap, Point pos, Direction direction, Rotation rotation) {
 	Direction fixedDirection = rotation_to_direction(direction, rotation);
 
-	return mm_is_wall(mazeMap, x, y, fixedDirection);
+	return mm_is_wall(mazeMap, pos, fixedDirection);
 }
 
 // sets the desired wall to a new state
-void mm_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction) {
+void mm_set_wall(MazeMap* mazeMap, BOOL state, Point pos, Direction direction) {
 	
 	// get the proper array position, will return false if the value is out of bounds
 	int xLook, yLook;
-	BOOL success = mm_get_look_position(x, y, direction, &xLook, &yLook);
+	BOOL success = mm_get_look_position(pos, direction, &xLook, &yLook);
 
 	if (!success) {
 		return;
@@ -77,23 +77,23 @@ void mm_set_wall(MazeMap* mazeMap, BOOL state, int x, int y, Direction direction
 	}
 }
 
-BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yLook) {
+BOOL mm_get_look_position(Point pos, Direction direction, int* xLook, int* yLook) {
 	// derive the look position from the current position and direction
 	switch (direction) {
 	case NORTH:
 	case EAST:
-		*xLook = x;
-		*yLook = y;
+		*xLook = pos.x;
+		*yLook = pos.y;
 		break;
 
 	case SOUTH:
-		*xLook = x;
-		*yLook = y - 1;
+		*xLook = pos.x;
+		*yLook = pos.y - 1;
 		break;
 
 	case WEST:
-		*xLook = x - 1;
-		*yLook = y;
+		*xLook = pos.x - 1;
+		*yLook = pos.y;
 		break;
 	}
 
@@ -103,10 +103,10 @@ BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yL
 	}
 
 	// check for other random bounds
-	if (direction == EAST && x == (MAZE_WIDTH - 1)) {
+	if (direction == EAST && pos.x == (MAZE_WIDTH - 1)) {
 		return FALSE;
 	}
-	if (direction == NORTH && y == (MAZE_HEIGHT - 1)) {
+	if (direction == NORTH && pos.y == (MAZE_HEIGHT - 1)) {
 		return FALSE;
 	}
 
@@ -114,20 +114,24 @@ BOOL mm_get_look_position(int x, int y, Direction direction, int* xLook, int* yL
 	return TRUE;
 }
 
-void mm_one_ahead_direction(Direction direction, int* x, int* y)
+void mm_one_ahead_direction(Direction direction, Point* pos)
 {
 	switch(direction) {
 	case EAST:
-		*x = *x + 1;
+		//*x = *x + 1;
+		pos->x = pos->x + 1;
 		return;
 	case SOUTH:
-		*y = *y - 1;
+		//*y = *y - 1;
+		pos->y = pos->y - 1;
 		return;
 	case WEST:
-		*x = *x - 1;
+		//*x = *x - 1;
+		pos->x = pos->x - 1;
 		return;
 	case NORTH:
-		*y = *y + 1;
+		//*y = *y + 1;
+		pos->y = pos->y + 1;
 		return;
 
 	default:

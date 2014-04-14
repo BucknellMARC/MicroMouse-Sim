@@ -38,13 +38,11 @@ typedef enum {
 typedef int MazeArray[MAZE_HEIGHT][MAZE_WIDTH];
 typedef int (*MazeArrayPtr)[MAZE_WIDTH];
 
-#ifdef GPP
-	// 2 dimensional point
-	struct Point {
-		int x;
-		int y;
-	};	
-#endif
+// 2 dimensional point
+typedef struct {
+	int x;
+	int y;
+} Point;
 
 //
 // Functions

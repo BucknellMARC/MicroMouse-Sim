@@ -18,8 +18,8 @@ Robot robot_create(int xPos, int yPos)
 	memset(&robot, 0, sizeof(Robot));
 
 	// assign the initial position to the robot
-	robot.xPos = xPos;
-	robot.yPos = yPos;
+	Point pos = { xPos, yPos };
+	robot.pos = pos;
 	robot.direction = EAST;
 	
 	// the robot will always start out exploring
@@ -73,7 +73,7 @@ void robot_run(Robot* robot) {
 	Direction direction;
 	if (robot->isExploring) {
 		direction = explore_suggest(
-			robot->xPos, robot->yPos, robot->direction, &robot->mazeMap, robot->posHistory
+			robot->pos, robot->direction, &robot->mazeMap, robot->posHistory
 			);
 	}
 	// otherwise run the flood fill algorithm
@@ -85,18 +85,18 @@ void robot_run(Robot* robot) {
 	robot_turn_d(robot, direction);
 
 	// only drive forward if there is no wall
-	BOOL wallForward = mm_is_wall(&robot->mazeMap, robot->xPos, robot->yPos, robot->direction);
+	BOOL wallForward = mm_is_wall(&robot->mazeMap, robot->pos, robot->direction);
 	if (!wallForward) {
 		robot_drive_forward(robot);
 
 		// increment the position history
-		robot->posHistory[robot->yPos][robot->xPos]++;
+		robot->posHistory[robot->pos.y][robot->pos.x]++;
 	}
 }
 
 void robot_run_flood_fill(Robot* robot) {
 
-	Rotation dToGo = floodfill_suggest(robot->xPos, robot->yPos, &robot->mazeMap, robot->ffMap);
+	Rotation dToGo = floodfill_suggest(robot->pos, &robot->mazeMap, robot->ffMap);
 
 	// turn that direction
 	robot_turn_d(robot, dToGo);
@@ -123,19 +123,19 @@ BOOL robot_drive_forward(Robot* robot) {
 
 	switch (direction) {
 	case NORTH:
-		robot->yPos++;
+		robot->pos.y++;
 		break;
 
 	case EAST:
-		robot->xPos++;
+		robot->pos.x++;
 		break;
 
 	case SOUTH:
-		robot->yPos--;
+		robot->pos.y--;
 		break;
 
 	case WEST:
-		robot->xPos--;
+		robot->pos.x--;
 		break;
 
 	default:
