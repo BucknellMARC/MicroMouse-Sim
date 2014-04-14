@@ -15,8 +15,6 @@ int previousTravelPos = -1;		// stack pointer
 
 void explore_init()
 {
-	printf("initializing maglo_explore\n");
-
 	// zero out the search array
 	for (int row = 0; row < MAZE_WIDTH; row++) {
 		for(int col = 0; col < MAZE_HEIGHT; col++) {
@@ -97,16 +95,11 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 
 	// save the prevous travel on the stack
 	previousTravel[++previousTravelPos] = toGo;
-
-	printf("numSearched: %i\t", numSearched);
-	printf("toGo: %i\n", toGo);
 	return toGo;
 }
 
 Direction explore_return()
 {
-	printf("returning\n");
-
 	if (previousTravelPos == -1) {
 		returning = FALSE;
 	}
@@ -114,7 +107,6 @@ Direction explore_return()
 		// get the opposite direction that was pushed on the stack
 		Direction prevDir = previousTravel[previousTravelPos--];
 		Direction returnDirection = rotation_to_direction(prevDir, BACKWARDS);
-		printf("returnDirection: %i\n", returnDirection);
 
 		returning = FALSE;
 
