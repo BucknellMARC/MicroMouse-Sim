@@ -13,9 +13,9 @@ The *MazeMap* class holds the robot's view of what the maze looks like in memory
 
 Simple API provides access to these confusing multi-dimensinal *horizontalWalls* and *vertcalWalls* arrays.
 
-```c++
-MazeMap::doesWallExist(int x, int y, Direction direction);
-MazeMap::setWall(WallState state, int x, int y, Direction direction);
+```C
+BOOL mm_is_wall(MazeMap* mazeMap, Point pos, Direction direction);
+void mm_set_wall(MazeMap* mazeMap, BOOL state, Point pos, Direction direction);
 ```
 
 These are the main functions of the class, basically lets you get or set the state of walls at a particular place and direction.  This deals with the challenge of handling differentiation between vertical, horizontal walls, and how direction affects the array position.  The idea is that the robot drives along, it can check the status of the walls by looking left, right, and forward.  These functions will get the proper location in the array, making the check an easy one-liner.
