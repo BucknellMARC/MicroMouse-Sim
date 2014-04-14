@@ -5,25 +5,27 @@
 
 #include "Explore.h"
 
-Direction explore_return();		// pops previousTravel and returns the oppposite direction
+Direction explore_return(ExploreModule* em);		// pops em->prevTravel and returns the opposite direction
 
-MazeArray exploreHistory;		// keeps track of whether or not robot was there previously
-BOOL returning = FALSE;			// returning state means robot is going back to previous source
-
-Direction previousTravel[512];	// stack of previous turn directions
-int previousTravelPos = -1;		// stack pointer
-
-void explore_init()
+ExploreModule explore_create()
 {
+	// init the module
+	ExploreModule em;
+
 	// zero out the search array
 	for (int row = 0; row < MAZE_WIDTH; row++) {
 		for(int col = 0; col < MAZE_HEIGHT; col++) {
-			exploreHistory[row][col] = FALSE;
+			em.exHistory[row][col] = FALSE;
 		}
 	}
+
+	em.returning = FALSE;
+	em.prevTravelPos = -1;
+
+	return em;
 }
 
-Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory)
+Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, ExploreModule* em)
 {
 	// stack up positions that have multiple options to go
 	// pop off only if we have traversed all locations.
@@ -31,11 +33,11 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 	// until we reach a node that has unexplored adjacent nodes
 
 	// mark current location as explored
-	exploreHistory[pos.y][pos.x] = TRUE;
+	em->exHistory[pos.y][pos.x] = TRUE;
 
 	// check for returning case
-	if (returning) {
-		return explore_return();
+	if (em->returning) {
+		return explore_return(em);
 	}
 
 	// calculate possible directions that we can travel
@@ -49,13 +51,13 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 
 	// if there is only one way to go, return
 	if (numFree == 1) {
-		returning = TRUE;
-		return explore_return();
+		em->returning = TRUE;
+		return explore_return(em);
 	}
 
 	int numSearched = 0;
 	if (!northWall && pos.y < (MAZE_HEIGHT-1)) {
-		if (exploreHistory[pos.y + 1][pos.x]) {
+		if (em->exHistory[pos.y + 1][pos.x]) {
 			numSearched++;
 		}
 		else {
@@ -63,7 +65,7 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 		}
 	}
 	if (!eastWall && pos.x < (MAZE_WIDTH-1)) {
-		if (exploreHistory[pos.y][pos.x + 1]) {
+		if (em->exHistory[pos.y][pos.x + 1]) {
 			numSearched++;
 		}
 		else {
@@ -71,7 +73,7 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 		}
 	}
 	if (!southWall && pos.y > 0) {
-		if (exploreHistory[pos.y - 1][pos.x]) {
+		if (em->exHistory[pos.y - 1][pos.x]) {
 			numSearched++;
 		}
 		else {
@@ -79,7 +81,7 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 		}
 	}
 	if (!westWall && pos.x > 0) {
-		if (exploreHistory[pos.y][pos.x - 1]) {
+		if (em->exHistory[pos.y][pos.x - 1]) {
 			numSearched++;
 		}
 		else {
@@ -89,26 +91,26 @@ Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, M
 
 	// return if there is nowhere else to go
 	if (numSearched == numFree) {
-		returning = TRUE;
-		return explore_return();
+		em->returning = TRUE;
+		return explore_return(em);
 	}
 
 	// save the prevous travel on the stack
-	previousTravel[++previousTravelPos] = toGo;
+	em->prevTravel[++em->prevTravelPos] = toGo;
 	return toGo;
 }
 
-Direction explore_return()
+Direction explore_return(ExploreModule* em)
 {
-	if (previousTravelPos == -1) {
-		returning = FALSE;
+	if (em->prevTravelPos == -1) {
+		em->returning = FALSE;
 	}
 	else {
 		// get the opposite direction that was pushed on the stack
-		Direction prevDir = previousTravel[previousTravelPos--];
+		Direction prevDir = em->prevTravel[em->prevTravelPos--];
 		Direction returnDirection = rotation_to_direction(prevDir, BACKWARDS);
 
-		returning = FALSE;
+		em->returning = FALSE;
 
 		return returnDirection;
 	}

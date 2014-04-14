@@ -4,14 +4,17 @@
 #include "FloodFill.h"
 
 typedef struct {
-	int x;
-	int y;
-} MazePoint;
+	BOOL returning;
+	MazeArray exHistory;
+
+	int prevTravelPos;
+	Direction prevTravel[512];
+} ExploreModule;
 
 #define SEARCH_EXPLORED	4
 
 // functions
-void explore_init();
-Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, MazeArrayPtr posHistory);
+ExploreModule explore_create();
+Direction explore_suggest(Point pos, Direction curDirection, MazeMap* mazeMap, ExploreModule* em);
 
 #endif

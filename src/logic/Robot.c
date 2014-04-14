@@ -25,14 +25,13 @@ Robot robot_create(int xPos, int yPos)
 	// the robot will always start out exploring
 	robot.isExploring = TRUE;
 
-	// zero out pos history
-	memset(robot.posHistory, 0, sizeof(MazeArray));
-
 	// create an empty mazemap
 	robot.mazeMap = mm_create();
 
 	// init the exploration component
-	explore_init();
+	robot.em = explore_create();
+
+	robot.distanceTraveled = 0;
 
 	return robot;
 }
@@ -73,7 +72,7 @@ void robot_run(Robot* robot) {
 	Direction direction;
 	if (robot->isExploring) {
 		direction = explore_suggest(
-			robot->pos, robot->direction, &robot->mazeMap, robot->posHistory
+			robot->pos, robot->direction, &robot->mazeMap, &robot->em
 			);
 	}
 	// otherwise run the flood fill algorithm
@@ -88,9 +87,6 @@ void robot_run(Robot* robot) {
 	BOOL wallForward = mm_is_wall(&robot->mazeMap, robot->pos, robot->direction);
 	if (!wallForward) {
 		robot_drive_forward(robot);
-
-		// increment the position history
-		robot->posHistory[robot->pos.y][robot->pos.x]++;
 	}
 }
 
@@ -110,12 +106,7 @@ void robot_turn_d(Robot* robot, Direction direction) {
 }
 
 void robot_turn_r(Robot* robot, Rotation rotation) {
-	// set the new direction
-	//printf("Original direction: %d\n", (int)robot->direction);
-
 	robot->direction = rotation_to_direction(robot->direction, rotation);
-
-	//printf("New Direction: %d\n\n", (int)robot->direction);
 }
 
 BOOL robot_drive_forward(Robot* robot) {
@@ -141,6 +132,9 @@ BOOL robot_drive_forward(Robot* robot) {
 	default:
 		printf("Error: Robot is in an unexpected state!\n");
 	}
+
+	// increase the distance traveled
+	robot->distanceTraveled++;
 
 	return TRUE;
 }
