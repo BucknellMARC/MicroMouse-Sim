@@ -5,6 +5,8 @@
 
 #include "Explore.h"
 
+Direction explore_return();		// pops previousTravel and returns the oppposite direction
+
 MazeArray exploreHistory;		// keeps track of whether or not robot was there previously
 BOOL returning = FALSE;			// returning state means robot is going back to previous source
 
@@ -27,31 +29,15 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 {
 	// stack up positions that have multiple options to go
 	// pop off only if we have traversed all locations.
-	// When we hit a dead end, find shortest path to the
-	// top location on the stack.  This should be the closest
-	// branch location to our current position.
+	// When we hit a dead end, pop return values off stack
+	// until we reach a node that has unexplored adjacent nodes
 
 	// mark current location as explored
 	exploreHistory[yPos][xPos] = TRUE;
 
 	// check for returning case
 	if (returning) {
-		return_code:
-		printf("returning\n");
-
-		if (previousTravelPos == -1) {
-			returning = FALSE;
-		}
-		else {
-			// get the opposite direction that was pushed on the stack
-			Direction prevDir = previousTravel[previousTravelPos--];
-			Direction returnDirection = rotation_to_direction(prevDir, BACKWARDS);
-			printf("returnDirection: %i\n", returnDirection);
-
-			returning = FALSE;
-
-			return returnDirection;
-		}
+		return explore_return();
 	}
 
 	// calculate possible directions that we can travel
@@ -66,7 +52,7 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	// if there is only one way to go, return
 	if (numFree == 1) {
 		returning = TRUE;
-		goto return_code;
+		return explore_return();
 	}
 
 	int numSearched = 0;
@@ -106,7 +92,7 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	// return if there is nowhere else to go
 	if (numSearched == numFree) {
 		returning = TRUE;
-		goto return_code;
+		return explore_return();
 	}
 
 	// save the prevous travel on the stack
@@ -115,6 +101,25 @@ Direction explore_suggest(int xPos, int yPos, Direction curDirection, MazeMap* m
 	printf("numSearched: %i\t", numSearched);
 	printf("toGo: %i\n", toGo);
 	return toGo;
+}
+
+Direction explore_return()
+{
+	printf("returning\n");
+
+	if (previousTravelPos == -1) {
+		returning = FALSE;
+	}
+	else {
+		// get the opposite direction that was pushed on the stack
+		Direction prevDir = previousTravel[previousTravelPos--];
+		Direction returnDirection = rotation_to_direction(prevDir, BACKWARDS);
+		printf("returnDirection: %i\n", returnDirection);
+
+		returning = FALSE;
+
+		return returnDirection;
+	}
 }
 
 #endif
