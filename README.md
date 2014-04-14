@@ -9,7 +9,7 @@ The purpose of this project is to build a simulator for the MicroMouse challenge
 
 Mapping The Maze
 ----------------
-The *MazeMap* class holds the robot's view of what the maze looks like in memory.  There are two dimensional arrays containing information about whether or not a wall is in the way (also whether or not the robot knows it has scanned that location.
+The *MazeMap* structure holds the robot's view of what the maze looks like in memory.  There are two dimensional arrays containing information about whether or not a wall is in the way (also whether or not the robot knows it has scanned that location.
 
 Simple API provides access to these confusing multi-dimensinal *horizontalWalls* and *vertcalWalls* arrays.
 
@@ -18,7 +18,7 @@ BOOL mm_is_wall(MazeMap* mazeMap, Point pos, Direction direction);
 void mm_set_wall(MazeMap* mazeMap, BOOL state, Point pos, Direction direction);
 ```
 
-These are the main functions of the class, basically lets you get or set the state of walls at a particular place and direction.  This deals with the challenge of handling differentiation between vertical, horizontal walls, and how direction affects the array position.  The idea is that the robot drives along, it can check the status of the walls by looking left, right, and forward.  These functions will get the proper location in the array, making the check an easy one-liner.
+These funcitondeal with the challenge of handling differentiation between vertical, horizontal walls, and how direction affects the array position.  The idea is that the robot drives along, it can check the status of the walls by looking left, right, and forward.  These functions will get the proper location in the array, making the check an easy one-liner.
 
 Graphics
 --------
