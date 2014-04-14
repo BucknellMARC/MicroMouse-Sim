@@ -1,7 +1,6 @@
 #ifndef EXPLORE_H
 #define EXPLORE_H
 
-#include "FloodFill.h"
 #include "MazeMap.h"
 
 typedef struct {
