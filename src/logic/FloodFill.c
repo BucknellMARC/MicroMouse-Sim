@@ -17,7 +17,7 @@ BOOL ff_enqueue(Point p)
 {
 	// make sure we aren't overwriting values in the queue
 	if ((q_end + 1) - q_start == FF_Q_SIZE) {
-		return FALSE
+		return FALSE;
 	}
 
 	queue[++q_end % FF_Q_SIZE] = p;
@@ -27,7 +27,10 @@ Point ff_dequeue()
 {
 	// return null value if the queue is empty
 	if (q_start == q_end) {
-		return Point(-1, -1);
+		Point p;
+		p.x = -1;
+		p.y = -1;
+		return p;
 	}
 
 	return queue[++q_start % FF_Q_SIZE];
@@ -36,113 +39,74 @@ Point ff_dequeue()
 // computes the flood fill for the first time (center is the target)
 void ff_compute(MazeMap* mm, FFMapPtr in)
 {
-	// blanks out the array to null values
+	// make sure flood fill map has been properly initialized
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
-			in[row][col] = MALGO_FF_BAD;
+			in[row][col] = FF_BAD;
 		}
 	}
 
-	// set the inner four values to 0 (this is the target)
-	int centerRow = MAZE_HEIGHT / 2 - 1;
-	int centerCol = MAZE_WIDTH / 2 - 1;
+	// current point starts at given node
+	Point current;
+	current.x = MAZE_WIDTH / 2;
+	current.y = MAZE_HEIGHT / 2;
+	in[current.y][current.x] = 0;
 
-	in[centerRow][centerCol] = 0;
-	in[centerRow][centerCol + 1] = 0;
-	in[centerRow + 1][centerCol] = 0;
-	in[centerRow + 1][centerCol + 1] = 0;
+	// keep dequeuing until there is no more left
+	for(; current.x > -1; current = ff_dequeue()) {
 
-	// now keep looping in each direction until the values have been populated
-	BOOL hasCompletedNeighbor = TRUE;
-	while (hasCompletedNeighbor) {
-		hasCompletedNeighbor = FALSE;
+		int curDistance = in[current.y][current.x];
 
-		// SOUTH to NORTH
-		for (int row = 0; row < (MAZE_HEIGHT-1); row++) {
-			for (int col = 0; col < MAZE_WIDTH; col++) {
-				BOOL complete = ff_compute_pull_neighbor(row, col, NORTH, mm, in);
+		// investigate the neighbors
+		BOOL northWall = mm_is_wall(mm, current, NORTH);
+		BOOL eastWall = mm_is_wall(mm, current, EAST);
+		BOOL southWall = mm_is_wall(mm, current, SOUTH);
+		BOOL westWall = mm_is_wall(mm, current, WEST);
 
-				if (complete) {
-					hasCompletedNeighbor = TRUE;
-				}
+		// add point to queue if there is no wall
+		Point p;
+		if (!northWall) {
+			p.x = current.x; p.y = current.y + 1;
+
+			// only add if the value is currently bad
+			if (in[p.y][p.x] == FF_BAD) {
+				in[p.y][p.x] = curDistance + 1;
+
+				ff_enqueue(p);
 			}
 		}
+		if (!eastWall) {
+			p.x = current.x + 1; p.y = current.y;
+			
+			// only add if the value is currently bad
+			if (in[p.y][p.x] == FF_BAD) {
+				in[p.y][p.x] = curDistance + 1;
 
-		// NORTH to SOUTH
-		for (int row = MAZE_HEIGHT-1; row > 0; row--) {
-			for (int col = 0; col < MAZE_WIDTH; col++) {
-				BOOL complete = ff_compute_pull_neighbor(row, col, SOUTH, mm, in);
-
-				if (complete) {
-					hasCompletedNeighbor = TRUE;
-				}
+				ff_enqueue(p);
 			}
 		}
+		if (!southWall) {
+			p.x = current.x; p.y = current.y - 1;
 
-		// WEST to EAST
-		for (int row = 0; row < MAZE_HEIGHT; row++) {
-			for (int col = 0; col < (MAZE_WIDTH-1); col++) {
-				BOOL complete = ff_compute_pull_neighbor(row, col, EAST, mm, in);
+			// only add if the value is currently bad
+			if (in[p.y][p.x] == FF_BAD) {
+				in[p.y][p.x] = curDistance + 1;
 
-				if (complete) {
-					hasCompletedNeighbor = TRUE;
-				}
+				ff_enqueue(p);
+			}
+
+		}
+		if (!westWall) {
+			p.x = current.x - 1; p.y = current.y;
+			
+			// only add if the value is currently bad
+			if (in[p.y][p.x] == FF_BAD) {
+				in[p.y][p.x] = curDistance + 1;
+
+				ff_enqueue(p);
 			}
 		}
-
-		// EAST to WEST
-		for (int row = 0; row < MAZE_HEIGHT; row++) {
-			for (int col = MAZE_WIDTH-1; col > 0; col--) {
-				BOOL complete = ff_compute_pull_neighbor(row, col, WEST, mm, in);
-
-				if (complete) {
-					hasCompletedNeighbor = TRUE;
-				}
-			}
-		}
 	}
-}
-
-BOOL ff_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm, FFMapPtr in)
-{
-	int curVal = in[row][col];
-	if (curVal != MALGO_FF_BAD || curVal == 0) {
-		return FALSE;
-	}
-
-	Point pos = { col, row };
-	BOOL wallExists = mm_is_wall(mm, pos, direction);	// bottom left is (0,0)
-	if (wallExists) {
-		return FALSE;
-	}
-
-	// get the next val
-	int nextVal;
-	switch (direction) {
-	case EAST:
-		nextVal = in[row][col + 1];
-		break;
-	case SOUTH:
-		nextVal = in[row - 1][col];
-		break;
-	case WEST:
-		nextVal = in[row][col - 1];
-		break;
-	case NORTH:
-		nextVal = in[row + 1][col];
-		break;
-
-	default:
-		printf("Error: Invalid direction specified!\n");
-	}
-
-	if (nextVal != MALGO_FF_BAD) {
-		in[row][col] = nextVal + 1;
-
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 // retargets the flood fill map
@@ -150,8 +114,8 @@ BOOL ff_compute_pull_neighbor(int row, int col, Direction direction, MazeMap* mm
 void ff_recompute_target(int targetX, int targetY, FFMapPtr in)
 {
 	// find the current target
-	int currentX = MALGO_FF_BAD;
-	int currentY = MALGO_FF_BAD;
+	int currentX = FF_BAD;
+	int currentY = FF_BAD;
 	for (int row = 0; row < MAZE_HEIGHT; row++) {
 		for (int col = 0; col < MAZE_WIDTH; col++) {
 			int value = in[row][col];
@@ -165,7 +129,7 @@ void ff_recompute_target(int targetX, int targetY, FFMapPtr in)
 		}
 
 		// if inner forloop found a match, break out of this one
-		if (currentX != MALGO_FF_BAD) {
+		if (currentX != FF_BAD) {
 			break;
 		}
 	}
