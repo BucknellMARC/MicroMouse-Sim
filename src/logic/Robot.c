@@ -58,7 +58,7 @@ void robot_run(Robot* robot) {
 	if (robot->isExploring && exploredMaze) {
 		robot->isExploring = FALSE;
 	
-		floodfill_compute(&robot->em.mazeMap, robot->ffMap);
+		ff_compute(&robot->em.mazeMap, robot->ffMap);
 	}
 
 
@@ -87,7 +87,7 @@ void robot_run(Robot* robot) {
 
 void robot_run_flood_fill(Robot* robot) {
 
-	Rotation dToGo = floodfill_suggest(robot->pos, &robot->em.mazeMap, robot->ffMap);
+	Rotation dToGo = ff_suggest(robot->pos, &robot->em.mazeMap, robot->ffMap);
 
 	// turn that direction
 	robot_turn_d(robot, dToGo);
