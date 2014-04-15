@@ -16,7 +16,6 @@ typedef MazeArrayPtr FFMapPtr;
 
 // functions
 void ff_compute(MazeMap* mm, FFMapPtr in);
-void ff_recompute_target(int targetX, int targetY, FFMapPtr in);
 Direction ff_suggest(Point pos, MazeMap* mazeMap, FFMapPtr ffMap);
 
 

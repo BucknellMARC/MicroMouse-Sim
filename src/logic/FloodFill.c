@@ -109,50 +109,6 @@ void ff_compute(MazeMap* mm, FFMapPtr in)
 	}
 }
 
-// retargets the flood fill map
-// ** UNTESTED **	-- this will be wrong with the middle zero blocks
-void ff_recompute_target(int targetX, int targetY, FFMapPtr in)
-{
-	// find the current target
-	int currentX = FF_BAD;
-	int currentY = FF_BAD;
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-			int value = in[row][col];
-
-			if (value == 0) {
-				currentX = col;
-				currentY = row;
-
-				break;
-			}
-		}
-
-		// if inner forloop found a match, break out of this one
-		if (currentX != FF_BAD) {
-			break;
-		}
-	}
-
-	// the new difference will be the current value of the new target
-	int difference = in[currentY][currentX];
-
-	// displace the rest of the array
-	for (int row = 0; row < MAZE_HEIGHT; row++) {
-		for (int col = 0; col < MAZE_WIDTH; col++) {
-
-			// make sure the value is always positive
-			int curValue = in[row][col];
-			if (difference > curValue) {
-				in[row][col] = difference - curValue;
-			}
-			else {
-				in[row][col] = curValue - difference;
-			}
-		}
-	}
-}
-
 // uses floodfill to determine where to go
 Direction ff_suggest(Point pos, MazeMap *mazeMap, FFMapPtr ffMap)
 {
