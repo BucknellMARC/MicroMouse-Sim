@@ -8,6 +8,31 @@
 #include "FloodFill.h"
 #include "MazeMap.h"
 
+#define FF_Q_SIZE 256
+Point queue[FF_Q_SIZE];
+int q_start = 0;
+int q_end = 0;
+
+BOOL ff_enqueue(Point p)
+{
+	// make sure we aren't overwriting values in the queue
+	if ((q_end + 1) - q_start == FF_Q_SIZE) {
+		return FALSE
+	}
+
+	queue[++q_end % FF_Q_SIZE] = p;
+}
+
+Point ff_dequeue()
+{
+	// return null value if the queue is empty
+	if (q_start == q_end) {
+		return Point(-1, -1);
+	}
+
+	return queue[++q_start % FF_Q_SIZE];
+}
+
 // computes the flood fill for the first time (center is the target)
 void ff_compute(MazeMap* mm, FFMapPtr in)
 {
