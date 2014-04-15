@@ -33,7 +33,8 @@ Robot robot_create(int xPos, int yPos)
 	return robot;
 }
 
-void robot_run(Robot* robot) {
+void robot_run(Robot* robot)
+{
 	// check to see if the robot has explored the whole maze
 	BOOL exploredMaze = TRUE;
 
@@ -85,7 +86,8 @@ void robot_run(Robot* robot) {
 	}
 }
 
-void robot_run_flood_fill(Robot* robot) {
+void robot_run_flood_fill(Robot* robot)
+{
 
 	Rotation dToGo = ff_suggest(robot->pos, &robot->em.mazeMap, robot->ffMap);
 
@@ -96,15 +98,18 @@ void robot_run_flood_fill(Robot* robot) {
 	robot_drive_forward(robot);
 }
 
-void robot_turn_d(Robot* robot, Direction direction) {
+void robot_turn_d(Robot* robot, Direction direction)
+{
 	robot->direction = direction;
 }
 
-void robot_turn_r(Robot* robot, Rotation rotation) {
+void robot_turn_r(Robot* robot, Rotation rotation)
+{
 	robot->direction = rotation_to_direction(robot->direction, rotation);
 }
 
-BOOL robot_drive_forward(Robot* robot) {
+BOOL robot_drive_forward(Robot* robot)
+{
 	Direction direction = robot->direction;
 
 	switch (direction) {
