@@ -20,6 +20,9 @@ extern "C" {
 #include "Rectangle.h"
 #include "Circle.h"
 
+// GLUT font we will be using
+#define FFD_TEXT GLUT_BITMAP_9_BY_15
+
 typedef struct {
 	Rectangle rectangle;
 	int row, col;
@@ -80,20 +83,14 @@ private:
 	//
 public:
 
+     static void drawFloodFill(FFMapPtr source);
+
 	static int getBlockWidthPX();
+     static void sspaceToPspace(float *x, float *y);
 };
 
 //
 // Display Methods
 //
-
-// GLUT font we will be using
-#define FFD_TEXT GLUT_BITMAP_9_BY_15
-
-// convert screen space to pixel space
-void display_screenspace_to_pixelspace(int *x, int *y);
-
-// flood fill drawing function
-void ff_draw(FFMapPtr source);
 
 #endif

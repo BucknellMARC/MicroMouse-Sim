@@ -81,7 +81,7 @@ void VirtualRobot::draw() {
 		rectangle->draw(1.0f, 0.0f, 0.0f);
 
 		// draw the flood fill once exploring is over
-		ff_draw(robot.ffMap);
+		VirtualMaze::drawFloodFill(robot.ffMap);
 	}
 }
 

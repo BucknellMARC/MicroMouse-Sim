@@ -238,24 +238,7 @@ void VirtualMaze::primGeneration() {
 // static methods
 //
 
-int VirtualMaze::getBlockWidthPX() {
-	return blockWidthPX;
-}
-
-//
-// Display Methods
-//
-
-void display_screenspace_to_pixelspace(float *x, float *y)
-{
-     int xVal = *x;
-     *x = 2.0 * xVal / (float)SCREEN_WIDTH - 1.0f;
-
-     int yVal = *y;
-     *y = 2.0 * yVal / (float)SCREEN_HEIGHT - 1.0f;
-}
-
-void ff_draw(FFMapPtr source)
+void VirtualMaze::drawFloodFill(FFMapPtr source)
 {
      for (int row = 0; row < MAZE_WIDTH; row++) {
           for (int col = 0; col < MAZE_HEIGHT; col++) {
@@ -268,7 +251,7 @@ void ff_draw(FFMapPtr source)
                // move the bitmap drawer to the right location
                float x = ((float)col + 0.4f) * MAZE_WIDTH_PX;
                float y = ((float)row + 0.4f) * MAZE_HEIGHT_PX;
-               display_screenspace_to_pixelspace(&x, &y);
+               VirtualMaze::sspaceToPspace(&x, &y);
                glRasterPos2f(x, y);
 
                // draw the text
@@ -283,6 +266,19 @@ void ff_draw(FFMapPtr source)
                }
           }
      }
+}
+
+int VirtualMaze::getBlockWidthPX() {
+	return blockWidthPX;
+}
+
+void VirtualMaze::sspaceToPspace(float *x, float *y)
+{
+     int xVal = *x;
+     *x = 2.0 * xVal / (float)SCREEN_WIDTH - 1.0f;
+
+     int yVal = *y;
+     *y = 2.0 * yVal / (float)SCREEN_HEIGHT - 1.0f;
 }
 
 #endif
