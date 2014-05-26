@@ -14,6 +14,7 @@ using namespace std;
 
 extern "C" {
 	#include "logic/MazeMap.h"
+     #include "logic/FloodFill.h"
 }
 
 #include "Rectangle.h"
@@ -81,5 +82,18 @@ public:
 
 	static int getBlockWidthPX();
 };
+
+//
+// Display Methods
+//
+
+// GLUT font we will be using
+#define FFD_TEXT GLUT_BITMAP_9_BY_15
+
+// convert screen space to pixel space
+void display_screenspace_to_pixelspace(int *x, int *y);
+
+// flood fill drawing function
+void ff_draw(FFMapPtr source);
 
 #endif

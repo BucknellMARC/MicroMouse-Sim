@@ -14,7 +14,7 @@ extern "C" {
 }
 
 #include "VirtualRobot.h"
-#include "Display.h"
+#include "VirtualMaze.h"
 
 VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 {
