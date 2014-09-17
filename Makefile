@@ -46,7 +46,7 @@ dirs:
 # rule to build main binary
 mm-sim: $(LOGIC_OBJ) $(GRAPHICS_OBJ) $(SRC_PATH)/main.cpp
 	@echo -n "Linking mm-sim..."
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(BINARY) $^
+	$(CXX) $(CXXFLAGS) -o $(BINARY) $^ $(LDFLAGS)
 	@echo "done!"
 
 # rule to build dependencies
