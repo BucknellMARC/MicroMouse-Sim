@@ -27,10 +27,10 @@ VirtualRobot::VirtualRobot(VirtualMaze* virtualMaze)
 
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
 
-	int x = robot.pos.x * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
-	int y = robot.pos.y * blockWidthPX + blockWidthPX/2 - robotSizePX/2;
+	int x = robot.pos.x * blockWidthPX + blockWidthPX/2 - ROBOT_SIZE_PX/2;
+	int y = robot.pos.y * blockWidthPX + blockWidthPX/2 - ROBOT_SIZE_PX/2;
 
-	this->rectangle = new Rectangle(x, y, robotSizePX, robotSizePX);
+	this->rectangle = new Rectangle(x, y, ROBOT_SIZE_PX, ROBOT_SIZE_PX);
 
 	// save the pointer to the virtual maze
 	this->virtualMaze = virtualMaze;
@@ -46,7 +46,7 @@ void VirtualRobot::run() {
 
 	// calculate and update the new position
 	int blockWidthPX = VirtualMaze::getBlockWidthPX();
-	int offset = blockWidthPX / 2 - robotSizePX / 2;
+	int offset = blockWidthPX / 2 - ROBOT_SIZE_PX / 2;
 
 	int newX = blockWidthPX * robot.pos.x + offset;
 	int newY = blockWidthPX * robot.pos.y + offset;

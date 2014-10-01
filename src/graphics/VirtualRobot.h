@@ -11,6 +11,8 @@ extern "C" {
 
 #include "VirtualMaze.h"
 
+#define ROBOT_SIZE_PX 15
+
 class VirtualRobot {
 private:
 	Robot robot;
@@ -19,31 +21,20 @@ private:
 
 	FFMap floodFillMap;
 
-	static const int robotSizePX = 15;
-
 public:
-	//
-	// constructors
-	//
-
+	// constructor
 	VirtualRobot(VirtualMaze* virtualMaze);
 
-	//
 	// main methods
-	//
 
 	void run();
 	void feedSensorData();
 
 	void draw();
 
-	//
-	// getters
-	//
-
 	FFMapPtr getFloodFillMap();
 
-	// deconstructor
+	// destructor
 	~VirtualRobot();
 };
 
