@@ -52,7 +52,7 @@ public:
 	// constructors
 	//
 
-	VirtualMaze();
+        VirtualMaze(int seed=-1);
 
 	//
 	// main methods
@@ -76,7 +76,7 @@ public:
 private:
 
 	// maze generation algorithms
-	void primGeneration();
+	void primGeneration(int seed);
 
 	//
 	// static methods

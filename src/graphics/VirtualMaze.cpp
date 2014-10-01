@@ -30,11 +30,16 @@ extern "C" {
 // constructors
 //
 
-VirtualMaze::VirtualMaze() {
+VirtualMaze::VirtualMaze(int seed) {
 	mazeMap = mm_create();
-
+        
+        if(seed==-1){
+                // seed is just going to be the current time
+	        seed = time(NULL);
+        }
+        
 	// perform prim generation
-	primGeneration();
+	primGeneration(seed);
 
 	// init the circle memory
 	circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
@@ -122,10 +127,9 @@ VirtualMaze::~VirtualMaze() {
 //
 
 // prim's algorithm
-void VirtualMaze::primGeneration() {
+void VirtualMaze::primGeneration(int seed) {
 	// init the random number generator the
-	// seed is just going to be the current time
-	int seed = time(NULL);
+	
 	srand(seed);
 
 	printf("Starting prim generation...");
