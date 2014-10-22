@@ -3,6 +3,11 @@ Coding Convention
 
 Below is the coding convention that we will use for this project.  Please take the time to read this to ensure that you write code in an understandable format.
 
+General
+--------
+
+For constants, use #define statements and pick a name.  Try to use some type of prefix but make sure the constant name isn't too long.
+
 C
 --------
 

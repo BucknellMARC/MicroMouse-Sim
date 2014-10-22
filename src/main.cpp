@@ -16,76 +16,76 @@ VirtualMaze* firstMaze;
 VirtualRobot* firstRobot;
 
 int main(int argc, char** argv) {
-	// initialize glut
-	initWindow(&argc, argv);
+    // initialize glut
+    initWindow(&argc, argv);
 
-	//
-	// init program data here
-	//
+    //
+    // init program data here
+    //
 
-	firstMaze = new VirtualMaze();
-	firstRobot = new VirtualRobot(firstMaze);
+    firstMaze = new VirtualMaze();
+    firstRobot = new VirtualRobot(firstMaze);
 
-	// start the main loop
-	startRenderLoop();
+    // start the main loop
+    startRenderLoop();
 
-	return 1;
+    return 1;
 }
 
 // initializes glut and opens up the rendering window
 void initWindow(int* argc, char** argv) {
-	printf("Initializing glut...");
+    printf("Initializing glut...");
 
-	// run preliminary init
-	glutInit(argc, argv);
+    // run preliminary init
+    glutInit(argc, argv);
 
-	// init the display mode
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    // init the display mode
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 
-	// put the window position
-	glutInitWindowPosition(0,0);
-	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    // put the window position
+    glutInitWindowPosition(0,0);
+    glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	// create the window
-	glutCreateWindow("MicroMouse Simulator [Bucknell MARC]\n");
+    // create the window
+    glutCreateWindow("MicroMouse Simulator [Bucknell MARC]\n");
 
-	printf("done!\n");
+    printf("done!\n");
 }
 
 // starts the rendering loop which will draw the simulation
 void startRenderLoop() {
-	// send the rendering loop to GLUT and start the main loop
-	glutDisplayFunc(renderScene);
-	glutIdleFunc(renderScene);
-	glutMainLoop();
+    // send the rendering loop to GLUT and start the main loop
+    glutDisplayFunc(renderScene);
+    glutIdleFunc(renderScene);
+    glutMainLoop();
 }
 
 void logic() {
-	firstRobot->run();
+    firstRobot->run();
 }
 
 // the rendering loop
 void renderScene() {
-	//
-	// perform rendering logic
-	//
+    //
+    // perform rendering logic
+    //
 
-	logic();
+    logic();
 
-	//
-	// draw stuff
-	//
+    //
+    // draw stuff
+    //
 
-	// clear the buffer
-	glClear(GL_COLOR_BUFFER_BIT);
+    // clear the buffer
+    glClear(GL_COLOR_BUFFER_BIT);
 
-	firstMaze->draw();
-	firstRobot->draw();
+    firstMaze->draw();
+    firstRobot->draw();
 
-	glutSwapBuffers();
+    glutSwapBuffers();
 
-	// sleep for 100 milliseconds so i can see what is going on
-	usleep(50000);
+    // sleep for 100 milliseconds so i can see what is going on
+    usleep(50000);
 }
 
 //
@@ -93,13 +93,13 @@ void renderScene() {
 //
 
 void pixelPointToGLPoint(float x, float y, float* outX, float* outY) {
-	// convert X and Y coords to GL screen space
-	*outX = 2.0f * x / (float)SCREEN_WIDTH - 1.0f;
-	*outY = 2.0f * y / (float)SCREEN_HEIGHT - 1.0f;
+    // convert X and Y coords to GL screen space
+    *outX = 2.0f * x / (float)SCREEN_WIDTH - 1.0f;
+    *outY = 2.0f * y / (float)SCREEN_HEIGHT - 1.0f;
 }
 
 void pixelDimToGLDim(float width, float height, float* outWidth, float* outHeight) {
-	// convert width and height to GL screen space
-	*outWidth = 2.0f * width / (float)SCREEN_WIDTH;
-	*outHeight = 2.0f * height / (float)SCREEN_HEIGHT;
+    // convert width and height to GL screen space
+    *outWidth = 2.0f * width / (float)SCREEN_WIDTH;
+    *outHeight = 2.0f * height / (float)SCREEN_HEIGHT;
 }
