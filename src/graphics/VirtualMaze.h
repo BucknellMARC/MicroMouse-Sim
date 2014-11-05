@@ -53,6 +53,7 @@ public:
 	//
 
         VirtualMaze(int seed=-1);
+        VirtualMaze(char *filename);
 
 	//
 	// main methods
