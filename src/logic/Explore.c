@@ -54,15 +54,8 @@ Direction explore_suggest(Point pos, Direction curDirection, ExploreModule* em)
   BOOL eastAvailable = !eastWall && !em->exHistory[pos.y][pos.x+1];
   BOOL southAvailable = !southWall && !em->exHistory[pos.y-1][pos.x];
   BOOL westAvailable = !westWall && !em->exHistory[pos.y][pos.x-1];
-	BOOL canProceed = northAvailable || eastAvailable || southAvailable || westAvailable;
 
 	Direction toGo;
-
-	// if there is only one way to go, return
-	if (!canProceed) {
-		em->returning = TRUE;
-		return explore_return(em);
-	}
 
   if (northAvailable) {
     toGo = NORTH;
