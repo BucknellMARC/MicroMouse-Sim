@@ -8,10 +8,12 @@
  * track of where it is
  */
 
+#include <errno.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <vector>
 using namespace std;
@@ -30,20 +32,62 @@ extern "C" {
 // constructors
 //
 
-VirtualMaze::VirtualMaze() {
+VirtualMaze::VirtualMaze(int seed) {
 	mazeMap = mm_create();
-
+        
+        if(seed==-1){
+                // seed is just going to be the current time
+	        seed = time(NULL);
+        }
+        
 	// perform prim generation
-	primGeneration();
+	primGeneration(seed);
 
 	// init the circle memory
-	circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
-	for (int row = 0; row < MAZE_WIDTH; row++) {
+   circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
+   for (int row = 0; row < MAZE_WIDTH; row++) {
 		for (int col = 0; col < MAZE_HEIGHT; col++) {
 			int arrayPos = row * MAZE_WIDTH + col;
 			circles[arrayPos] = new Circle(row * blockWidthPX, col * blockWidthPX, wallWidthPX/2);
 		}
 	}
+}
+
+VirtualMaze::VirtualMaze(char *filename) {
+    FILE *fhandle = fopen(filename, "r");
+    if (fhandle == NULL) {
+        perror("Could not open file");
+        throw strerror(errno);
+    }
+    // Use the first line to figure out how wide the maze is
+    char buffer[512];
+    fgets(buffer, 512, fhandle);
+    int width = strlen(buffer);
+    if(width/2 != MAZE_WIDTH) {
+        printf("Warning: Maze file width is wrong!\n");
+    }
+    mazeMap = mm_create();
+    for(int y=0; y<MAZE_HEIGHT; y++) {
+        fgets(buffer, 512, fhandle);
+        printf("V%i:\t%s", y, buffer);
+        for(int x=0; x < MAZE_WIDTH; x++) {
+            mazeMap.vertWalls[y][x] = (buffer[2*x+2] == *"*"?WALL:NOWALL);
+        }
+        fgets(buffer, 512, fhandle);
+        printf("H%i:\t%s", y, buffer);
+        for(int x=0; x < MAZE_WIDTH; x++) {
+                mazeMap.horizWalls[y][x] = (buffer[2*x+1] == *"*"?WALL:NOWALL);
+        }
+    }
+
+    // init the circle memory
+    circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
+    for (int row = 0; row < MAZE_WIDTH; row++) {
+		for (int col = 0; col < MAZE_HEIGHT; col++) {
+			int arrayPos = row * MAZE_WIDTH + col;
+			circles[arrayPos] = new Circle(row * blockWidthPX, col * blockWidthPX, wallWidthPX/2);
+		}
+	 }
 }
 
 //
@@ -122,10 +166,9 @@ VirtualMaze::~VirtualMaze() {
 //
 
 // prim's algorithm
-void VirtualMaze::primGeneration() {
+void VirtualMaze::primGeneration(int seed) {
 	// init the random number generator the
-	// seed is just going to be the current time
-	int seed = time(NULL);
+	
 	srand(seed);
 
 	printf("Starting prim generation...");
@@ -231,7 +274,7 @@ void VirtualMaze::primGeneration() {
 	mm_set_wall(&mazeMap, FALSE, middle, WEST);
 
 
-	printf("done!\n");
+        printf("done!\n");
 }
 
 //
