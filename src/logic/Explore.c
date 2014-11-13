@@ -45,59 +45,30 @@ Direction explore_suggest(Point pos, Direction curDirection, ExploreModule* em)
 	}
 
 	// calculate possible directions that we can travel
-	BOOL northWall = mm_is_wall(&em->mazeMap, pos, NORTH);
-	BOOL eastWall = mm_is_wall(&em->mazeMap, pos, EAST);
-	BOOL southWall = mm_is_wall(&em->mazeMap, pos, SOUTH);
-	BOOL westWall = mm_is_wall(&em->mazeMap, pos, WEST);
-	int numFree = (int)(!northWall) + (int)(!eastWall) + (int)(!southWall) + (int)(!westWall);
+	BOOL northWall = mm_is_wall(&em->mazeMap, pos, NORTH) || pos.y >= (MAZE_HEIGHT - 1);
+	BOOL eastWall = mm_is_wall(&em->mazeMap, pos, EAST) || pos.x >= (MAZE_WIDTH- 1);
+	BOOL southWall = mm_is_wall(&em->mazeMap, pos, SOUTH) || pos.y <= 0;
+	BOOL westWall = mm_is_wall(&em->mazeMap, pos, WEST) || pos.x <= 0;
+
+  BOOL northAvailable = (!northWall) && (!em->exHistory[pos.y+1][pos.x]);
+  BOOL eastAvailable = !eastWall && !em->exHistory[pos.y][pos.x+1];
+  BOOL southAvailable = !southWall && !em->exHistory[pos.y-1][pos.x];
+  BOOL westAvailable = !westWall && !em->exHistory[pos.y][pos.x-1];
 
 	Direction toGo;
 
-	// if there is only one way to go, return
-	if (numFree == 1) {
-		em->returning = TRUE;
-		return explore_return(em);
-	}
-
-	int numSearched = 0;
-	if (!northWall && pos.y < (MAZE_HEIGHT-1)) {
-		if (em->exHistory[pos.y + 1][pos.x]) {
-			numSearched++;
-		}
-		else {
-			toGo = NORTH;
-		}
-	}
-	if (!eastWall && pos.x < (MAZE_WIDTH-1)) {
-		if (em->exHistory[pos.y][pos.x + 1]) {
-			numSearched++;
-		}
-		else {
-			toGo = EAST;
-		}
-	}
-	if (!southWall && pos.y > 0) {
-		if (em->exHistory[pos.y - 1][pos.x]) {
-			numSearched++;
-		}
-		else {
-			toGo = SOUTH;
-		}
-	}
-	if (!westWall && pos.x > 0) {
-		if (em->exHistory[pos.y][pos.x - 1]) {
-			numSearched++;
-		}
-		else {
-			toGo = WEST;
-		}
-	}
-
-	// return if there is nowhere else to go
-	if (numSearched == numFree) {
-		em->returning = TRUE;
-		return explore_return(em);
-	}
+  if (northAvailable) {
+    toGo = NORTH;
+  } else if (eastAvailable) {
+    toGo = EAST;
+  } else if (southAvailable) {
+    toGo = SOUTH;
+  } else if (westAvailable) {
+    toGo = WEST;
+  } else {
+    em->returning = TRUE;
+    return explore_return(em);
+  }
 
 	// save the prevous travel on the stack
 	em->prevTravel[++em->prevTravelPos] = toGo;
