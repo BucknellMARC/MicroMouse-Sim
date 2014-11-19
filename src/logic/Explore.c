@@ -9,6 +9,8 @@
 
 Direction explore_return(ExploreModule* em);		// pops em->prevTravel and returns the opposite direction
 
+Direction in_which_area(Point pos); // determine which area the robot is currently in
+
 ExploreModule explore_create()
 {
 	// init the module
@@ -57,22 +59,41 @@ Direction explore_suggest(Point pos, Direction curDirection, ExploreModule* em)
 
 	Direction toGo;
 
-  if (northAvailable) {
-    toGo = NORTH;
-  } else if (eastAvailable) {
-    toGo = EAST;
-  } else if (southAvailable) {
-    toGo = SOUTH;
-  } else if (westAvailable) {
-    toGo = WEST;
-  } else {
-    em->returning = TRUE;
-    return explore_return(em);
-  }
+  switch (in_which_area(pos)) {
+  case NORTH:
+    if (northAvailable) {
+      toGo = NORTH;
+    } else if (eastAvailable) {
+      toGo = EAST;
+    } else if (southAvailable) {
+      toGo = SOUTH;
+    } else if (westAvailable) {
+      toGo = WEST;
+    } else {
+      em->returning = TRUE;
+      return explore_return(em);
+    }
+    break;
+  case EAST:
+    // TODO: add logic here
+    break;
+  case SOUTH:
+    // TODO: add logic here
+    break;
+  case WEST:
+    // TODO: add logic here
+    break;
+  };
+
 
 	// save the prevous travel on the stack
 	em->prevTravel[++em->prevTravelPos] = toGo;
 	return toGo;
+}
+
+Direction in_which_area(Point pos) {
+   // TODO: add logic here
+  return NORTH;
 }
 
 Direction explore_return(ExploreModule* em)
