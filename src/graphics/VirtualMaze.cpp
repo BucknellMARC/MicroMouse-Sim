@@ -67,18 +67,24 @@ VirtualMaze::VirtualMaze(char *filename) {
         printf("Warning: Maze file width is wrong!\n");
     }
     mazeMap = mm_create();
+	int row;
     for(int y=0; y<MAZE_HEIGHT; y++) {
+		row = MAZE_HEIGHT-y-1;
         fgets(buffer, 512, fhandle);
-        printf("V%i:\t%s", y, buffer);
-        for(int x=0; x < MAZE_WIDTH; x++) {
-            mazeMap.vertWalls[y][x] = (buffer[2*x+2] == *"*"?WALL:NOWALL);
+        //printf("V%i,%i:\t%s", y, row, buffer);
+        for(int x=0; x < (MAZE_WIDTH - 1); x++) {
+            mazeMap.vertWalls[row][x] = (buffer[2*x+2] == *"*"?WALL:NOWALL);
         }
         fgets(buffer, 512, fhandle);
-        printf("H%i:\t%s", y, buffer);
+		if(row!=0){
+        //printf("H%i,%i:\t%s", y, row-1, buffer);
         for(int x=0; x < MAZE_WIDTH; x++) {
-                mazeMap.horizWalls[y][x] = (buffer[2*x+1] == *"*"?WALL:NOWALL);
+                mazeMap.horizWalls[row-1][x] = (buffer[2*x+1] == *"*"?WALL:NOWALL);
         }
+		}
     }
+	fclose(fhandle);
+
 
     // init the circle memory
     circles = new Circle*[MAZE_WIDTH * MAZE_HEIGHT];
